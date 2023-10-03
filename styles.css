@@ -7,7 +7,7 @@
   
   .navbar {
     background: #131313;
-    height: 80px;
+    height: 120px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,16 +51,16 @@
   }
 
   #company_logo{
-    margin-top: 150px;
-    height: 120px;
-    width: 120px;
+    margin-top: 70px;
+    position:inherit;
+    height: 135px;
+    width: 170px;
   }
 
   #company_logo_footer{
     /* margin-top: 150px; */
-    height: 100px;
-    width: 100px;
-    margin-right: 4%;
+    height: 135px;
+    width: 170px;
   }
   
   .navbar__menu {
@@ -614,7 +614,103 @@
     color: #e9e9e9;
     transition: 0.3s ease-out;
   }
+
+  /* -----------------------------------Contact Page-------------------------------------------- */
+  .enquires{
+    background: #131313;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .enquires h1{
+    background-color: #ff8177;
+    background-image: linear-gradient(
+      to right,
+      #ffc800 0%,
+      #f5c61f 0%,
+      #f8cb27 21%,
+      #FACF39 52%,
+      #FACF39 78%,
+      #FACF39 100%
+    );
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    margin-top: 1rem;
+    font-size: 2.5rem;
+  }
+
+  .enquires__container{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  form{
+    background: white;
+    display: flex;
+    flex-direction: column;
+    padding: 2vw 4vw;
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+  }
+
+  /* form:hover{
+    transform: scale(1.123);
+    transition: 0.4s ease-in-out;
+  } */
+
+  /* form:not(:hover) {
+    transform: scale(1);
+    transition-timing-function: ease-out;
+    transition: 1s;
+  } */
+
+  form h3{
+    color: 555;
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  form input{
+    border: 0;
+    margin: 10px;
+    padding: 20px;
+    outline: none;
+    background: #f5f5f5;
+    font-size: 16px;
+  }
+
+  form textarea{
+    border: 0;
+    margin: 10px;
+    padding: 20px;
+    outline: none;
+    background: #f5f5f5;
+    font-size: 16px;
+  }
   
+  form button{
+    padding: 15px;
+    background: #ff5361;
+    color: white;
+    font-size: 18px;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+    width: 150px;
+    margin: 20px auto 0;
+    border-radius: 30px;
+  }
+
   /* Social Icons */
   .social__icon--link {
     color: #fff;
