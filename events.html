@@ -34,9 +34,9 @@
           <li class="navbar__item">
             <a href="/contact.html" class="navbar__links">Contact</a>
           </li>
-          <li class="navbar__btn">
-            <a href="/sign-up" class="button">Sign Up</a>
-          </li>
+          <header>
+            <a class="iconCart"><img src="checkoutcart/icon.png"><div class="totalQuantity">0</div></a>
+          </header>
         </ul>
       </div>
     </nav>
@@ -44,16 +44,20 @@
     <div class="services">
       <h1>Listed events</h1>
       <div class="services__container">
-        <div class="services__card">
-          <h2>Maynooth University: Diwali</h2>
-          <p>Indian Society Culteral Event</p>
-          <button class="buyticket"><a href="/events.html">Buy Tickets</a></button>
+        <div class="listProduct">
+          <div class="item">
+            <div class="item-bg">
+              <h2>Maynooth University: Diwali</h2>
+              <p>Indian Society Culteral Event</p>
+              <button class="buyticket">Buy Tickets</button>
+            </div>
+          </div>
         </div>
-        <div class="services__card">
+        <!-- <div class="services__card">
           <h2>Mangala School of Carnatic Music</h2>
           <p>Arrengatam Ganamela</p>
-          <button class="buyticket"><a href="/events.html">Buy Tickets</a></button>
-        </div>
+          <button class="buyticket" ><a href="/events.html">Buy Tickets</a></button>
+        </div> -->
         <!-- <div class="services__card">
           <h2>Mangala School of Carnatic Music</h2>
           <p>Arrengatam Ganamela</p>
@@ -62,6 +66,33 @@
       </div>
     </div>
 
-    <script src="app.js"></script>
+    <div class="cart">
+        <h2>
+            CART
+        </h2>
+        <div class="listCart">
+            <div class="item">
+                <img src="images/1.webp">
+                <div class="content">
+                    <div class="name">CoPilot / Black / Automatic</div>
+                    <div class="price">$550 / 1 product</div>
+                </div>
+                <div class="quantity">
+                    <button>-</button>
+                    <span class="value">3</span>
+                    <button>+</button>
+                </div>
+            </div>
+        </div>
+        <div class="buttons">
+            <div class="close">
+                CLOSE
+            </div>
+            <div class="checkout">
+                <a href="checkout.html">CHECKOUT</a>
+            </div>
+        </div>
+    </div>
+  <script src="app.js"></script
   </body>
 </html>

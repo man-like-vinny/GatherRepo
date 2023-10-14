@@ -34,42 +34,34 @@
           <li class="navbar__item">
             <a href="/contact.html" class="navbar__links">Contact</a>
           </li>
-          <li class="navbar__btn"><a href="/login.html" class="button">Login</a></li>
+          <li class="navbar__btn">
+            <a href="/sign-up" class="button">Sign Up</a>
+          </li>
         </ul>
       </div>
     </nav>
-
-    <!-- Enquires Section -->
-    <div class="enquires">
-      <h1>Event hosting enquries</h1>
-      <div class="enquires__container">
-        <form class = "contactform" onsubmit="sendEmail(); reset(); return false;">
-            <h3>Get in touch!</h3>
-            <input type="text" id="name" placeholder="Name" required>
-            <input type="text" id="email" placeholder="Email ID" required>
-            <input type="text" id="phonenum" placeholder="Phone" required>
-            <textarea id="message" rows="4" placeholder="How can we help you"></textarea>
-            <button type="submit" class="sendbutton" >Send</button>
-        </form>
+    <!-- Services Section -->
+    <div class="services">
+      <h1>Listed events</h1>
+      <div class="services__container">
+        <div class="services__card">
+          <h2>Maynooth University: Diwali</h2>
+          <p>Indian Society Culteral Event</p>
+          <button class="buyticket"><a href="/events.html">Buy Tickets</a></button>
+        </div>
+        <div class="services__card">
+          <h2>Mangala School of Carnatic Music</h2>
+          <p>Arrengatam Ganamela</p>
+          <button class="buyticket"><a href="/events.html">Buy Tickets</a></button>
+        </div>
+        <!-- <div class="services__card">
+          <h2>Mangala School of Carnatic Music</h2>
+          <p>Arrengatam Ganamela</p>
+          <button class="buyticket"><a href="/events.html">Buy Tickets</a></button>
+        </div> -->
       </div>
     </div>
+
     <script src="app.js"></script>
-    <script src="https://smtpjs.com/v3/smtp.js"></script>
-    <script>
-        function sendEmail(){
-            Email.send({
-            Host : "smtp.elasticemail.com",
-            Username : "harrynest50@yahoo.com",
-            Port: 2525,
-            Password : "964D5EFBDBCFAF1FD5202D38870039ABC176",
-            To : document.getElementById("email").value,
-            From : 'harrynest50@yahoo.com',
-            Subject : "New Enquiry from Gatheround",
-            Body : "Message: " + document.getElementById("message").value
-            }).then(
-            message => alert(message)
-            );
-        }
-    </script>
   </body>
 </html>
