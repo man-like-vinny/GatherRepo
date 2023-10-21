@@ -18,6 +18,7 @@ function addCartToHTML(){
     let totalPriceHTML = document.querySelector('.totalPrice');
     let totalQuantity = 0;
     let totalPrice = 0;
+
     // if has product in Cart
     if(listCart){
         listCart.forEach(product => {
@@ -28,17 +29,17 @@ function addCartToHTML(){
                     `<img src="${product.image}">
                     <div class="info">
                         <div class="name">${product.name}</div>
-                        <div class="price">${product.price}/1 product</div>
+                        <div class="price">Selected Ticket: ${product.ticktype}</div>
                     </div>
-                    <div class="quantity">${product.quantity}</div>
-                    <div class="returnPrice">€${product.price * product.quantity}</div>`;
+                    <div class="quantity">x${product.quantity}</div>
+                    <div class="returnPrice">€${product.variablePrice * product.quantity}</div>`;
                 listCartHTML.appendChild(newCart);
                 totalQuantity = totalQuantity + product.quantity;
-                totalPrice = totalPrice + (product.price * product.quantity);
+                totalPrice = totalPrice + (product.variablePrice * product.quantity);
             }
         })
     }
     totalQuantityHTML.innerText = totalQuantity;
-    totalPriceHTML.innerText = totalPrice;
+    totalPriceHTML.innerText = "€" + totalPrice;
 }
 

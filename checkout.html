@@ -15,6 +15,9 @@
       href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="checkout.css" />
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="checkout_stripe.js" defer></script>
 </head>
 <body>
 
@@ -22,27 +25,38 @@
     <div class="container">
         <div class="checkoutLayout">        
             <div class="returnCart">
-                <a href="/events.html">keep shopping</a>
-                <h1>List Product in Cart</h1>
-                <div class="list">
-
-                    <div class="item">
-                        <img src="images/1.webp">
-                        <div class="info">
-                            <div class="name">PRODUCT 1</div>
-                            <div class="price">€22/1 product</div>
+                <a href="/events.html"><img id="returntocartlogo" src="images/download.png"></a>
+                <h1>Tickets in your Cart</h1>
+                <div class="listHolder">
+                    <div class="list">
+                        <div class="item">
+                            <img src="images/1.webp">
+                            <div class="info">
+                                <div class="name">PRODUCT 1</div>
+                                <div class="price">€22/1 product</div>
+                            </div>
+                            <div class="quantity">5</div>
+                            <div class="returnPrice">€433.3</div>
                         </div>
-                        <div class="quantity">5</div>
-                        <div class="returnPrice">€433.3</div>
                     </div>
-
+                    <div class="return">
+                        <div class="row">
+                            <div>Total Quantity:</div>
+                            <div class="totalQuantity" id="totalQuantity">70</div>
+                        </div>
+                        <div class="row">
+                            <div>Total Price:</div>
+                            <div class="totalPrice" id="totalPrice">€900</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="right">
-                <h1>Checkout</h1>
-                <form class="form" onsubmit="sendMongo(); reset(); return false;">
-                    <div class="group">
+                <h1>Billing Information</h1>
+                <!-- <form id="payment-form" class="form" onsubmit="sendMongo(); reset(); return false;"> -->
+                <form id="payment-form" onsubmit="sendMongo(); reset(); return false;">
+                    <!-- <div class="group">
                         <label for="name">Full Name</label>
                         <input name="name" type="text" id="name" required>
                     </div>
@@ -50,30 +64,32 @@
                     <div class="group">
                         <label for="phone">Phone Number</label>
                         <input name="phone" type="text" id="phone" required>
+                    </div> -->
+
+                    <div id="link-authentication-element">
+                    <!--Stripe.js injects the Link Authentication Element-->
+                    </div>
+
+                    <div id="address-element">
+                        <!--Stripe.js injects the addressElement--> 
+                    </div>
+                    
+                    <div id="payment-element">
+                    <!--Stripe.js injects the Payment Element-->
                     </div>
         
-                    <div class="group">
-                        <label for="address">Address</label>
+                    <!-- <div class="group">
+                        <label for="address">Email Address</label>
                         <input name="address" type="text" name="address" id="address" required>
-                    </div>
-        
-                    <div class="group">
-                        <label for="country">Country</label>
-                        <select name="country" id="country">
-                            <option value="">Choose..</option>
-                            <option value="">Kingdom</option>
-                        </select>
-                    </div>
-        
-                    <div class="group">
-                        <label for="city">City</label>
-                        <select name="city" id="city">
-                            <option value="">Choose..</option>
-                            <option value="">London</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="buttonCheckout">CHECKOUT</button>
-                    <div class="return">
+                    </div> -->
+    
+                    <!-- <button type="submit" class="buttonCheckout">MAKE PAYMENT</button> -->
+                    <div id="payment-message" class="hidden"></div>
+                    <button type="submit" id="submit">
+                        <div class="spinner hidden" id="spinner"></div>
+                        <span id="button-text">Pay now</span>
+                    </button>
+                    <!-- <div class="return">
                         <div class="row">
                             <div>Total Quantity</div>
                             <div class="totalQuantity" id="totalQuantity">70</div>
@@ -82,8 +98,7 @@
                             <div>Total Price</div>
                             <div class="totalPrice" id="totalPrice">€900</div>
                         </div>
-                    </div>
-                </form>
+                    </div> -->
             </div>
         </div>
     </div>
@@ -97,9 +112,9 @@
         // Get the form data
         const name = document.getElementById('name').value;
         const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const country = document.getElementById('country').value;
-        const city = document.getElementById('city').value;
+        // const address = document.getElementById('address').value;
+        // const country = document.getElementById('country').value;
+        // const city = document.getElementById('city').value;
         const totalquantity = document.getElementById('totalQuantity').textContent;
         const totalprice = document.getElementById('totalPrice').textContent;
 
@@ -107,9 +122,9 @@
         const formData = {
             name,
             phone,
-            address,
-            country,
-            city,
+            // address,
+            // country,
+            // city,
             totalquantity,
             totalprice,
         };
