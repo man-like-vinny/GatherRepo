@@ -79,25 +79,31 @@ let selectedTicketType = null;
 //     }
 // }
 // // Function to save the selected ticket type
-// function saveSelectedTicketType() {
-//     // Get the select element
-//     const ticketTypeSelect = document.getElementById("ticketType");
+function saveSelectedTicketType() {
+    // Get the select element
+    const ticketTypeSelect = document.getElementById("ticketType");
 
-//     // Get the selected value (either "earlyBird" or "standard")
-//     selectedTicketType = ticketTypeSelect.value;
+    // Get the selected value (either "earlyBird" or "standard")
+    selectedTicketType = ticketTypeSelect.value;
 
-//     // Display the selected ticket type
-//     const selectedTicketElement = document.getElementById("selectedTicket");
-//     selectedTicketElement.textContent = selectedTicketType;
+    // Display the selected ticket type
+    const selectedTicketElement = document.getElementById("selectedTicket");
+    selectedTicketElement.textContent = selectedTicketType;
 
-//     // You can use the 'selectedTicketType' variable as needed
-//     // For example, you can perform different actions based on the selection.
-//     if (selectedTicketType === "earlyBird") {
-//         // Do something for Early Bird ticket
-//     } else if (selectedTicketType === "standard") {
-//         // Do something for Standard ticket
-//     }
-// }
+    // You can use the 'selectedTicketType' variable as needed
+    // For example, you can perform different actions based on the selection.
+    // if (selectedTicketType === "") {
+    //     // Do something for Early Bird ticket
+    // } else if (selectedTicketType === "standard") {
+    //     // Do something for Standard ticket
+    // }
+    //   else if (selectedTicketType === "earlyBird") {
+    //     // Do something for Early Bird ticket
+    // } 
+    //   else if (selectedTicketType === "standard") {
+    //     // Do something for Standard ticket
+    // }
+}
 
 
 function addDataToHTML() {
@@ -129,8 +135,10 @@ function addDataToHTML() {
             <button onclick="checkProductId('${product.name}')">Add To Cart</button>
             <label for="ticketType">Select Ticket Type:</label>
             <select id="ticketType">
-                <option value="EarlyBird">EarlyBird</option>
-                <option value="Standard">Standard</option>
+                <option value="EarlyBird (Non-Member)">EarlyBird (Non-Member)</option>
+                <option value="EarlyBird (Member)">EarlyBird (Member)</option>
+                <option value="Standard (Non-Member)">Standard (Non-Member)</option>
+                <option value="Standard (Member)">Standard (Member)</option>
             </select>
             <script src="script.js"></script>`;
 
@@ -212,16 +220,40 @@ function checkProductId(productName){
     let productID = null;
     let productQuantity = null;
 
-    if (selectedValue === "EarlyBird") {
-        const earlyBirdID = selectedProduct.type.find(type => type.ticketType === "EarlyBird");
-        productID = earlyBirdID ? earlyBirdID.id : null;
-        productTicketType = earlyBirdID ? earlyBirdID.ticketType : null;
-        productQuantity = earlyBirdID ? earlyBirdID.quantity : null;
-    } else if (selectedValue === "Standard") {
-        const standardID = selectedProduct.type.find(type => type.ticketType === "Standard");
-        productID = standardID ? standardID.id : null;
-        productTicketType = standardID ? standardID.ticketType : null;
-        productQuantity = standardID ? standardID.quantity : null;
+    // if (selectedValue === "EarlyBird") {
+    //     const earlyBirdID = selectedProduct.type.find(type => type.ticketType === "EarlyBird");
+    //     productID = earlyBirdID ? earlyBirdID.id : null;
+    //     productTicketType = earlyBirdID ? earlyBirdID.ticketType : null;
+    //     productQuantity = earlyBirdID ? earlyBirdID.quantity : null;
+    // } else if (selectedValue === "Standard") {
+    //     const standardID = selectedProduct.type.find(type => type.ticketType === "Standard");
+    //     productID = standardID ? standardID.id : null;
+    //     productTicketType = standardID ? standardID.ticketType : null;
+    //     productQuantity = standardID ? standardID.quantity : null;
+    // }
+
+    if (selectedValue === "EarlyBird (Non-Member)") {
+        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === "EarlyBird (Non-Member)");
+        productID = earlyBirdNonMemberID ? earlyBirdNonMemberID.id : null;
+        productTicketType = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketType : null;
+        productQuantity = earlyBirdNonMemberID ? earlyBirdNonMemberID.quantity : null;
+    } else if (selectedValue === "EarlyBird (Member)") {
+        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === "EarlyBird (Member)");
+        productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
+        productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
+        productQuantity = earlyBirdMemberID ? earlyBirdMemberID : null;
+    }
+    else if (selectedValue === "Standard (Non-Member)") {
+        const StandardNonMemberID = selectedProduct.type.find(type => type.ticketType === "Standard (Non-Member)");
+        productID = StandardNonMemberID ? StandardNonMemberID.id : null;
+        productTicketType = StandardNonMemberID ? StandardNonMemberID.ticketType : null;
+        productQuantity = StandardNonMemberID ? StandardNonMemberID : null;
+    }
+    else if (selectedValue === "Standard (Member)") {
+        const StandardMemberID = selectedProduct.type.find(type => type.ticketType === "Standard (Member)");
+        productID = StandardMemberID ? StandardMemberID.id : null;
+        productTicketType = StandardMemberID ? StandardMemberID.ticketType : null;
+        productQuantity = StandardMemberID ? StandardMemberID : null;
     }
 
     if (productID !== null) {
@@ -401,12 +433,18 @@ function addCartToHTML() {
     function getPriceForSelectedType(product, selectedValue) {
         let price = null;
         // Check the selected ticket type and find the corresponding price
-        if (selectedValue === "EarlyBird") {
-            const earlyBirdPrice = product.type.find(type => type.ticketType === "EarlyBird");
-            price = earlyBirdPrice ? earlyBirdPrice.price : null;
-        } else if (selectedValue === "Standard") {
-            const standardPrice = product.type.find(type => type.ticketType === "Standard");
-            price = standardPrice ? standardPrice.price : null;
+        if (selectedValue === "EarlyBird (Non-Member)") {
+            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === "EarlyBird (Non-Member)");
+            price = earlyBirdNonMemberPrice ? earlyBirdNonMemberPrice.price : null;
+        } else if (selectedValue === "EarlyBird (Member)") {
+            const earlyBirdMemberPrice = product.type.find(type => type.ticketType === "EarlyBird (Member)");
+            price = earlyBirdMemberPrice ? earlyBirdMemberPrice.price : null;
+        } else if (selectedValue === "Standard (Non-Member)") {
+            const standardNonMemberPrice = product.type.find(type => type.ticketType === "Standard (Non-Member)");
+            price = standardNonMemberPrice ? standardNonMemberPrice.price : null;
+        } else if (selectedValue === "Standard (Member)") {
+            const standardMemberPrice = product.type.find(type => type.ticketType === "Standard (Member)");
+            price = standardMemberPrice ? standardMemberPrice.price : null;
         }
         return price;
     }
@@ -447,18 +485,18 @@ function addCartToHTML() {
 }
 
 // Function to get the price based on the selected ticket type
-function getPriceForSelectedType(product, selectedValue) {
-    let price = null;
-    // Check the selected ticket type and find the corresponding price
-    if (selectedValue === "EarlyBird") {
-        const earlyBirdPrice = product.type.find(type => type.ticketType === "EarlyBird");
-        price = earlyBirdPrice ? earlyBirdPrice.price : null;
-    } else if (selectedValue === "Standard") {
-        const standardPrice = product.type.find(type => type.ticketType === "Standard");
-        price = standardPrice ? standardPrice.price : null;
-    }
-    return price;
-}
+// function getPriceForSelectedType(product, selectedValue) {
+//     let price = null;
+//     // Check the selected ticket type and find the corresponding price
+//     if (selectedValue === "EarlyBird") {
+//         const earlyBirdPrice = product.type.find(type => type.ticketType === "EarlyBird");
+//         price = earlyBirdPrice ? earlyBirdPrice.price : null;
+//     } else if (selectedValue === "Standard") {
+//         const standardPrice = product.type.find(type => type.ticketType === "Standard");
+//         price = standardPrice ? standardPrice.price : null;
+//     }
+//     return price;
+// }
 
 function changeQuantity($idProduct, $type){
     switch ($type) {

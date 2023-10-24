@@ -833,7 +833,7 @@ header .totalQuantity{
 
 .listProduct{
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 20px;
 }
 
@@ -987,7 +987,7 @@ header .totalQuantity{
 .listProduct .item select{
   z-index: 100;
   position: absolute;
-  right: 140px;
+  right: 47px;
   z-index: 2;
   white-space: normal; /* Allow text to wrap */
   top: 491px; /* Position .item p just below .item h2 */
