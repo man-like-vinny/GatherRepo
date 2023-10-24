@@ -73,7 +73,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const port = 5500;
+const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
 
@@ -211,4 +211,4 @@ app.post("/create-payment-intent", async (req, res) => {
 });
 
 
-app.listen(5500, () => console.log("Node server listening on port 4242!"));
+app.listen(port, () => console.log(`Node server listening on port ${port}`));
