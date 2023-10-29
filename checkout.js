@@ -217,7 +217,7 @@ function checkCart() {
 
 function updateCartOnServer(cart) {
     // Send a WebSocket message to update the cart on the server
-    const ws = new WebSocket('ws://10.10.14.87:5000'); // Replace with your WebSocket server URL
+    const ws = new WebSocket('ws://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
   
     ws.addEventListener('open', () => {
       console.log('WebSocket connection is open.');
