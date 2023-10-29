@@ -2,7 +2,7 @@
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
 const stripe = Stripe("pk_live_51O2y4dASLMn2l3lqKpiDGgetEi9CbrP9miuR4Ns4pLxktfpvBPKNqX7LHgsCxNHXwt5Z8oqcoyFWP1I0NpHE74sP004yeMSfkW");
-
+//const stripe = Stripe("pk_test_51O2y4dASLMn2l3lqZONitI1i4fQZcrWdhq7khNIvEG66SADdBXVagGLrCLDoYDTh8gYeiLdwicrM91iL0gJE5UL400rNvTqxBC");
 const validItems = listCart.filter(item => item !== null);
 
 console.log(listCart);
@@ -13,6 +13,7 @@ const itemsForStripe = validItems.map(product => {
   return {
     id: product.name, // Use a unique identifier for each item, e.g., the product name
     price: product.variablePrice * 100, // Convert to cents (Stripe requires prices in the smallest currency unit)
+    staticQuant: product.staticQuantity,
     quantity: product.quantity,
     description: product.ticktype,
   };
@@ -26,7 +27,9 @@ const items = window.itemsForStripe;
 
 items.forEach(item => {
   const itemId = item.id;
-  console.log("The item is the following: " + itemId);
+  const itemStatic = item.staticQuant;
+  //console.log("The item is the following: " + itemId);
+  console.log("The item is the following: " + itemStatic);
   // Do something with the 'itemId' here, such as displaying it on the page or using it in your Stripe setup.
 });
 
@@ -84,7 +87,8 @@ async function handleSubmit(e) {
     elements,
     confirmParams: {
       // Make sure to change this to your payment completion page
-      return_url: "http://localhost:5500/success.html",
+      return_url: "http://www.eventifyed.com/success.html",
+      //return_url: "/success.html",
       receipt_email: emailAddress,
     },
   });

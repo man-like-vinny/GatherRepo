@@ -71,33 +71,47 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-//const mongoose = require('mongoose');
-const app = express();
-const port = process.env.PORT || 5000;
+const mongoose = require('mongoose');
+const socketIo = require('socket.io');
 
+//const port = process.env.PORT || 4000;
+const app = express();
 app.use(bodyParser.json());
 
-//const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/checkoutusers'; // Update with your MongoDB URI
+const http = require('http'); // Add this line to create an HTTP server
+const WebSocket = require('ws'); // Add this line for WebSocket support
+
+// const server = http.createServer(app); // Create an HTTP server
+const server = express().listen(5000);
+const wss = new WebSocket.Server({ server }); // Create a WebSocket server
+const io = socketIo(server)
+
+const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/products'; // Update with your MongoDB URI
 
 // Connect to MongoDB
-// mongoose.connect(mongoURI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// });
+mongoose.connect(mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 // Define a schema for your data
-// const checkoutSchema = new mongoose.Schema({
-//     name: String,
-//     phone: String,
-//     address: String,
-//     country: String,
-//     city: String,
-//     totalquantity: Number,
-//     totalprice: Number
-// });
+const productSchema = new mongoose.Schema({
+    name: String,
+    description: String,
+    type: [
+        {
+            ticketType: String,
+            price: Number,
+            ticketQuantity: Number,
+            id: Number
+        }
+    ],
+    ticketDescription: String,
+    image: String,
+    staticImage: String
+});
 
-//const Checkout = mongoose.model('Checkout', checkoutSchema);
-const stripe = require("stripe")('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');
+const Product = mongoose.model('Product', productSchema, 'events');
 
 app.use(express.json());
 app.use(express.static(__dirname));
@@ -106,6 +120,180 @@ app.use(express.static(__dirname));
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
+
+// // Route to get all products
+app.get('/getProducts', async (req, res) => {
+  try {
+    console.log('Accessed /getProducts route'); // Add this log statement
+
+    const products = await Product.find({}); // Find all products in the collection
+
+    console.log('Products fetched:', products); // Add this log statement
+
+    // Send the products as JSON
+    res.json(products);
+  } catch (error) {
+    console.error('Error fetching products from MongoDB:', error);
+    res.status(500).json({ error: 'Failed to fetch products' });
+  }
+});
+
+// wss.on('connection', (ws) => {
+//   console.log('WebSocket connection opened');
+
+//   // Handle WebSocket messages
+//   ws.on('message', async (message) => {
+//       const request = JSON.parse(message);
+
+//       if (request.action === 'getProducts') {
+//           try {
+//               const products = await Product.find({}).exec();
+//               console.log('Products fetched:', products);
+//               ws.send(JSON.stringify({ action: 'updateProducts', data: products }));
+//           } catch (err) {
+//               console.error('Error fetching products from MongoDB:', err);
+//               ws.send(JSON.stringify({ action: 'updateProducts', error: 'Failed to fetch products' }));
+//           }
+//       }
+//   });
+// });
+
+const port = process.env.PORT || 4000;
+
+//---------------------------Change quantity-------------------------
+// app.post('/updateQuantity', async (req, res) => {
+//   try {
+//     const { items } = req.body;
+
+//     console.log('Received request to update quantity. Items:', items);
+
+//     // Loop through items and update the quantity for each product
+//     for (const item of items) {
+//       const { id, quantity } = item;
+//       console.log(id)
+//       console.log(quantity)
+//       // Find the product by its ID and update the quantity
+//       await Product.findOneAndUpdate(
+//         { _id: id },
+//         { 'type.ticketQuantity': quantity },
+//       );
+//     }
+
+//     res.json({ message: 'Quantity updated successfully' });
+//   } catch (error) {
+//     console.error('Error updating quantity:', error);
+//     res.status(500).json({ error: 'Failed to update quantity' });
+//   }
+// });
+
+// WebSocket server
+
+let numberOfClients = 0;
+const clients = new Set();
+
+wss.on('connection', (ws) => {
+  // Handle incoming WebSocket messages
+  console.log('A client has connected.');
+  
+  numberOfClients++;
+  broadcastNumberOfClients();
+  clients.add(ws);
+  
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message);
+      if (data.action === 'updateCart') {
+        const cart = data.cart;
+
+        // Filter out items that are not null
+        const validCart = cart.filter(item => item !== null);
+
+        // Prepare an array of update operations
+        const updateOperations = validCart.map(item => {
+          const { name, ticktype, ticketQuantity } = item;
+          console.log(name, ticktype, ticketQuantity);
+          return {
+            updateOne: {
+              filter: { name: name, 'type.ticketType': ticktype },
+              update: { $set: { 'type.$.ticketQuantity': ticketQuantity } },
+            },
+          };
+        });
+
+        // Execute the update operations
+        Product.bulkWrite(updateOperations);
+
+        // Notify all connected clients about the updated cart
+        clients.forEach((client) => {
+          // if (client !== ws && client.readyState === WebSocket.OPEN) {
+          //   client.send(JSON.stringify({ action: 'cartUpdated' }));
+          if (client.readyState === WebSocket.OPEN) {
+            client.send(JSON.stringify({ action: 'cartUpdated', requestFetch: true }));
+          }
+        });
+      }
+    } catch (error) {
+      console.error('WebSocket message handling error:', error);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('A client has disconnected.');
+
+    // Decrement the number of connected clients and notify all clients
+    numberOfClients--;
+    broadcastNumberOfClients();
+  });
+});
+
+function broadcastNumberOfClients() {
+  // Send the current number of connected clients to all clients
+  const message = JSON.stringify({
+    action: 'numberOfClients',
+    count: numberOfClients,
+  });
+
+  wss.clients.forEach((client) => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
+  });
+}
+
+
+// app.post('/api/updateCart', async (req, res) => {
+//   try {
+//     const cart = req.body.cart;
+//     console.log(req.body.cart);
+
+//     // Filter out items that are not null
+//     const validCart = cart.filter(item => item !== null);
+
+//     // Prepare an array of update operations
+//     const updateOperations = validCart.map(item => {
+//       const { name, ticktype, ticketQuantity } = item;
+//       console.log(name, ticktype, ticketQuantity);
+//       return {
+//         updateOne: {
+//           filter: { name: name, 'type.ticketType': ticktype },
+//           update: { $set: { 'type.$.ticketQuantity': ticketQuantity } },
+//         },
+//       };
+//     });
+
+//     // Execute the update operations
+//     await Product.bulkWrite(updateOperations);
+
+//     res.json({ success: true });
+//   } catch (error) {
+//     console.error('Error updating cart:', error);
+//     res.status(500).json({ error: 'Error updating cart in MongoDB' });
+//   }
+// });
+
+
+const stripe = require("stripe")('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');
+//const stripe = require("stripe")('sk_test_51O2y4dASLMn2l3lqB9tO9e4Ob1eEB8DyfaUC8i8Tz6iHADtchanmJcxCKpR1dWMSu4hafsa0jCPBzfuUiSH2tway00EqpaBNHn');
 
 // app.post('/submit', (req, res) => {
 //     const { name, phone, address, country, city, totalquantity, totalprice } = req.body;
@@ -142,6 +330,10 @@ app.get('/', (req, res) => {
 //         });
 // });
 
+// const reduceQuantity = (items) => {
+
+// }
+
 const calculateOrderAmount = (items) => {
   // Replace this constant with a calculation of the order's amount
   // Calculate the order total on the server to prevent
@@ -153,6 +345,8 @@ const calculateOrderAmount = (items) => {
   }, 0);
 
   console.log("Total amount cents: " + totalAmountCents);
+
+  //reduceQuantity(items);
 
   return totalAmountCents;
 };
@@ -193,7 +387,7 @@ app.post("/create-payment-intent", async (req, res) => {
     setup_future_usage: "off_session",
     amount: calculateOrderAmount(items),
     currency: "eur",
-    description: items.map(item => `${item.id} (${item.description}) x ${item.quantity}`).join('\n'),
+    description: items.map(item => `${item.id} : ${item.description} x ${item.quantity}`).join('\n'),
     // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
     payment_method_types: ["card"], // Specify the payment method types
     automatic_payment_methods: {
@@ -201,7 +395,7 @@ app.post("/create-payment-intent", async (req, res) => {
     },
   });
 
-  console.log(paymentIntent);
+  //console.log(paymentIntent);
 
   totalAmountCents = 0;
 

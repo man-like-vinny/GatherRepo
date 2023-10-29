@@ -6,25 +6,25 @@
             {
                 "ticketType": "EarlyBird (Non-Member)",
                 "price": 1,
-                "quantity": 10,
+                "ticketQuantity": 30,
                 "id": 1
             },
             {
                 "ticketType": "EarlyBird (Member)",
                 "price": 1,
-                "quantity": 10,
+                "ticketQuantity": 40,
                 "id": 2
             },
             {
                 "ticketType": "Standard (Non-Member)",
                 "price": 1,
-                "quantity": 150,
+                "ticketQuantity": 20,
                 "id": 3
             },
             {
                 "ticketType": "Standard (Member)",
                 "price": 1,
-                "quantity": 150,
+                "ticketQuantity": 20,
                 "id": 4
             }
         ],
