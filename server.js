@@ -79,7 +79,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const http = require('http'); // Add this line to create an HTTP server
-const WebSocket = require('wss'); // Add this line for WebSocket support
+const WebSocket = require('ws'); // Add this line for WebSocket support
 
 // const server = http.createServer(app); // Create an HTTP server
 const server = express().listen(5000);
