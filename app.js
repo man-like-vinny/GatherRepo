@@ -49,7 +49,7 @@ let listCart = [];
 
 
 //---------websocket---------------
-const ws = new WebSocket('ws://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
+const ws = new WebSocket('wss://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
 
 ws.addEventListener('open', () => {
   console.log('WebSocket connection is open.');
