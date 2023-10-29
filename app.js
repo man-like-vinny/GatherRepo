@@ -45,6 +45,8 @@ fetch('/getProducts')
         addDataToHTML();
 })
 
+let listCart = [];
+
 
 
 //---------websocket---------------
@@ -236,7 +238,7 @@ function clearCart() {
 
 
 //use cookie so the cart doesn't get lost on refresh page
-let listCart = [];
+
 function checkCart(){
     var cookieValue = document.cookie
     .split('; ')
