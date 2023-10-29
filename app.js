@@ -48,9 +48,8 @@ fetch('/getProducts')
 let listCart = [];
 
 
-
 //---------websocket---------------
-const ws = new WebSocket('ws://192.168.0.5:5000'); // Replace with your WebSocket server URL
+const ws = new WebSocket('ws://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
 
 ws.addEventListener('open', () => {
   console.log('WebSocket connection is open.');
