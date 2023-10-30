@@ -75,6 +75,7 @@ const mongoose = require('mongoose');
 const socketIo = require('socket.io');
 
 //const port = process.env.PORT || 4000;
+const port = process.env.PORT || 4000;
 const app = express();
 app.use(bodyParser.json());
 
@@ -82,7 +83,7 @@ const http = require('http'); // Add this line to create an HTTP server
 const WebSocket = require('ws'); // Add this line for WebSocket support
 
 // const server = http.createServer(app); // Create an HTTP server
-const server = express().listen(5000);
+const server = express().listen(port);
 const wss = new WebSocket.Server({ server }); // Create a WebSocket server
 const io = socketIo(server)
 
@@ -158,7 +159,6 @@ app.get('/getProducts', async (req, res) => {
 //   });
 // });
 
-const port = process.env.PORT || 4000;
 
 //---------------------------Change quantity-------------------------
 // app.post('/updateQuantity', async (req, res) => {

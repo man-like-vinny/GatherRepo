@@ -1,4 +1,5 @@
 let listCart = [];
+var HOST = location.origin.replace(/^http/, 'ws')
 
 function checkCart() {
     var cookieValue = document.cookie
@@ -217,7 +218,8 @@ function checkCart() {
 
 function updateCartOnServer(cart) {
     // Send a WebSocket message to update the cart on the server
-    const ws = new WebSocket('wss://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
+    // const ws = new WebSocket('wss://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
+    const ws = new WebSocket(HOST); // Replace with your WebSocket server URL
   
     ws.addEventListener('open', () => {
       console.log('WebSocket connection is open.');
