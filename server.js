@@ -95,7 +95,7 @@ const http = require('http'); // Add this line to create an HTTP server
 
 var WebSocketServer = require("ws").Server
 var server = http.createServer(app)
-server.listen(port)
+server.listen(port, () => console.log(`Node server listening on port ${port}`))
 
 console.log("http server listening on %d", port)
 
@@ -412,4 +412,4 @@ app.post("/create-payment-intent", async (req, res) => {
 });
 
 
-app.listen(port, () => console.log(`Node server listening on port ${port}`));
+// app.listen(port, () => console.log(`Node server listening on port ${port}`));
