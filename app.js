@@ -49,9 +49,8 @@ let listCart = [];
 
 
 //---------websocket---------------
-var HOST = location.origin.replace(/^http/, 'ws')
-// const ws = new WebSocket('wss://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
-const ws = new WebSocket(HOST); // Replace with your WebSocket server URL
+var host = location.origin.replace(/^http/, 'wss')
+var ws = new WebSocket(host);
 
 
 ws.addEventListener('open', () => {

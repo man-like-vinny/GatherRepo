@@ -72,20 +72,35 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const socketIo = require('socket.io');
+//const socketIo = require('socket.io');
 
 //const port = process.env.PORT || 4000;
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 const app = express();
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.static(__dirname));
+
+// Serve your HTML file
+app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/index.html');
+});
 
 const http = require('http'); // Add this line to create an HTTP server
-const WebSocket = require('ws'); // Add this line for WebSocket support
+//const WebSocket = require('ws'); // Add this line for WebSocket support
 
 // const server = http.createServer(app); // Create an HTTP server
-const server = express().listen(port);
-const wss = new WebSocket.Server({ server }); // Create a WebSocket server
-const io = socketIo(server)
+//const server = express().listen(port);
+//const wss = new WebSocket.Server({ server }); // Create a WebSocket server
+
+var WebSocketServer = require("ws").Server
+var server = http.createServer(app)
+server.listen(port)
+
+console.log("http server listening on %d", port)
+
+var wss = new WebSocketServer({server: server})
+console.log("websocket server created")
 
 const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/products'; // Update with your MongoDB URI
 
@@ -113,14 +128,6 @@ const productSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model('Product', productSchema, 'events');
-
-app.use(express.json());
-app.use(express.static(__dirname));
-
-// Serve your HTML file
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
 
 // // Route to get all products
 app.get('/getProducts', async (req, res) => {
