@@ -49,7 +49,7 @@ let listCart = [];
 
 
 //---------websocket---------------
-var host = location.origin.replace(/^http/, 'wss')
+var host = location.origin.replace(/^http/, 'ws')
 var ws = new WebSocket(host);
 
 

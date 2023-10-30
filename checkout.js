@@ -1,5 +1,5 @@
 let listCart = [];
-var host = location.origin.replace(/^http/, 'wss')
+var host = location.origin.replace(/^http/, 'ws')
 
 function checkCart() {
     var cookieValue = document.cookie
