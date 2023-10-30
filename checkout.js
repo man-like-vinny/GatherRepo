@@ -232,6 +232,12 @@ function updateCartOnServer(cart) {
       ws.send(message);
     });
 
+    ws.addEventListener('ping', () => {
+        // When a ping message is received from the server, respond with a pong
+        ws.pong();
+        console.log('Sent a ping to the server.');
+      });
+
     ws.addEventListener('close', (event) => {
         if (event.wasClean) {
           console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);

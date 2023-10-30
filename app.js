@@ -52,12 +52,17 @@ let listCart = [];
 var host = location.origin.replace(/^http/, 'ws')
 var ws = new WebSocket(host);
 
-
 ws.addEventListener('open', () => {
   console.log('WebSocket connection is open.');
   // You can now use this WebSocket connection for real-time communication.
   // For example, you can listen for messages from the server and send messages.
 });
+
+ws.addEventListener('ping', () => {
+    // When a ping message is received from the server, respond with a pong
+    ws.pong();
+    console.log('Sent a ping from the client.');
+  });
 
 ws.addEventListener('close', (event) => {
   if (event.wasClean) {

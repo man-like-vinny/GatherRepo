@@ -205,6 +205,20 @@ wss.on('connection', (ws) => {
   numberOfClients++;
   broadcastNumberOfClients();
   clients.add(ws);
+
+    // Define a function to send ping messages to clients
+  function sendPing() {
+    ws.ping();
+  }
+
+  // Set up a ping interval to periodically send ping messages
+  const pingInterval = setInterval(sendPing, 30000); // Send a ping every 30 seconds
+
+  ws.on('pong', () => {
+    // This callback is executed when the client responds to a ping with a pong.
+    // You can use this to track that the client is still responsive.
+    console.log('Received a pong from the client.');
+  });
   
   ws.on('message', (message) => {
     try {
@@ -250,6 +264,7 @@ wss.on('connection', (ws) => {
     // Decrement the number of connected clients and notify all clients
     numberOfClients--;
     broadcastNumberOfClients();
+    clearInterval(pingInterval);
   });
 });
 
