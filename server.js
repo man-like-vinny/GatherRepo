@@ -234,7 +234,7 @@ wss.on('connection', (ws) => {
         clients.forEach((client) => {
           // if (client !== ws && client.readyState === WebSocket.OPEN) {
           //   client.send(JSON.stringify({ action: 'cartUpdated' }));
-          if (client.readyState === WebSocket.OPEN) {
+          if (client.readyState === WebSocketServer.OPEN) {
             client.send(JSON.stringify({ action: 'cartUpdated', requestFetch: true }));
           }
         });
@@ -261,7 +261,7 @@ function broadcastNumberOfClients() {
   });
 
   wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
+    if (client.readyState === WebSocketServer.OPEN) {
       client.send(message);
     }
   });
