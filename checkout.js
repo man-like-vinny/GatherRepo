@@ -267,7 +267,7 @@ function updateCartOnServer(cart) {
 
 async function startTimer() {
     const startTime = new Date().getTime();
-    const timerDuration = 1 * 60 * 1000; // 1 minute in milliseconds
+    const timerDuration = 10 * 60 * 1000; // 1 minute in milliseconds
   
     const timerInterval = setInterval(async () => {
       const currentTime = new Date().getTime();

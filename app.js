@@ -250,7 +250,7 @@ function checkCart(){
         listCart = [];
     }
 }
-//clearCart();
+clearCart();
 checkCart();
 function checkProductId(productName){
     console.log()

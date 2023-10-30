@@ -402,7 +402,7 @@ app.post("/create-payment-intent", async (req, res) => {
     },
   });
 
-  //console.log(paymentIntent);
+  console.log(paymentIntent);
 
   totalAmountCents = 0;
 
