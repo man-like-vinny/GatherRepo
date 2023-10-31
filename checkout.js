@@ -101,7 +101,7 @@ returntoCart.addEventListener('click', function() {
 
         // Call updateCartOnServer after all operations are complete
         updateCartOnServer(validCart);
-        window.location.href = '/events.html';
+        //window.location.href = '/events.html';
     });
 });
 
