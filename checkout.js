@@ -100,7 +100,13 @@ returntoCart.addEventListener('click', function() {
         // ...
 
         // Call updateCartOnServer after all operations are complete
-        updateCartOnServer(validCart);
+        updateCartOnServer(validCart)
+        .then(() => {
+            window.location.href = '/events.html';
+        })
+        .catch(error => {
+            console.error('Error updating the cart on the server:', error);
+        });
         //window.location.href = '/events.html';
     });
 });
@@ -320,7 +326,13 @@ function startTimer() {
         item.ticketQuantity = item.ticketQuantity + item.quantity;
       });
   
-      updateCartOnServer(validCart);
+      updateCartOnServer(validCart)
+      .then(() => {
+        window.location.href = '/events.html';
+    })
+    .catch(error => {
+        console.error('Error updating the cart on the server:', error);
+    });
     } catch (error) {
       throw error; // Rethrow the error
     }
