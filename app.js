@@ -9,6 +9,7 @@ menu.addEventListener('click', function() {
 
 let iconCart = document.querySelector('.iconCart');
 let clearCartButton = document.querySelector('.clear-cart-button');
+let checkoutButton = document.querySelector('.checkout')
 let cart = document.querySelector('.cart');
 let container = document.querySelector('.navbar');
 let event_container = document.querySelector('.listProduct');
@@ -46,6 +47,29 @@ fetch('/getProducts')
 })
 
 let listCart = [];
+
+checkoutButton.addEventListener('click', function(){
+    if (listCart.length === 0) {
+        // Don't do anything or show a message to the user indicating that the cart is empty.
+        window.alert("Cart Empty!")
+        //return;
+    }
+    else{
+        window.location.href = '/checkout.html';
+    }
+})
+
+checkoutButton.addEventListener('mouseover', function() {
+    if (listCart.length === 0) {
+        checkoutButton.style.backgroundColor = 'red';
+    } else {
+        checkoutButton.style.backgroundColor = 'green'; // Change to green if listCart is not empty
+    }
+});
+
+checkoutButton.addEventListener('mouseout', function() {
+    checkoutButton.style.backgroundColor = 'rgb(29, 101, 193)'
+});
 
 
 //---------websocket---------------
@@ -460,6 +484,7 @@ function changeQuantity($idProduct, $type) {
             // if quantity <= 0 then remove product in cart
             if (listCart[$idProduct].quantity <= 0) {
                 delete listCart[$idProduct];
+                listCart = [];
             } else if (listCart[$idProduct].ticketQuantity === 0) {
                 console.log("Max tickets reached");
             }

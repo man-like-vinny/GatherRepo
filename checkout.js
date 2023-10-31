@@ -1,4 +1,5 @@
 let listCart = [];
+let returntoCart = document.querySelector('.returnCart');
 var host = location.origin.replace(/^http/, 'ws')
 
 function checkCart() {
@@ -49,8 +50,6 @@ function addCartToHTML() {
     //updateCartOnServer(listCart);
 }
 
-let returntoCart = document.querySelector('.returnCart');
-
 // returntoCart.addEventListener('click', function() {
 //     const validCart = listCart.filter(item => item !== null);
 //     validCart.forEach(item => {
@@ -64,101 +63,101 @@ let returntoCart = document.querySelector('.returnCart');
 //     clearCart();
 // });
 
-// returntoCart.addEventListener('click', function() {
-//     // Perform a fetch to get updated product data
-//     fetch('/getProducts')
-//     .then(response => response.json())
-//     .then(updatedData => {
-//         const validCart = listCart.filter(item => item !== null);
-
-//         // Update item.ticketQuantity values with the latest data
-//         validCart.forEach(item => {
-//             // Find the product with the matching name
-//             const matchingProduct = updatedData.find(product => product.name === item.name);
-
-//             if (matchingProduct) {
-//                 // Find the corresponding ticketType
-//                 const matchingTicket = matchingProduct.type.find(ticket => ticket.ticketType === item.ticktype);
-//                 console.log(matchingTicket);
-//                 if (matchingTicket) {
-//                     // Update item.ticketQuantity with the value from the matching ticket
-//                     item.ticketQuantity = matchingTicket.ticketQuantity;
-//                     console.log(matchingTicket.ticketQuantity);
-//                 }
-//             }
-//         });
-
-//         // Now that item.ticketQuantity values are updated, you can perform calculations
-//         validCart.forEach(item => {
-//             item.ticketQuantity = item.ticketQuantity + item.quantity;
-//         });
-
-//         console.log(validCart);
-
-//         // Clear the cart locally or handle it as needed
-
-//         // Update the page or perform any additional actions with the updated data
-//         // ...
-
-//         // Call updateCartOnServer after all operations are complete
-//         updateCartOnServer(validCart);
-//         clearCart();
-//     });
-// });
-
-// returntoCart.addEventListener('click', function() {
-//     const validCart = listCart.filter(item => item !== null);
-//     validCart.forEach(item => {
-//       item.ticketQuantity = item.ticketQuantity + item.quantity;       
-//     });
-
-//     updateCartOnServer(validCart)
-//     clearCart();
-
-//     // You can choose to clear the cart here or handle it as needed
-//     clearCart();
-// });
-
-returntoCart.addEventListener('click', async function() {
-    try {
-        // Perform a fetch to get updated product data
-        const response = await fetch('/getProducts');
-        const updatedData = await response.json();
-
+returntoCart.addEventListener('click', function() {
+    // Perform a fetch to get updated product data
+    fetch('/getProducts')
+    .then(response => response.json())
+    .then(updatedData => {
         const validCart = listCart.filter(item => item !== null);
 
-        // Update item.ticketQuantity values with the latest data from the fetch
+        // Update item.ticketQuantity values with the latest data
         validCart.forEach(item => {
+            // Find the product with the matching name
             const matchingProduct = updatedData.find(product => product.name === item.name);
+
             if (matchingProduct) {
+                // Find the corresponding ticketType
                 const matchingTicket = matchingProduct.type.find(ticket => ticket.ticketType === item.ticktype);
+                console.log(matchingTicket);
                 if (matchingTicket) {
+                    // Update item.ticketQuantity with the value from the matching ticket
                     item.ticketQuantity = matchingTicket.ticketQuantity;
                     console.log(matchingTicket.ticketQuantity);
                 }
             }
         });
 
-
+        // Now that item.ticketQuantity values are updated, you can perform calculations
         validCart.forEach(item => {
             item.ticketQuantity = item.ticketQuantity + item.quantity;
         });
 
-        // Now that item.ticketQuantity values are updated, you can proceed with calculations
+        console.log(validCart);
 
         // Clear the cart locally or handle it as needed
+
+        // Update the page or perform any additional actions with the updated data
+        // ...
+
+        // Call updateCartOnServer after all operations are complete
         updateCartOnServer(validCart);
-        clearCart();
-
-        // Perform any other calculations or actions
-
-        // After all calculations are completed, you can redirect to another page
         window.location.href = '/events.html';
-    } catch (error) {
-        console.error('Error:', error);
-        // Handle any errors that occur during the process
-    }
+    });
 });
+
+// returntoCart.addEventListener('click', function() {
+//     const validCart = listCart.filter(item => item !== null);
+//     validCart.forEach(item => {
+//       item.ticketQuantity = item.ticketQuantity + item.quantity;       
+//     });
+
+//     updateCartOnServer(validCart)
+//     clearCart();
+
+//     // You can choose to clear the cart here or handle it as needed
+//     clearCart();
+// });
+
+// returntoCart.addEventListener('click', function() {
+//     try {
+//         // Perform a fetch to get updated product data
+//         const response = fetch('/getProducts');
+//         const updatedData = response.json();
+
+//         const validCart = listCart.filter(item => item !== null);
+
+//         // Update item.ticketQuantity values with the latest data from the fetch
+//         validCart.forEach(item => {
+//             const matchingProduct = updatedData.find(product => product.name === item.name);
+//             if (matchingProduct) {
+//                 const matchingTicket = matchingProduct.type.find(ticket => ticket.ticketType === item.ticktype);
+//                 if (matchingTicket) {
+//                     item.ticketQuantity = matchingTicket.ticketQuantity;
+//                     console.log(matchingTicket.ticketQuantity);
+//                 }
+//             }
+//         });
+
+
+//         validCart.forEach(item => {
+//             item.ticketQuantity = item.ticketQuantity + item.quantity;
+//         });
+
+//         // Now that item.ticketQuantity values are updated, you can proceed with calculations
+
+//         // Clear the cart locally or handle it as needed
+//         updateCartOnServer(validCart);
+//         clearCart();
+
+//         // Perform any other calculations or actions
+
+//         // After all calculations are completed, you can redirect to another page
+//         window.location.href = '/events.html';
+//     } catch (error) {
+//         console.error('Error:', error);
+//         // Handle any errors that occur during the process
+//     }
+// });
 
 
 
@@ -271,20 +270,20 @@ function updateCartOnServer(cart) {
     });
 }
 
-async function startTimer() {
+function startTimer() {
     const startTime = new Date().getTime();
     const timerDuration = 10 * 60 * 1000; // 1 minute in milliseconds
   
-    const timerInterval = setInterval(async () => {
+    const timerInterval = setInterval( () => {
       const currentTime = new Date().getTime();
       const timeRemaining = startTime + timerDuration - currentTime;
   
       if (timeRemaining <= 0) {
         clearInterval(timerInterval);
         try {
-          await handleTimerExpiration();
+          handleTimerExpiration();
           // All calculations and API calls are complete, redirect to events.html
-          clearCart();
+          //clearCart();
           window.location.href = '/events.html';
         } catch (error) {
           console.error('Error during calculations:', error);
@@ -298,9 +297,9 @@ async function startTimer() {
     }, 1000);
   }
   
-  async function handleTimerExpiration() {
+  function handleTimerExpiration() {
     try {
-      const updatedData = await fetch('/getProducts').then((response) => response.json());
+      const updatedData = fetch('/getProducts').then((response) => response.json());
       const validCart = listCart.filter((item) => item !== null);
   
       // Update item.ticketQuantity values with the latest data

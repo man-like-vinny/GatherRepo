@@ -203,6 +203,7 @@ wss.on('connection', (ws) => {
   console.log('A client has connected.');
   
   numberOfClients++;
+  console.log("Clients connected: " + numberOfClients);
   broadcastNumberOfClients();
   clients.add(ws);
 
@@ -264,6 +265,7 @@ wss.on('connection', (ws) => {
     // Decrement the number of connected clients and notify all clients
     numberOfClients--;
     broadcastNumberOfClients();
+    console.log("Clients connected: " + numberOfClients)
     clearInterval(pingInterval);
   });
 });
