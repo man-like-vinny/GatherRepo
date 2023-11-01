@@ -102,12 +102,13 @@ returntoCart.addEventListener('click', function() {
         // Call updateCartOnServer after all operations are complete
         updateCartOnServer(validCart)
         .then(() => {
+            // Once updateCartOnServer is done, navigate to the new page
             window.location.href = '/events.html';
         })
-        .catch(error => {
-            console.error('Error updating the cart on the server:', error);
+        .catch((error) => {
+            console.error('Error updating cart on the server:', error);
         });
-        //window.location.href = '/events.html';
+        window.location.href = '/events.html';
     });
 });
 
@@ -222,57 +223,53 @@ function checkCart() {
 // }
 
 function updateCartOnServer(cart) {
-    // Send a WebSocket message to update the cart on the server
-    // const ws = new WebSocket('wss://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
-    const ws = new WebSocket(host); // Replace with your WebSocket server URL
-  
-    ws.addEventListener('open', () => {
-      console.log('WebSocket connection is open.');
+    return new Promise((resolve, reject) => {
+        const ws = new WebSocket(host); // Replace with your WebSocket server URL
 
-      const message = JSON.stringify({
-        action: 'updateCart',
-        cart: cart,
-        requestFetch: true,
-      });
-      ws.send(message);
-    });
+        ws.addEventListener('open', () => {
+            console.log('WebSocket connection is open.');
 
-    ws.addEventListener('ping', () => {
-        // When a ping message is received from the server, respond with a pong
-        ws.pong();
-        console.log('Sent a ping to the server.');
-      });
+            const message = JSON.stringify({
+                action: 'updateCart',
+                cart: cart,
+                requestFetch: true,
+            });
+            ws.send(message);
+        });
 
-    ws.addEventListener('close', (event) => {
-        if (event.wasClean) {
-          console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
-        } else {
-          console.error('WebSocket connection abruptly closed');
-        }
-      });
-      
-    ws.addEventListener('error', (error) => {
-        console.error('WebSocket error:', error);
-    });
-  
-    ws.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-      if(data.action == 'numberOfClients'){
-        const numberOfClients = data.count;
-        console.log(`Number of connected clients: ${numberOfClients}`);
-      }
-      else if (data.action === 'cartUpdated') {
-        // Handle the case where the cart has been updated by another user.
-        // You can update the client's cart and UI here.
-        console.log('Cart updated by another user');
-        //alert('Another user updated the cart');
+        ws.addEventListener('ping', () => {
+            ws.pong();
+            console.log('Sent a ping to the server.');
+        });
 
-        if (data.requestReload) {
-            // Reload the page when requested by the server
-            window.location.reload();
-          }
-        //checkCart(); // Update the cart on the client side
-      }
+        ws.addEventListener('close', (event) => {
+            if (event.wasClean) {
+                console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
+            } else {
+                console.error('WebSocket connection abruptly closed');
+            }
+        });
+
+        ws.addEventListener('error', (error) => {
+            console.error('WebSocket error:', error);
+            reject(error);
+        });
+
+        ws.addEventListener('message', (event) => {
+            const data = JSON.parse(event.data);
+            if (data.action === 'numberOfClients') {
+                const numberOfClients = data.count;
+                console.log(`Number of connected clients: ${numberOfClients}`);
+            } else if (data.action === 'cartUpdated') {
+                console.log('Cart updated by another user');
+
+                if (data.requestReload) {
+                    window.location.reload();
+                }
+
+                resolve(); // Resolve the Promise when cart update is confirmed
+            }
+        });
     });
 }
 
@@ -326,13 +323,7 @@ function startTimer() {
         item.ticketQuantity = item.ticketQuantity + item.quantity;
       });
   
-      updateCartOnServer(validCart)
-      .then(() => {
-        window.location.href = '/events.html';
-    })
-    .catch(error => {
-        console.error('Error updating the cart on the server:', error);
-    });
+      updateCartOnServer(validCart);
     } catch (error) {
       throw error; // Rethrow the error
     }
