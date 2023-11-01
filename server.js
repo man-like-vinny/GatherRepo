@@ -250,7 +250,7 @@ wss.on('connection', (ws) => {
           // if (client !== ws && client.readyState === WebSocket.OPEN) {
           //   client.send(JSON.stringify({ action: 'cartUpdated' }));
           if (client.readyState === WebSocketServer.OPEN) {
-            client.send(JSON.stringify({ action: 'cartUpdated', requestFetch: true }));
+            client.send(JSON.stringify({ action: 'cartUpdated'}));
           }
         });
       }

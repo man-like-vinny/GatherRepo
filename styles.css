@@ -558,15 +558,6 @@
       font-size: 2rem;
       margin-top: 12rem;
     }
-
-    .listProduct .item h2 {
-      position: absolute;
-      left: 30px;
-      color: rgb(203, 11, 11);
-      z-index: 2;
-      white-space: normal; /* Allow text to wrap */
-      top: 30px; /* Original top value for .item h2 */
-    }
   }
   
   @media screen and (max-width: 480px) {
@@ -581,15 +572,6 @@
   
     .services__card {
       width: 300px;
-    }
-
-    .listProduct .item h2 {
-      position: absolute;
-      left: 30px;
-      color: white;
-      z-index: 2;
-      white-space: normal; /* Allow text to wrap */
-      top: 30px; /* Original top value for .item h2 */
     }
   }
   

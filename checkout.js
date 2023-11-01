@@ -100,15 +100,8 @@ returntoCart.addEventListener('click', function() {
         // ...
 
         // Call updateCartOnServer after all operations are complete
-        updateCartOnServer(validCart)
-        .then(() => {
-            // Once updateCartOnServer is done, navigate to the new page
-            window.location.href = '/events.html';
-        })
-        .catch((error) => {
-            console.error('Error updating cart on the server:', error);
-        });
-        window.location.href = '/events.html';
+        updateCartOnServer(validCart);
+        delayTimer(2000);
     });
 });
 
@@ -223,53 +216,57 @@ function checkCart() {
 // }
 
 function updateCartOnServer(cart) {
-    return new Promise((resolve, reject) => {
-        const ws = new WebSocket(host); // Replace with your WebSocket server URL
+    // Send a WebSocket message to update the cart on the server
+    // const ws = new WebSocket('wss://www.eventifyed.com:5000'); // Replace with your WebSocket server URL
+    const ws = new WebSocket(host); // Replace with your WebSocket server URL
+  
+    ws.addEventListener('open', () => {
+      console.log('WebSocket connection is open.');
 
-        ws.addEventListener('open', () => {
-            console.log('WebSocket connection is open.');
+      const message = JSON.stringify({
+        action: 'updateCart',
+        cart: cart,
+        requestFetch: true,
+      });
+      ws.send(message);
+    });
 
-            const message = JSON.stringify({
-                action: 'updateCart',
-                cart: cart,
-                requestFetch: true,
-            });
-            ws.send(message);
-        });
+    ws.addEventListener('ping', () => {
+        // When a ping message is received from the server, respond with a pong
+        ws.pong();
+        console.log('Sent a ping to the server.');
+      });
 
-        ws.addEventListener('ping', () => {
-            ws.pong();
-            console.log('Sent a ping to the server.');
-        });
+    ws.addEventListener('close', (event) => {
+        if (event.wasClean) {
+          console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
+        } else {
+          console.error('WebSocket connection abruptly closed');
+        }
+      });
+      
+    ws.addEventListener('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
+  
+    ws.addEventListener('message', (event) => {
+      const data = JSON.parse(event.data);
+      if(data.action == 'numberOfClients'){
+        const numberOfClients = data.count;
+        console.log(`Number of connected clients: ${numberOfClients}`);
+      }
+      else if (data.action === 'cartUpdated') {
+        // Handle the case where the cart has been updated by another user.
+        // You can update the client's cart and UI here.
+        console.log('Cart updated by another user');
+        //alert('Another user updated the cart');
 
-        ws.addEventListener('close', (event) => {
-            if (event.wasClean) {
-                console.log(`WebSocket connection closed cleanly, code: ${event.code}, reason: ${event.reason}`);
-            } else {
-                console.error('WebSocket connection abruptly closed');
-            }
-        });
-
-        ws.addEventListener('error', (error) => {
-            console.error('WebSocket error:', error);
-            reject(error);
-        });
-
-        ws.addEventListener('message', (event) => {
-            const data = JSON.parse(event.data);
-            if (data.action === 'numberOfClients') {
-                const numberOfClients = data.count;
-                console.log(`Number of connected clients: ${numberOfClients}`);
-            } else if (data.action === 'cartUpdated') {
-                console.log('Cart updated by another user');
-
-                if (data.requestReload) {
-                    window.location.reload();
-                }
-
-                resolve(); // Resolve the Promise when cart update is confirmed
-            }
-        });
+        if (data.requestReload) {
+            // Reload the page when requested by the server
+            window.location.reload();
+          }
+        //checkCart(); // Update the cart on the client side
+      }
     });
 }
 
@@ -287,7 +284,7 @@ function startTimer() {
           handleTimerExpiration();
           // All calculations and API calls are complete, redirect to events.html
           //clearCart();
-          window.location.href = '/events.html';
+          delayTimer(2000);
         } catch (error) {
           console.error('Error during calculations:', error);
         }
@@ -301,32 +298,42 @@ function startTimer() {
   }
   
   function handleTimerExpiration() {
-    try {
-      const updatedData = fetch('/getProducts').then((response) => response.json());
-      const validCart = listCart.filter((item) => item !== null);
-  
-      // Update item.ticketQuantity values with the latest data
-      validCart.forEach((item) => {
-        const matchingProduct = updatedData.find((product) => product.name === item.name);
-  
-        if (matchingProduct) {
-          const matchingTicket = matchingProduct.type.find((ticket) => ticket.ticketType === item.ticktype);
-  
-          if (matchingTicket) {
-            item.ticketQuantity = matchingTicket.ticketQuantity;
-          }
-        }
-      });
-  
-      // Now that item.ticketQuantity values are updated, you can perform calculations
-      validCart.forEach((item) => {
-        item.ticketQuantity = item.ticketQuantity + item.quantity;
-      });
-  
+    fetch('/getProducts')
+    .then(response => response.json())
+    .then(updatedData => {
+        const validCart = listCart.filter(item => item !== null);
+
+        // Update item.ticketQuantity values with the latest data
+        validCart.forEach(item => {
+            // Find the product with the matching name
+            const matchingProduct = updatedData.find(product => product.name === item.name);
+
+            if (matchingProduct) {
+                // Find the corresponding ticketType
+                const matchingTicket = matchingProduct.type.find(ticket => ticket.ticketType === item.ticktype);
+                console.log(matchingTicket);
+                if (matchingTicket) {
+                    // Update item.ticketQuantity with the value from the matching ticket
+                    item.ticketQuantity = matchingTicket.ticketQuantity;
+                    console.log(matchingTicket.ticketQuantity);
+                }
+            }
+        });
+
+        // Now that item.ticketQuantity values are updated, you can perform calculations
+        validCart.forEach(item => {
+            item.ticketQuantity = item.ticketQuantity + item.quantity;
+        });
+
       updateCartOnServer(validCart);
-    } catch (error) {
-      throw error; // Rethrow the error
-    }
+    });
+  };
+
+  function delayTimer(delay){
+    setTimeout(function() {
+        console.log("delay taken place");
+        window.location.href = '/events.html';
+    }, delay);
   }
   
 
