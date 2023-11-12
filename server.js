@@ -87,7 +87,7 @@ app.get('/', (req, res) => {
 
 app.use(express.static(__dirname));
 
-const http = require('https'); // Add this line to create an HTTP server
+// const http = require('http'); // Add this line to create an HTTP server
 //const WebSocket = require('ws'); // Add this line for WebSocket support
 
 // const server = http.createServer(app); // Create an HTTP server
@@ -95,8 +95,9 @@ const http = require('https'); // Add this line to create an HTTP server
 //const wss = new WebSocket.Server({ server }); // Create a WebSocket server
 
 var WebSocketServer = require("ws").Server
-var server = http.createServer(app)
-server.listen(port, () => console.log(`Node server listening on port ${port}`))
+// var server = http.createServer(app)
+const server = app.listen(port, () => console.log(`Node server listening on port ${port}`));
+// server.listen(port, () => console.log(`Node server listening on port ${port}`))
 
 console.log("http server listening on %d", port)
 

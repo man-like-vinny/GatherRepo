@@ -1,0 +1,45 @@
+{
+  "name": "auto-sni",
+  "description": "Automatically generate tls credentials using letsencrypt.",
+  "version": "2.3.2",
+  "author": "Dylan Piercey <pierceydylan@gmail.com>",
+  "bugs": "https://github.com/DylanPiercey/auto-sni/issues",
+  "dependencies": {
+    "greenlock-express": "^2.0.9"
+  },
+  "devDependencies": {
+    "hostile": "^1.3.0",
+    "ngrok": "^2.2.6",
+    "object-assign": "^4.1.1",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.1",
+    "supertest": "^3.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.3"
+  },
+  "homepage": "https://github.com/DylanPiercey/auto-sni",
+  "keywords": [
+    "auto",
+    "auto-sni",
+    "http",
+    "https",
+    "lets-encrypt",
+    "letsencrypt",
+    "letsencrypt-auto",
+    "renew",
+    "secure",
+    "sni",
+    "ssl",
+    "tls",
+    "web"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DylanPiercey/auto-sni"
+  },
+  "scripts": {
+    "test": "standard --verbose | snazzy && sudo tape ./test/**/*.test.js | tap-spec"
+  }
+}
