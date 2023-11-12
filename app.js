@@ -1,4 +1,3 @@
-//comment
 const menu = document.querySelector('#mobile-menu');
 const menuLinks = document.querySelector('.navbar__menu');
 
@@ -182,21 +181,21 @@ function addDataToHTML() {
             newProduct.classList.add('item');
             
             // Create a container for the background effect
-            // let backgroundEffect = document.createElement('div');
-            // backgroundEffect.classList.add('item-bg');
-            // backgroundEffect.style.backgroundImage = `url(${product.image})`;
+            let backgroundEffect = document.createElement('div');
+            backgroundEffect.classList.add('item-bg');
+            backgroundEffect.style.backgroundImage = `url(${product.image})`;
 
-            // newProduct.appendChild(backgroundEffect);
+            newProduct.appendChild(backgroundEffect);
 
             // Create a video element for the product.image
-            let videoElement = document.createElement('video');
-            videoElement.src = product.image;
-            videoElement.muted = true; // Mute the audio
-            videoElement.autoplay = true; // Play the video automatically
-            videoElement.loop = true; // Loop the video
-            videoElement.style.width = '100%'; // Set the video width using CSS
-            videoElement.style.height = 'auto'; // Set the video height using CSS
-            newProduct.appendChild(videoElement);
+            // let videoElement = document.createElement('video');
+            // videoElement.src = product.image;
+            // videoElement.muted = true; // Mute the audio
+            // videoElement.autoplay = true; // Play the video automatically
+            // videoElement.loop = true; // Loop the video
+            // videoElement.style.width = '100%'; // Set the video width using CSS
+            // videoElement.style.height = 'auto'; // Set the video height using CSS
+            // newProduct.appendChild(videoElement);
 
             // if needed for adding to selected ticket type bit
             // <p>Selected Ticket Type: <span id="selectedTicket"></span></p>
@@ -207,8 +206,8 @@ function addDataToHTML() {
             <button onclick="checkProductId('${product.name}')">Add To Cart</button>
             <label for="ticketType">Select Ticket Type:</label>
             <select id="ticketType">
-                <option value="EarlyBird (Non-Member)">EarlyBird (Non-Member)</option>
-                <option value="EarlyBird (Member)">EarlyBird (Member)</option>
+                <option value="Standard">Standard</option>
+                <option value="Family">Family</option>
             </select>
             <script src="script.js"></script>`;
 
@@ -292,13 +291,13 @@ function checkProductId(productName){
     let productQuantity = null;
 
 
-    if (selectedValue === "EarlyBird (Non-Member)") {
-        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === "EarlyBird (Non-Member)");
+    if (selectedValue === "Standard") {
+        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === "Standard");
         productID = earlyBirdNonMemberID ? earlyBirdNonMemberID.id : null;
         productTicketType = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketType : null;
         productQuantity = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketQuantity : null;
-    } else if (selectedValue === "EarlyBird (Member)") {
-        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === "EarlyBird (Member)");
+    } else if (selectedValue === "Family") {
+        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === "Family");
         productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
         productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
         productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
@@ -411,11 +410,11 @@ function addCartToHTML() {
     function getPriceForSelectedType(product, selectedValue) {
         let price = null;
         // Check the selected ticket type and find the corresponding price
-        if (selectedValue === "EarlyBird (Non-Member)") {
-            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === "EarlyBird (Non-Member)");
+        if (selectedValue === "Standard") {
+            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === "Standard");
             price = earlyBirdNonMemberPrice ? earlyBirdNonMemberPrice.price : null;
-        } else if (selectedValue === "EarlyBird (Member)") {
-            const earlyBirdMemberPrice = product.type.find(type => type.ticketType === "EarlyBird (Member)");
+        } else if (selectedValue === "Family") {
+            const earlyBirdMemberPrice = product.type.find(type => type.ticketType === "Family");
             price = earlyBirdMemberPrice ? earlyBirdMemberPrice.price : null;
         }
         // } else if (selectedValue === "Standard (Non-Member)") {
@@ -443,7 +442,7 @@ function addCartToHTML() {
                 //note that listCart[productTypeID].ticktype is also known as product.ticktype
 
                 newCart.innerHTML = 
-                    `<img src="${product.staticImage}">
+                    `<img src="${product.image}">
                     <div class="content">
                         <div class="name">${product.name}</div>
                         <div class="price">€${product.variablePrice} / ${product.ticktype}</div>
