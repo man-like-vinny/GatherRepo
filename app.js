@@ -385,10 +385,11 @@ function addCart(productTypeID, productTicketType) {
             console.log("Max tickets reached");
         }
     }
+
+    console.log(listCart);
     
     // console.log(listCart[$idProduct]);
     document.cookie = "listCart=" + JSON.stringify(listCart) + "; expires=Thu, 31 Dec 2025 23:59:59 UTC; path=/;";
-    
     addCartToHTML();
 }
 
@@ -483,6 +484,7 @@ function changeQuantity($idProduct, $type) {
             // if quantity <= 0 then remove product in cart
             if (listCart[$idProduct].quantity <= 0) {
                 delete listCart[$idProduct];
+                console.log(listCart);
                 listCart = [];
             } else if (listCart[$idProduct].ticketQuantity === 0) {
                 console.log("Max tickets reached");

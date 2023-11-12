@@ -921,6 +921,7 @@ header .totalQuantity{
   z-index: 2;
   white-space: normal; /* Allow text to wrap */
   top: 370px; /* Original top value for .item h2 */
+  opacity: 0;
 }
 
 .listProduct .item p {

@@ -2,30 +2,13 @@ let listCart = [];
 let returntoCart = document.querySelector('.returnCart');
 var host = location.origin.replace(/^http/, 'ws')
 
-// function checkCart() {
-//     var cookieValue = document.cookie
-//         .split('; ')
-//         .find(row => row.startsWith('listCart='));
-//     if (cookieValue) {
-//         listCart = JSON.parse(cookieValue.split('=')[1]);
-//     }
-// }
-
 function checkCart() {
-  var cookieValue = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('listCart='));
-  
-  if (cookieValue) {
-      // Parse the "listCart" value from the cookie
-      listCart = JSON.parse(cookieValue.split('=')[1]);
-
-      // Filter out null values from the array
-      listCart = listCart.filter(item => item !== null);
-
-      // Now 'listCart' contains the array without null values
-      console.log(listCart);
-  }
+    var cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('listCart='));
+    if (cookieValue) {
+        listCart = JSON.parse(cookieValue.split('=')[1]);
+    }
 }
 
 checkCart();
