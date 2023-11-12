@@ -192,15 +192,6 @@ function clearCart() {
 
 //------------------------------------------updating cart logic below------------------------------------------------------------
 //listCart = []
-
-function checkCart() {
-    var cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('listCart='));
-    if (cookieValue) {
-        listCart = JSON.parse(cookieValue.split('=')[1]);
-    }
-}
 // function updateCartOnServer(listCart) {
 //     // Send a request to the server to update the cart in MongoDB
 //     fetch('/api/updateCart', {
@@ -399,7 +390,7 @@ function startTimer() {
 // window.onload = startTimer;
 
 window.onload = () => {
-    checkCart();
+    //checkCart();
     updateCartOnServer(listCart);
     startTimer();
   };
