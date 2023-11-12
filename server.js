@@ -79,14 +79,15 @@ const port = process.env.PORT || 5000;
 const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
-app.use(express.static(__dirname));
 
 // Serve your HTML file
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-const http = require('http'); // Add this line to create an HTTP server
+app.use(express.static(__dirname));
+
+const http = require('https'); // Add this line to create an HTTP server
 //const WebSocket = require('ws'); // Add this line for WebSocket support
 
 // const server = http.createServer(app); // Create an HTTP server
