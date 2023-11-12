@@ -389,7 +389,7 @@ function addCart(productTypeID, productTicketType) {
     console.log(listCart);
     
     // console.log(listCart[$idProduct]);
-    document.cookie = "listCart=" + JSON.stringify(listCart) + "; expires=Thu, 31 Dec 2025 23:59:59 UTC; path=/;";
+    document.cookie = "listCart=" + JSON.stringify(listCart);
     addCartToHTML();
 }
 
@@ -494,7 +494,7 @@ function changeQuantity($idProduct, $type) {
             break;
     }
     // save new data in the cookie
-    document.cookie = "listCart=" + JSON.stringify(listCart) + "; expires=Thu, 31 Dec 2025 23:59:59 UTC; path=/;";
+    document.cookie = "listCart=" + JSON.stringify(listCart);
     // reload the HTML view cart
     addCartToHTML();
 }
