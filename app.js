@@ -206,7 +206,7 @@ function addDataToHTML() {
             <button onclick="checkProductId('${product.name}')">Add To Cart</button>
             <label for="ticketType">Select Ticket Type:</label>
             <select id="ticketType">
-                <option value="Standard">Standard</option>
+                <option value="Single">Single</option>
                 <option value="Family">Family</option>
             </select>
             <script src="script.js"></script>`;
@@ -291,8 +291,8 @@ function checkProductId(productName){
     let productQuantity = null;
 
 
-    if (selectedValue === "Standard") {
-        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === "Standard");
+    if (selectedValue === "Single") {
+        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === "Single");
         productID = earlyBirdNonMemberID ? earlyBirdNonMemberID.id : null;
         productTicketType = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketType : null;
         productQuantity = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketQuantity : null;
@@ -411,8 +411,8 @@ function addCartToHTML() {
     function getPriceForSelectedType(product, selectedValue) {
         let price = null;
         // Check the selected ticket type and find the corresponding price
-        if (selectedValue === "Standard") {
-            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === "Standard");
+        if (selectedValue === "Single") {
+            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === "Single");
             price = earlyBirdNonMemberPrice ? earlyBirdNonMemberPrice.price : null;
         } else if (selectedValue === "Family") {
             const earlyBirdMemberPrice = product.type.find(type => type.ticketType === "Family");
