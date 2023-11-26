@@ -1,0 +1,34 @@
+[
+    {
+        "name": "Maynooth University Indian Society: Diwali",
+        "description": "Indian Society Culteral Event",
+        "type": [
+            {
+                "ticketType": "EarlyBird (Non-Member)",
+                "price": 1,
+                "ticketQuantity": 30,
+                "id": 1
+            },
+            {
+                "ticketType": "EarlyBird (Member)",
+                "price": 1,
+                "ticketQuantity": 40,
+                "id": 2
+            },
+            {
+                "ticketType": "Standard (Non-Member)",
+                "price": 1,
+                "ticketQuantity": 20,
+                "id": 3
+            },
+            {
+                "ticketType": "Standard (Member)",
+                "price": 1,
+                "ticketQuantity": 20,
+                "id": 4
+            }
+        ],
+        "ticketDescription": "Early-bird €10/Member | €12/Non-Member Standard: €12/Member | €14/Non-Member",
+        "image": "product_images/muindiansoc.jpeg"
+    }
+]

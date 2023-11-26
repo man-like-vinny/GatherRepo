@@ -1,6 +1,6 @@
 let listCart = [];
 let returntoCart = document.querySelector('.returnCart');
-var host = location.origin.replace(/^http/, 'ws')
+var host = location.origin.replace(/^https/, 'ws')
 
 function checkCart() {
     var cookieValue = document.cookie

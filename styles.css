@@ -848,14 +848,276 @@ header .totalQuantity{
   transform: translateX(20px);
 }
 
+.listEvents{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.listEvents .item{
+  height: 560px;
+  width: 400px;
+  left: 100px;
+  border-radius: 4px;
+  position: relative;
+  color: #ffffff;
+  background-color: white;
+  overflow: hidden; /* Add this to hide overflow of the background image */
+}
+
+.listEvents .item .item-bg{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  z-index: 1; /* Move the background behind the content */
+  border-radius: 4px;
+}
+
+/* 
+.listProduct .item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+} */
+
+.listEvents .item .item-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(17, 17, 17, 0.9) 100%
+  ); */
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.listEvents .description{
+  height: 560px;
+  width: 570px;
+  left: -40px;
+  border-radius: 10px;
+  position: relative;
+  color: #ffffff;
+  background-color: white;
+  overflow: hidden; /* Add this to hide overflow of the background image */
+}
+
+.listEvents .description h2 {
+  position: absolute;
+  left: 17px;
+  color: #1e0a3c;
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 5px; /* Original top value for .item h2 */
+  opacity: 1;
+  font-family: Neue Plak,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,Helvetica,Tahoma,Arial,sans-serif;
+  font-weight: 1000;
+  font-size: 30px;
+
+  background-color: #ff8177;
+  background-image: linear-gradient(to top, #000000 0%, #4253bf 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.listEvents .description p {
+  position: absolute;
+  left: 30px;
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 420px; /* Position .item p just below .item h2 */
+  transform: translateY(-50%); /* Center .item p vertically */
+}
+
+.listEvents .description .price{
+  position: absolute;
+  color: rgb(0, 0, 0);
+  top: 50px;
+  left: 18px;
+  font-size: 18px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  z-index: 2;
+  opacity: 1;
+}
+
+.listEvents .description .type{
+  position: absolute;
+  color: black;
+  top: 505px;
+  left: 30px;
+  font-size: medium;
+  opacity: 1;
+  z-index: 2;
+}
+
+.listEvents .description .addtoCart {
+  position: absolute;
+  background-color: rgb(29, 101, 193);
+  color: #fff;
+  bottom: -2px;
+  width: 25%;
+  right: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  /* transform: translateX(-50%) translateY(100px); */
+  opacity: 1;
+  z-index: 2;
+}
+
+.listEvents .description .addtoCart:hover {
+  cursor: pointer;
+  background: green;
+  transition: all 0.35s;
+  border-radius: 20px;
+  color: white;
+  opacity: 1;
+  z-index: 2;
+}
+
+.listEvents .description .addtoCart:after{
+  transition: all 0.35s;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #4837ff;
+  transition: all 0.35s;
+  border-radius: 4px;
+  color: white;
+}
+
+/* .listEvents .description label{
+  z-index: 100;
+  position: absolute;
+  left: 30px;
+  z-index: 2;
+  color: black;
+  white-space: normal; 
+  top: 268px; 
+  transform: translateY(-50%); 
+}
+
+.listEvents .description select{
+  z-index: 100;
+  position: absolute;
+  right: 330px;
+  z-index: 2;
+  color: white;
+  background-color: black;
+  white-space: normal;
+  top: 271px; 
+  transform: translateY(-50%); 
+} */
+
+.listEvents .description .location{
+  position: absolute;
+  left: 18px;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 335px; /* Original top value for .item h2 */
+  opacity: 1;
+  font-size: 15px;
+}
+
+.listEvents .description .location_header{
+  position: absolute;
+  left: 18px;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 305px; /* Original top value for .item h2 */
+  font-size: 24px;
+  opacity: 1;
+  font-weight: bolder;
+  background-color: #ff8177;
+  background-image: linear-gradient(to top, #000000 0%, #000000 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.listEvents .description .timing_header{
+  position: absolute;
+  left: 18px;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 250px; /* Original top value for .item h2 */
+  font-size: 24px;
+  opacity: 1;
+  font-weight: bolder;
+  background-color: #ff8177;
+  background-image: linear-gradient(to top, #000000 0%, #000000 100%);
+  background-size: 100%;
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-text-fill-color: transparent;
+}
+
+.listEvents .description .timing{
+  position: absolute;
+  left: 18px;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 280px; /* Original top value for .item h2 */
+  font-size: 15px;
+  opacity: 1;
+}
+
+.listEvents .description .ticketHeading{
+  position: absolute;
+  left: 18px;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 365px; /* Original top value for .item h2 */
+  font-size: larger;
+  opacity: 1;
+  font-weight: bolder;
+}
+
+.listEvents .description .ticketRules{
+  position: absolute;
+  left: 18px;
+  color: rgb(0, 0, 0);
+  z-index: 2;
+  white-space: normal; /* Allow text to wrap */
+  top: 394px; /* Original top value for .item h2 */
+  font-size: small;
+  opacity: 1;
+}
+
+.listEvents .description .ticketSection{
+  position: absolute;
+
+}
+
 .listProduct{
   display: grid;
-  grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
 .listProduct .item {
-  height: 630px;
+  height: 560px;
   width: 400px;
   border-radius: 4px;
   position: relative;
@@ -865,7 +1127,7 @@ header .totalQuantity{
 }
 
 .listProduct .item .item-bg{
-  height: 85%;
+  height: 100%;
   width: 100%;
   position: absolute;
   background-size: cover;
@@ -917,23 +1179,24 @@ header .totalQuantity{
 .listProduct .item h2 {
   position: absolute;
   left: 30px;
-  color: black;
+  color: white;
   z-index: 2;
   white-space: normal; /* Allow text to wrap */
-  top: 535px; /* Original top value for .item h2 */
-  opacity: 1;
-}
-
-.listProduct .item p {
+  top: 350px; /* Original top value for .item h2 */
+  opacity: 0;
+  }
+  
+  .listProduct .item p {
   position: absolute;
   left: 30px;
   z-index: 2;
   white-space: normal; /* Allow text to wrap */
   top: 420px; /* Position .item p just below .item h2 */
   transform: translateY(-50%); /* Center .item p vertically */
-}
-
-.listProduct .item .price{
+  opacity: 0;
+  }
+  
+  .listProduct .item .price{
   position: absolute;
   color: white;
   top: 435px;
@@ -941,19 +1204,20 @@ header .totalQuantity{
   font-size: medium;
   z-index: 2;
   opacity: 0;
-}
-
-.listProduct .item .type{
+  }
+  
+  .listProduct .item .type{
   position: absolute;
-  color: black;
-  top: 505px;
+  color: white;
+  top: 385px;
   left: 30px;
   font-size: medium;
   opacity: 1;
   z-index: 2;
-}
-
-.listProduct .item button {
+  opacity: 0;
+  }
+  
+  .listProduct .item button {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -967,9 +1231,9 @@ header .totalQuantity{
   transform: translateX(-50%) translateY(100px);
   opacity: 0;
   z-index: 2;
-}
-
-.listProduct .item:hover button{
+  }
+  
+  .listProduct .item:hover button{
   cursor: pointer;
   background: #4837ff;
   transition: all 0.35s;
@@ -977,9 +1241,9 @@ header .totalQuantity{
   color: white;
   opacity: 1;
   z-index: 2;
-}
-
-.listProduct .item button:after{
+  }
+  
+  .listProduct .item button:after{
   transition: all 0.35s;
   position: absolute;
   content: '';
@@ -991,30 +1255,27 @@ header .totalQuantity{
   transition: all 0.35s;
   border-radius: 4px;
   color: white;
-}
-
-.listProduct .item label{
+  }
+  
+  /* .listProduct .item label{
   z-index: 100;
   position: absolute;
   left: 30px;
   z-index: 2;
-  color: black;
-  white-space: normal; /* Allow text to wrap */
-  top: 608px; /* Position .item p just below .item h2 */
-  transform: translateY(-50%); /* Center .item p vertically */
-}
-
-.listProduct .item select{
+  white-space: normal; 
+  top: 490px; 
+  transform: translateY(-50%); 
+  } */
+  
+  /* .listProduct .item select{
   z-index: 100;
   position: absolute;
-  right: 145px;
+  right: 47px;
   z-index: 2;
-  color: white;
-  background-color: black;
-  white-space: normal; /* Allow text to wrap */
-  top: 608px; /* Position .item p just below .item h2 */
-  transform: translateY(-50%); /* Center .item p vertically */
-}
+  white-space: normal; 
+  top: 491px; 
+  transform: translateY(-50%);
+  } */
 
 .cart{
   color: #fff;
@@ -1029,6 +1290,7 @@ header .totalQuantity{
   gap: 20px;
   transition: right 1s;
   top: 0;
+  z-index: 2;;
 }
 
 .cart .buttons .checkout{

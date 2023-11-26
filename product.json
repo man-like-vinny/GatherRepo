@@ -1,34 +1,69 @@
 [
     {
-        "name": "Maynooth University Indian Society: Diwali",
-        "description": "Indian Society Culteral Event",
+        "name": "Daffodils: Christmas & New-Year Party",
+        "description": "January 7th @ 2.00PM",
         "type": [
-            {
-                "ticketType": "EarlyBird (Non-Member)",
-                "price": 1,
-                "ticketQuantity": 30,
-                "id": 1
-            },
-            {
-                "ticketType": "EarlyBird (Member)",
-                "price": 1,
-                "ticketQuantity": 40,
-                "id": 2
-            },
-            {
-                "ticketType": "Standard (Non-Member)",
-                "price": 1,
-                "ticketQuantity": 20,
-                "id": 3
-            },
-            {
-                "ticketType": "Standard (Member)",
-                "price": 1,
-                "ticketQuantity": 20,
-                "id": 4
-            }
+          {
+            "ticketType": "Single",
+            "price": 1,
+            "ticketQuantity": 0,
+            "id": 0
+          },
+          {
+            "ticketType": "Family",
+            "price": 1,
+            "ticketQuantity": 0,
+            "id": 1
+          },
+          {
+            "ticketType": "Standard (Non-Member)",
+            "price": 1,
+            "ticketQuantity": 20,
+            "id": 2
+          },
+          {
+            "ticketType": "Standard (Member)",
+            "price": 1,
+            "ticketQuantity": 10,
+            "id": 3
+          }
         ],
-        "ticketDescription": "Early-bird €10/Member | €12/Non-Member Standard: €12/Member | €14/Non-Member",
-        "image": "product_images/muindiansoc.jpeg"
+        "ticketDescription": "Standard",
+        "image": "product_images/daffodils_jan.jpg",
+        "staticImage": "product_images/daffodils_jan.jpg"
+    },
+
+    {
+        "name": "Daffodils: Christmas & New-Year Party",
+        "description": "January 7th @ 2.00PM",
+        "type": [
+          {
+            "ticketType": "Single",
+            "price": 1,
+            "ticketQuantity": 0,
+            "id": 0
+          },
+          {
+            "ticketType": "Family",
+            "price": 1,
+            "ticketQuantity": 0,
+            "id": 1
+          },
+          {
+            "ticketType": "Standard (Non-Member)",
+            "price": 1,
+            "ticketQuantity": 20,
+            "id": 2
+          },
+          {
+            "ticketType": "Standard (Member)",
+            "price": 1,
+            "ticketQuantity": 10,
+            "id": 3
+          }
+        ],
+        "ticketDescription": "Standard",
+        "image": "product_images/daffodils_jan.jpg",
+        "staticImage": "product_images/daffodils_jan.jpg"
     }
 ]

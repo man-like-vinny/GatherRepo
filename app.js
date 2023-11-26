@@ -14,6 +14,8 @@ let container = document.querySelector('.navbar');
 let event_container = document.querySelector('.listProduct');
 let close = document.querySelector('.close');
 
+let globalProductID = 0;
+
 iconCart.addEventListener('click', function(){
     if(cart.style.right == '-100%'){
         cart.style.right = '0';
@@ -200,14 +202,113 @@ function addDataToHTML() {
             // if needed for adding to selected ticket type bit
             // <p>Selected Ticket Type: <span id="selectedTicket"></span></p>
             // <button class=saveticket" onclick="saveSelectedTicketType()">Save Ticket Type</button>
+            if(product.status == "true"){
+                eventStatus = "Buy Tickets"
+                navigateStatus = "navigateProduct('${product.name}')"
+            }
+            else{
+                eventStatus = "Event Completed"
+                navigateStatus = null
+            }
+            newProduct.innerHTML += 
+            `<h2>${product.name}</h2>
+            <div class="price">${product.ticketDescription}</div>
+            <button onclick="${navigateStatus}">${eventStatus}</button>
+            <label for="ticketType">Select Ticket Type:</label>
+            <select id="ticketType">
+                <option value="${product.option1}">${product.option1}</option>
+                <option value="${product.option2}">${product.option2}</option>
+            </select>
+            <script src="script.js"></script>`;
+
+            listProductHTML.appendChild(newProduct);
+
+            let addButton = newProduct.querySelector('button');
+
+            // addButton.addEventListener('click', function(){
+            //     if(cart.style.right == '-100%'){
+            //         cart.style.right = '0';
+            //         container.style.transform = 'translateX(-400px)';
+            //     } else {
+            //         cart.style.right = '0%';
+            //         container.style.transform = 'translateX(-400px)';
+            //         event_container.style.transform = 'translateX(-150px)';
+            //     }
+            // });
+            
+            const ticketSelection = document.getElementById("ticketType");
+            ticketSelection.addEventListener("change", function() {
+                const selectedValue = ticketSelection.value;
+                console.log("Selected Value: " + selectedValue);
+                // const selectedProduct = product.name;
+
+                const selectedProductName = ticketSelection.parentElement.querySelector('h2').textContent;
+                console.log("selectedProductName: " + selectedProductName);
+                const selectedProduct = products.find(product => product.name === selectedProductName);
+            
+                if (selectedProduct) {
+                    // Now 'selectedProduct' contains the product information based on the selected ticket type.
+                    // You can use this information to update the cart view or perform any other actions.
+                    console.log("Selected Product:", selectedProduct);
+                    
+                    // You can also get the price for the selected ticket type
+                    selectedTicketType = selectedProduct.type.find(type => type.ticketType === selectedValue);
+                    console.log("Selected TicketType: " + selectedTicketType);
+                    if (selectedTicketType) {
+                        console.log("Selected TicketType: " + selectedTicketType.ticketType);
+                        console.log("Price: €" + selectedTicketType.price);
+                    } else {
+                        console.log("Price not found for the selected ticket type.");
+                    }
+                } else {
+                    console.log("Product not found for the selected ID.");
+                }
+            });
+            
+        });
+    }
+}
+
+function addEventToHTML() {
+    // remove datas default from HTML
+    let listProductHTML = document.querySelector('.listEvents');
+    listProductHTML.innerHTML = '';
+
+    // add new datas
+    if (products != null) // if has data
+    {
+        products.forEach(product => {
+            let newProduct = document.createElement('div');
+            newProduct.classList.add('item');
+            
+            // Create a container for the background effect
+            let backgroundEffect = document.createElement('div');
+            backgroundEffect.classList.add('item-bg');
+            backgroundEffect.style.backgroundImage = `url(${product.image})`;
+
+            newProduct.appendChild(backgroundEffect);
+
+            // Create a video element for the product.image
+            // let videoElement = document.createElement('video');
+            // videoElement.src = product.image;
+            // videoElement.muted = true; // Mute the audio
+            // videoElement.autoplay = true; // Play the video automatically
+            // videoElement.loop = true; // Loop the video
+            // videoElement.style.width = '100%'; // Set the video width using CSS
+            // videoElement.style.height = 'auto'; // Set the video height using CSS
+            // newProduct.appendChild(videoElement);
+
+            // if needed for adding to selected ticket type bit
+            // <p>Selected Ticket Type: <span id="selectedTicket"></span></p>
+            // <button class=saveticket" onclick="saveSelectedTicketType()">Save Ticket Type</button>
             newProduct.innerHTML += 
             `<h2>${product.name}</h2>
             <div class="price">${product.ticketDescription}</div>
             <button onclick="checkProductId('${product.name}')">Add To Cart</button>
             <label for="ticketType">Select Ticket Type:</label>
             <select id="ticketType">
-                <option value="Single">Single</option>
-                <option value="Family">Family</option>
+                <option value="${product.option1}">${product.option1}</option>
+                <option value="${product.option2}">${product.option2}</option>
             </select>
             <script src="script.js"></script>`;
 
@@ -280,24 +381,38 @@ function checkCart(){
 }
 clearCart();
 checkCart();
+
+function navigateProduct() {
+    globalProductID = 1;
+    window.location.href = "daffodils_newyear.html";
+}
+fetch('/getProducts')
+.then(response => response.json())
+.then(data => {
+    products = data;
+    console.log("done")
+    addEventToHTML();
+})
+
 function checkProductId(productName){
     console.log()
     const selectedProduct = products.find(product => product.name === productName);
     console.log(selectedProduct);
     const ticketSelection = document.getElementById("ticketType");
     const selectedValue = ticketSelection.value; // Get the selected value here
+    console.log("option1:" + selectedProduct.option1)
 
     let productID = null;
     let productQuantity = null;
 
 
-    if (selectedValue === "Single") {
-        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === "Single");
+    if (selectedValue === selectedProduct.option1) {
+        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
         productID = earlyBirdNonMemberID ? earlyBirdNonMemberID.id : null;
         productTicketType = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketType : null;
         productQuantity = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketQuantity : null;
-    } else if (selectedValue === "Family") {
-        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === "Family");
+    } else if (selectedValue === selectedProduct.option2) {
+        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
         productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
         productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
         productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
@@ -355,6 +470,7 @@ function addCart(productTypeID, productTicketType) {
                         
                         else {
                             console.log("Max tickets reached");
+
                         }
 
                     } 
@@ -411,11 +527,11 @@ function addCartToHTML() {
     function getPriceForSelectedType(product, selectedValue) {
         let price = null;
         // Check the selected ticket type and find the corresponding price
-        if (selectedValue === "Single") {
-            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === "Single");
+        if (selectedValue === selectedProduct.option1) {
+            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option1);
             price = earlyBirdNonMemberPrice ? earlyBirdNonMemberPrice.price : null;
-        } else if (selectedValue === "Family") {
-            const earlyBirdMemberPrice = product.type.find(type => type.ticketType === "Family");
+        } else if (selectedValue === selectedProduct.option2) {
+            const earlyBirdMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option2);
             price = earlyBirdMemberPrice ? earlyBirdMemberPrice.price : null;
         }
         // } else if (selectedValue === "Standard (Non-Member)") {
