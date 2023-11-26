@@ -508,8 +508,6 @@ function addCartToHTML() {
         return price;
     }
 
-    console.log("Real shi: " + selectedTicketType);
-
     // If there are products in the cart
     if (listCart) {
         Object.entries(listCart).forEach(([productTypeID, product]) => {
