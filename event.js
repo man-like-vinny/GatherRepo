@@ -72,7 +72,7 @@ checkoutButton.addEventListener('mouseout', function() {
 
 
 //---------websocket---------------
-var host = location.origin.replace(/^https/, 'ws')
+var host = location.origin.replace(/^http/, 'ws')
 var ws = new WebSocket(host);
 
 ws.addEventListener('open', () => {
