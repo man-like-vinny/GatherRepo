@@ -742,9 +742,29 @@
     }
   }
 
-  .cart .checkout{
-    margin-bottom: 50
-    px !important;
+  @media screen and (max-width: 480px){
+    .checkoutLayout{
+      grid-template-columns: 1fr !important;
+    }
+
+    .checkoutLayout .returnCart{
+      width: 95% !important;
+      margin-left: -13px;
+    }
+
+    .checkoutLayout .returnCart .timer-container{
+      margin-top: -20px !important;
+    }
+
+    .checkoutLayout .returnCart .timer-container p{
+      margin-left: -50px;
+    }
+
+    .checkoutLayout .right{
+      width: 97% !important;
+      margin-left: -15px;
+      margin-top: -60px !important;
+    }
   }
   
   /* Footer CSS */
