@@ -229,14 +229,14 @@ function addDataToHTML() {
                 <div class="location_header">Location</div>
                 <div class="location">${selectedProduct.eventLocation}</div>
                 <div class="ticketHeading">Ticket Options</div>
-                <div class="ticketRules">Tickets are sold on a <strong>first come first served</strong> basis.<br>*Booking fee of €0.50 will be included in the total sale</br>*Family ticket is the equivalent of 4 single tickets</div>
+                <div class="ticketRules">Tickets are sold on a <strong>first come first served</strong> basis.<br>*Booking fee of €0.50 will be included in the total sale.</div>
                 <table class ="ticketSection" width="100%" style="position: relative; top: 450px;" border="0" cellspacing="0" cellpadding="4">
                     <tbody>
                         <tr style="background-color: #efefef; color:black;">
                             <td width="30%" style="position: relative; left: 19px;"><strong>Ticket Selection</strong></td>
-                            <td width="20%"><strong>Price</strong></td>
+                            <td width="15%"><strong>Price</strong></td>
                             <td width="25%"><strong>Ticket Status</strong></td>
-                            <td width="20%"></td>
+                            <td width="25%"></td>
                         </tr>
                         <tr style="color:black; position: relative; top: 5px;">
                             <td style="position: relative; left: 20px;"><strong>${selectedProduct.option1}</strong></td>

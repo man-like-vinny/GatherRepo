@@ -666,12 +666,12 @@
 
     .listEvents .description .ticketSection  {
       width: 105% !important;
-      margin-top: 120px;
+      margin-top: 100px;
       margin-left: -10px;
     }
 
     .listEvents .description .ticketSection td  {
-      width: 12% !important;
+      width: 15% !important;
     }
 
     .listEvents .item .item-bg {
@@ -680,6 +680,8 @@
       background-size: cover !important;
       background-position: center !important;
     }
+
+  
 
     .services__container{
       height: 620px !important;
