@@ -682,7 +682,7 @@
     .listEvents .description .addtoCart2{
       position: absolute;
       color: #fff;
-      bottom: -2px;
+      bottom: 1px !important;
       width: 100% !important;
       right: 10px !important;
       border-radius: 20px;
@@ -1179,12 +1179,12 @@ header .totalQuantity{
   z-index: 2;
 }
 
-.listEvents .description .addtoCart {
+.listEvents .description .addtoCart2{
   position: absolute;
   background-color: rgb(29, 101, 193);
   color: #fff;
   bottom: -2px;
-  width: 25%;
+  width: 95%;
   right: 10px;
   border-radius: 20px;
   cursor: pointer;
@@ -1193,12 +1193,36 @@ header .totalQuantity{
   z-index: 2;
 }
 
-.listEvents .description .addtoCart2{
+.listEvents .description .addtoCart2:hover {
+  cursor: pointer;
+  background: green;
+  transition: all 0.35s;
+  border-radius: 20px;
+  color: white;
+  opacity: 1;
+  z-index: 2;
+}
+
+.listEvents .description .addtoCart2:after{
+  transition: all 0.35s;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #4837ff;
+  transition: all 0.35s;
+  border-radius: 4px;
+  color: white;
+}
+
+.listEvents .description .addtoCart {
   position: absolute;
   background-color: rgb(29, 101, 193);
   color: #fff;
   bottom: -2px;
-  width: 95%;
+  width: 25%;
   right: 10px;
   border-radius: 20px;
   cursor: pointer;
