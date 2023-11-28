@@ -568,7 +568,7 @@
     }
   }
   
-  @media screen and (max-width: 480px) {
+  @media only screen and (min-width: 375px) and (max-width: 812px) {
     .services {
       height: 1300px;
       padding-bottom: 750px;
