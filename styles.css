@@ -676,7 +676,24 @@
 
     .listEvents .description .ticketSection .row  {
       position: relative !important; 
-      top: 25px !important;
+      top: 10px !important;
+    }
+
+    .listEvents .description .addtoCart2{
+      position: absolute;
+      color: #fff;
+      bottom: -2px;
+      width: 100% !important;
+      right: 10px !important;
+      border-radius: 20px;
+      cursor: pointer;
+      /* transform: translateX(-50%) translateY(100px); */
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .listEvents .description .addtoCart{
+      width: 24% !important;
     }
 
 
@@ -1168,6 +1185,20 @@ header .totalQuantity{
   color: #fff;
   bottom: -2px;
   width: 25%;
+  right: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  /* transform: translateX(-50%) translateY(100px); */
+  opacity: 1;
+  z-index: 2;
+}
+
+.listEvents .description .addtoCart2{
+  position: absolute;
+  background-color: rgb(29, 101, 193);
+  color: #fff;
+  bottom: -2px;
+  width: 95%;
   right: 10px;
   border-radius: 20px;
   cursor: pointer;
