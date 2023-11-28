@@ -246,7 +246,7 @@ function addDataToHTML() {
                                 ${ProductPriceOptionOne.productAvailability}
                                 </strong>
                                 </td>
-                            <td style="position: relative; left: 20px;">
+                            <td style="position: relative; right: 100px;">
                                 <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
