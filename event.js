@@ -250,6 +250,20 @@ function addDataToHTML() {
                                 <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
+                        <tr style="color:black; position: relative; top: 50px;">
+                            <td style="position: relative; left: 20px;"><strong>${selectedProduct.option2}</strong></td>
+                            <td><strong>€${ProductPriceOptionTwo.price}</strong></td>
+                            <td>
+                                <strong>
+
+                                ${ProductPriceOptionTwo.productAvailability}
+
+                                </strong>
+                            </td>
+                            <td>
+                                <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option2}')">Add To Cart</button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <label for="ticketType">Select Ticket Type:</label>
