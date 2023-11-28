@@ -674,6 +674,13 @@
       width: 15% !important;
     }
 
+    .listEvents .description .ticketSection .row  {
+      position: relative !important; 
+      top: 25px !important;
+    }
+
+
+
     .listEvents .item .item-bg {
       width: 100% !important;
       height: 100% !important;
