@@ -246,8 +246,18 @@ function addDataToHTML() {
                                 ${ProductPriceOptionOne.productAvailability}
                                 </strong>
                                 </td>
-                            <td style="position: relative; right: 100px;">
-                                <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
+                            <td style="position: relative;">
+                                <button style="  position: absolute;
+                                background-color: rgb(29, 101, 193);
+                                color: #fff;
+                                bottom: -2px;
+                                width: 100%;
+                                right: 10px;
+                                border-radius: 20px;
+                                cursor: pointer;
+                                /* transform: translateX(-50%) translateY(100px); */
+                                opacity: 1;
+                                z-index: 2;" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
                         <tr class = "row" style="color:black; position: relative; top: 10px;">
