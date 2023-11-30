@@ -4,6 +4,10 @@
     padding: 0;
     font-family: 'Kumbh Sans', sans-serif;
   }
+
+body {
+  background-color: #131313;
+}
   
   .navbar {
     background: #131313;
@@ -118,6 +122,12 @@
     color: #f77062;
     transition: all 0.3s ease;
   }
+
+  @media screen and (max-width: 415px) {
+    #navbar__logo {
+      font-size: 15vw; /* Adjust this value based on your design needs */
+    }
+  }
   
   @media screen and (max-width: 960px) {
     .navbar__container {
@@ -156,6 +166,10 @@
     #navbar__logo {
       padding-left: 25px;
     }
+
+    .navbar__toggle{
+      bottom: -20px;
+    }
   
     .navbar__toggle .bar {
       width: 25px;
@@ -174,7 +188,7 @@
     }
 
     .iconCart .totalQuantity{
-      right: 180px;
+      right: 46vw !important;
     }
   
     .navbar__links {
@@ -895,7 +909,7 @@
     } 
   }
 
-  @media screen and (max-width: 480px){
+  @media screen and (max-width: 550px){
 
     .enquires h1{
       text-align: center;
@@ -911,9 +925,9 @@
 
   @media screen and (max-width: 550px){
 
-    .cart .buttons .checkout{
+    /* .cart .buttons .checkout{
       bottom: 70px !important;
-    }
+    } */
 
     .navbar{
       z-index: 3 !important;
@@ -928,10 +942,10 @@
       display: grid;
       grid-template-rows: 50px 1fr 50px;
       gap: 20px;
-      transition: right 0.5s ease-in-out, top 0.5s ease-in-out !important;
+      transition: right 0.5s ease-in-out !important;
       top: 0;
       z-index: 10 !important;
-      height: 100vh !important;
+      height: 100% !important;
     }
 
     .navbar {
@@ -1031,6 +1045,10 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
+  }
+
+  .no-scroll {
+    overflow: hidden;
   }
 
   .enquires h1{
