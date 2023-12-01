@@ -911,6 +911,43 @@ body {
 
   @media screen and (max-width: 550px){
 
+    .checkoutLayout .returnCart .listHolder .return .row{
+      display: grid !important;
+      grid-template-columns: 0.01fr 50px !important;
+    }
+
+    .checkoutLayout .returnCart .listHolder .return .row .totalQuantity{
+          margin-left: -15px !important;
+    }
+
+    .checkoutLayout .returnCart .listHolder .return .row .totalPrice{
+      margin-left: 0px !important;
+}
+
+    .returnCart .list .item img{
+      padding-top: 5px;
+      padding-left: 5px !important;
+      align-items: center;
+    }
+    .returnCart .list .item{
+      display: grid;
+      grid-template-columns: 50px 1fr 20px 50px !important;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 20px;
+      padding: 0 10px;
+      color: rgb(0, 0, 0);
+      background-color: rgb(255, 255, 255);
+      border-radius: 30px;
+      /* background-color: ; */
+    }
+    .returnCart .list .item .name{
+
+    }
+    .returnCart .list .item .returnPrice{
+      padding-left: -20px !important;
+    }
+
     .enquires h1{
       text-align: center;
       margin-bottom: -50px;
@@ -1908,8 +1945,7 @@ header .totalQuantity{
 
 .checkoutLayout .returnCart .listHolder .return .row{
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: space-between;
+  grid-template-columns: 1fr 65px;
   gap: 205px;
   padding:5px;
   margin-left: 10px;
@@ -1917,6 +1953,10 @@ header .totalQuantity{
   font-weight: bold;
   width: 100%;
   font-size: 20px;
+}
+
+.checkoutLayout .returnCart .listHolder .return .row .totalPrice{
+  margin-left: -20px;
 }
 
 
@@ -2026,12 +2066,13 @@ header .totalQuantity{
 
 .returnCart .list .item img{
   height: 75px; 
+  padding-top: 5px;
   padding-left: 26px;
   align-items: center;
 }
 .returnCart .list .item{
   display: grid;
-  grid-template-columns: 80px 1fr  30px 30px;
+  grid-template-columns: 80px 1fr  30px 50px;
   align-items: center;
   gap: 20px;
   margin-bottom: 20px;

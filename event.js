@@ -176,6 +176,7 @@ function addDataToHTML() {
     const selectedProduct = products.find(product => product.name === "Daffodils Xmas & New-Year Party");
     const ProductPriceOptionOne = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
     const ProductPriceOptionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
+    
     console.log(ProductPriceOptionTwo.ticketQuantity);
     if(ProductPriceOptionOne.ticketQuantity == 0)
     {
@@ -401,6 +402,8 @@ function checkProductId(productName, productOption){
         // Call the addCart function with the product ID and selected value
         if(productQuantity == 0){
             window.alert("The " + productTicketType + " ticket is sold out for this event.");
+            
+
         }
         else{
             addCart(productID, productTicketType, selectedValue);
