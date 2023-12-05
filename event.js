@@ -230,7 +230,7 @@ function addDataToHTML() {
                 <div class="location_header">Location</div>
                 <div class="location">${selectedProduct.eventLocation}</div>
                 <div class="ticketHeading">Ticket Options</div>
-                <div class="ticketRules">Tickets are sold on a <strong>first come first served</strong> basis.</div>
+                <div class="ticketRules">Tickets are sold on a <strong>first come first served</strong> basis.<br>*Payment gateway charges will apply for any refunds.</div>
                 <table class ="ticketSection" width="100%" style="position: relative; top: 450px;" border="0" cellspacing="0" cellpadding="4">
                     <tbody>
                         <tr style="background-color: #efefef; color:black;">
