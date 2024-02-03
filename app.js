@@ -386,7 +386,7 @@ checkCart();
 
 function navigateProduct() {
     // globalProductID = 1;
-    window.location.href = "Sangeetha_Arangu.html";
+    window.location.href = "SangeethaArangu.html";
 }
 fetch('/getProducts')
 .then(response => response.json())
