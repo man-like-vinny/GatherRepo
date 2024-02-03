@@ -908,11 +908,16 @@ body {
     } 
   }
 
-  @media screen and (max-width: 550px){
+  @media screen and (max-width: 388px){
 
     .checkoutLayout .returnCart .listHolder .return .row{
       display: grid !important;
-      grid-template-columns: 0.01fr 50px !important;
+      grid-template-columns: 1fr 50px !important;
+      padding:5px;
+      color: rgb(0, 0, 0);
+      font-weight: bold;
+      width: 100%;
+      font-size: 20px;
     }
 
     .checkoutLayout .returnCart .listHolder .return .row .totalQuantity{
@@ -920,7 +925,7 @@ body {
     }
 
     .checkoutLayout .returnCart .listHolder .return .row .totalPrice{
-      margin-left: 0px !important;
+        margin-left: -8vw !important;
 }
 
     .returnCart .list .item img{
