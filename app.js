@@ -386,7 +386,7 @@ checkCart();
 
 function navigateProduct() {
     // globalProductID = 1;
-    window.location.href = "daffodils_newyear.html";
+    window.location.href = "Sangeetha_Arangu.html";
 }
 fetch('/getProducts')
 .then(response => response.json())

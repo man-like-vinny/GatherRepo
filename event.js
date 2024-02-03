@@ -335,7 +335,7 @@ clearCart();
 checkCart();
 
 function navigateProduct() {
-    window.location.href = "daffodils_newyear.html";
+    window.location.href = "SangeethaArangu.html";
 }
 fetch('/getProducts')
 .then(response => response.json())
