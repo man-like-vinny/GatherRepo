@@ -13,6 +13,7 @@ const itemsForStripe = validItems.map(product => {
   return {
     id: product.name, // Use a unique identifier for each item, e.g., the product name
     price: product.variablePrice * 100, // Convert to cents (Stripe requires prices in the smallest currency unit)
+    fee: (0.01845 * (product.variablePrice * product.quantity) + 0.3075) * 100,
     staticQuant: product.staticQuantity,
     quantity: product.quantity,
     description: product.ticktype,

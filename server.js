@@ -367,7 +367,7 @@ const calculateOrderAmount = (items) => {
   let totalAmountCents = 0; // Initialize total amount to zero
 
   totalAmountCents = items.reduce((total, item) => {
-    return total + item.price * item.quantity;
+    return Math.round(total + item.price * item.quantity + item.fee);
   }, 0);
 
   console.log("Total amount cents: " + totalAmountCents);

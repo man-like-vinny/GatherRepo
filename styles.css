@@ -1946,7 +1946,7 @@ header .totalQuantity{
 .checkoutLayout .returnCart .listHolder .return .row{
   display: grid;
   grid-template-columns: 1fr 65px;
-  gap: 205px;
+  gap: 20px;
   padding:5px;
   margin-left: 10px;
   color: rgb(0, 0, 0);
@@ -1956,7 +1956,7 @@ header .totalQuantity{
 }
 
 .checkoutLayout .returnCart .listHolder .return .row .totalPrice{
-  margin-left: -20px;
+  margin-left: -12px;
 }
 
 
