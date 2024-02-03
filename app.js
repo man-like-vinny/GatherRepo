@@ -14,7 +14,7 @@ let container = document.querySelector('.navbar');
 let event_container = document.querySelector('.listProduct');
 let close = document.querySelector('.close');
 
-let globalProductID = 0;
+let globalProductID;
 
 iconCart.addEventListener('click', function(){
     if(cart.style.right == '-100%'){
@@ -204,6 +204,8 @@ function addDataToHTML() {
             // <button class=saveticket" onclick="saveSelectedTicketType()">Save Ticket Type</button>
             if(product.status == "true"){
                 eventStatus = "Buy Tickets"
+                globalProductID = product.eventID;
+                console.log(globalProductID);
                 navigateStatus = "navigateProduct('${product.name}')"
             }
             else{
@@ -383,7 +385,7 @@ clearCart();
 checkCart();
 
 function navigateProduct() {
-    globalProductID = 1;
+    // globalProductID = 1;
     window.location.href = "daffodils_newyear.html";
 }
 fetch('/getProducts')

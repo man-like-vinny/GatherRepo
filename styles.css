@@ -415,7 +415,7 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 180vh;
   }
 
   .video-container {
@@ -470,7 +470,7 @@ body {
         rgba(0, 0, 0, 0) 0%,
         rgba(17, 17, 17, 0.6) 100%
       ),
-      url(product_images/daffodils_jan.jpg);
+      url(product_images/mangalaschool.jpg);
     background-size: cover;
     background-position: center;
     position: relative;
@@ -591,18 +591,6 @@ body {
       height: 20px;
     }
     
-    .listProduct{
-      grid-template-columns: 1fr !important;
-    }
-
-    .listProduct .item {
-      width: 100% !important;
-      margin-bottom: 20px !important; /* Adjust margin for mobile view */
-    }
-
-    .listProduct .item .item-bg {
-      width: 100% !important;
-    }
 /* 
     ------------------------------------------------------------ */
 
@@ -610,6 +598,22 @@ body {
       height: 1300 !important;
       width: auto !important;
     }
+
+    .listProduct{
+      grid-template-columns: 1fr !important;
+    }
+
+    .listProduct .item {
+      width: 93vw !important;
+      margin-bottom: 20px !important; /* Adjust margin for mobile view */
+    }
+
+    .listProduct .item .item-bg {
+      width: 93vw !important;
+      background-size: cover !important;
+      background-position: center !important;
+    }
+    
     .listEvents{
       grid-template-columns: 1fr !important;
     }
@@ -744,7 +748,6 @@ body {
     } 
   }
 
-  
   @media only screen and (min-width: 375px) and (max-width: 1114px) {
     .services {
       height: 1300px;
@@ -761,12 +764,12 @@ body {
     }
 
     .listProduct .item {
-      width: 100% !important;
+      width: 85vw !important;
       margin-bottom: 20px !important; /* Adjust margin for mobile view */
     }
 
     .listProduct .item .item-bg {
-      width: 100% !important;
+      width: 85vw !important;
     }
 /* 
     ------------------------------------------------------------ */
@@ -780,15 +783,21 @@ body {
     }
 
     .listEvents .item {
-      width: 135% !important;
-      margin-left: -145px !important;
+      width: 150% !important;
+      margin-left: -155px !important;
       margin-top: 70px;
       margin-bottom: 30px;
     }
 
+    .listEvents .item .item-bg {
+      width: 100% !important;
+      background-size: cover !important;
+      background-position: center !important;
+    }
+
     .listEvents .description {
-      width: 135% !important;
-      margin-left: -4px;
+      width: 149% !important;
+      margin-left: -16px;
       height: 670px !important;
     }
 
@@ -801,7 +810,7 @@ body {
 
     .listEvents .description .price  {
       width: 100% !important;
-      margin-top: 20px;
+      margin-top: 5px;
       margin-left: -10px;
     }
 
@@ -873,16 +882,6 @@ body {
       width: 24% !important;
     }
 
-
-
-    .listEvents .item .item-bg {
-      width: 100% !important;
-      height: 100% !important;
-      background-size: cover !important;
-      background-position: center !important;
-    }
-
-  
 
     .services__container{
       height: 620px !important;
@@ -959,6 +958,7 @@ body {
     }
 
   }
+
 
   @media screen and (max-width: 550px){
 

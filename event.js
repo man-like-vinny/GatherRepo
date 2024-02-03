@@ -173,11 +173,13 @@ function addDataToHTML() {
     let listProductHTML = document.querySelector('.listEvents');
     listProductHTML.innerHTML = '';
 
-    const selectedProduct = products.find(product => product.name === "Daffodils Xmas & New-Year Party");
+    const selectedProduct = products.find(product => product.name == "Sangeetha Arangu 2024");
+    // const selectedProduct = products.find(product => product.eventID == globalProductID);
+    console.log(selectedProduct.appliedID);
     const ProductPriceOptionOne = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
-    const ProductPriceOptionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
+    //const ProductPriceOptionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
     
-    console.log(ProductPriceOptionTwo.ticketQuantity);
+    //console.log(ProductPriceOptionTwo.ticketQuantity);
     if(ProductPriceOptionOne.ticketQuantity == 0)
     {
         ProductPriceOptionOne.productAvailability = "Sold Out";
@@ -185,14 +187,14 @@ function addDataToHTML() {
     else{
         ProductPriceOptionOne.productAvailability = "Available";
     }
-    if(ProductPriceOptionTwo.ticketQuantity == 0)
-    {
-        ProductPriceOptionTwo.productAvailability = "Sold Out";
-    }
-    else
-    {
-        ProductPriceOptionTwo.productAvailability = "Available";
-    }
+    // if(ProductPriceOptionTwo.ticketQuantity == 0)
+    // {
+    //     ProductPriceOptionTwo.productAvailability = "Sold Out";
+    // }
+    // else
+    // {
+    //     ProductPriceOptionTwo.productAvailability = "Available";
+    // }
     console.log(selectedProduct);
 
         if(selectedProduct) {
@@ -251,26 +253,11 @@ function addDataToHTML() {
                                 <button class="addtoCart2" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
-                        <tr class = "row" style="color:black; position: relative; top: 10px;">
-                            <td style="position: relative; left: 20px;"><strong>${selectedProduct.option2}</strong></td>
-                            <td><strong>€${ProductPriceOptionTwo.price}</strong></td>
-                            <td>
-                                <strong>
-
-                                ${ProductPriceOptionTwo.productAvailability}
-
-                                </strong>
-                            </td>
-                            <td>
-                                <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option2}')">Add To Cart</button>
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
                 <label for="ticketType">Select Ticket Type:</label>
                 <select style="opacity:0;" id="ticketType">
                     <option value="${selectedProduct.option1}">${selectedProduct.option1}</option>
-                    <option value="${selectedProduct.option2}">${selectedProduct.option2}</option>
                 </select>
                 <script src="script.js"></script>`;
 
@@ -579,6 +566,7 @@ function changeQuantity($idProduct, $type) {
     // reload the HTML view cart
     addCartToHTML();
 }
+
 
 
 // function changeQuantity($idProduct, $type){
