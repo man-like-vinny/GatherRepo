@@ -630,14 +630,8 @@ body {
 
     .listEvents .description h2  {
       width: 100% !important;
-      margin-bottom: 100px;
+      margin-bottom: 0.5em !important;
       font-size: 25px !important;
-      margin-left: -10px;
-    }
-
-    .listEvents .description .price  {
-      width: 100% !important;
-      margin-top: 20px;
       margin-left: -10px;
     }
 
@@ -800,14 +794,12 @@ body {
 
     .listEvents .description h2  {
       width: 100% !important;
-      margin-bottom: 100px;
-      font-size: 25px !important;
+      font-size: 33px !important;
       margin-left: -10px;
     }
 
     .listEvents .description .price  {
       width: 100% !important;
-      margin-top: 5px;
       margin-left: -10px;
     }
 
@@ -1367,7 +1359,6 @@ header .totalQuantity{
   font-family: Neue Plak,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,Helvetica,Tahoma,Arial,sans-serif;
   font-weight: 1000;
   font-size: 30px;
-
   background-color: #ff8177;
   background-image: linear-gradient(to top, #000000 0%, #4253bf 100%);
   background-size: 100%;
@@ -1375,6 +1366,20 @@ header .totalQuantity{
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
+  line-height: 1.25 !important;
+  overflow: visible !important;
+  margin-top: -5px !important;
+}
+
+@media screen and (min-width: 1114px){
+  .listEvents .description h2 {
+    font-size: 40px !important; /* Adjust this value as needed */
+  }
+
+  .listEvents .description .price {
+    margin-top: 2px !important;
+  } 
+
 }
 
 .listEvents .description p {
@@ -1395,6 +1400,8 @@ header .totalQuantity{
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   z-index: 2;
   opacity: 1;
+  margin-top: 2em ;
+  vertical-align: middle !important;
 }
 
 .listEvents .description .type{
@@ -2089,3 +2096,4 @@ header .totalQuantity{
   font-size: large;
   font-weight: bold;
 }
+

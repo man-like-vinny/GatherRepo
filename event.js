@@ -173,7 +173,7 @@ function addDataToHTML() {
     let listProductHTML = document.querySelector('.listEvents');
     listProductHTML.innerHTML = '';
 
-    const selectedProduct = products.find(product => product.name == "Sangeetha Arangu 2024");
+    const selectedProduct = products.find(product => product.name == currentFileName);
     // const selectedProduct = products.find(product => product.eventID == globalProductID);
     console.log(selectedProduct.appliedID);
     const ProductPriceOptionOne = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
@@ -335,7 +335,7 @@ clearCart();
 checkCart();
 
 function navigateProduct() {
-    window.location.href = "SangeethaArangu.html";
+    //window.location.href = "SangeethaArangu.html";
 }
 fetch('/getProducts')
 .then(response => response.json())
@@ -477,26 +477,26 @@ function addCartToHTML() {
     const selectedValue = ticketSelection.value;
 
     // Define a function to get the price for the selected ticket type
-    function getPriceForSelectedType(product, selectedValue) {
-        let price = null;
-        const selectedProduct = products.find(product => product.name === "Daffodils Xmas & New-Year Party");
-        // Check the selected ticket type and find the corresponding price
-        if (selectedValue === selectedProduct.option1) {
-            const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option1);
-            price = earlyBirdNonMemberPrice ? earlyBirdNonMemberPrice.price : null;
-        } else if (selectedValue === selectedProduct.option2) {
-            const earlyBirdMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option2);
-            price = earlyBirdMemberPrice ? earlyBirdMemberPrice.price : null;
-        }
-        // } else if (selectedValue === "Standard (Non-Member)") {
-        //     const standardNonMemberPrice = product.type.find(type => type.ticketType === "Standard (Non-Member)");
-        //     price = standardNonMemberPrice ? standardNonMemberPrice.price : null;
-        // } else if (selectedValue === "Standard (Member)") {
-        //     const standardMemberPrice = product.type.find(type => type.ticketType === "Standard (Member)");
-        //     price = standardMemberPrice ? standardMemberPrice.price : null;
-        // }
-        return price;
-    }
+    // function getPriceForSelectedType(product, selectedValue) {
+    //     let price = null;
+    //     const selectedProduct = products.find(product => product.name === "Daffodils New-Year Party");
+    //     // Check the selected ticket type and find the corresponding price
+    //     if (selectedValue === selectedProduct.option1) {
+    //         const earlyBirdNonMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option1);
+    //         price = earlyBirdNonMemberPrice ? earlyBirdNonMemberPrice.price : null;
+    //     } else if (selectedValue === selectedProduct.option2) {
+    //         const earlyBirdMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option2);
+    //         price = earlyBirdMemberPrice ? earlyBirdMemberPrice.price : null;
+    //     }
+    //     // } else if (selectedValue === "Standard (Non-Member)") {
+    //     //     const standardNonMemberPrice = product.type.find(type => type.ticketType === "Standard (Non-Member)");
+    //     //     price = standardNonMemberPrice ? standardNonMemberPrice.price : null;
+    //     // } else if (selectedValue === "Standard (Member)") {
+    //     //     const standardMemberPrice = product.type.find(type => type.ticketType === "Standard (Member)");
+    //     //     price = standardMemberPrice ? standardMemberPrice.price : null;
+    //     // }
+    //     return price;
+    // }
 
     // If there are products in the cart
     if (listCart) {
@@ -506,7 +506,7 @@ function addCartToHTML() {
                 newCart.classList.add('item');
 
                 // Find the price for the selected ticket type
-                let price = getPriceForSelectedType(product, selectedValue);
+                //let price = getPriceForSelectedType(product, selectedValue);
 
                 //note that listCart[productTypeID].ticktype is also known as product.ticktype
 

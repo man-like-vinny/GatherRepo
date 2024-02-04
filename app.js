@@ -206,7 +206,7 @@ function addDataToHTML() {
                 eventStatus = "Buy Tickets"
                 globalProductID = product.eventID;
                 console.log(globalProductID);
-                navigateStatus = "navigateProduct('${product.name}')"
+                navigateStatus = `navigateProduct('${product.filename}')`;
             }
             else{
                 eventStatus = "Event Completed"
@@ -384,11 +384,13 @@ function checkCart(){
 clearCart();
 checkCart();
 
-function navigateProduct() {
+function navigateProduct(filename) {
     // globalProductID = 1;
-    window.location.href = "SangeethaArangu.html";
+    console.log(filename);
+    //window.location.href = "SangeethaArangu.html";
+    window.location.href = filename + ".html";
 }
-fetch('/getProducts')
+fetch('/getProducts')   
 .then(response => response.json())
 .then(data => {
     products = data;

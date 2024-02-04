@@ -12,7 +12,14 @@ function checkCart() {
 }
 
 checkCart();
-addCartToHTML();
+
+if(listCart.length === 0){
+  window.location.href = "events.html";
+}
+else{
+  addCartToHTML();
+}
+
 
 function addCartToHTML() {
     // clear data default
@@ -67,6 +74,7 @@ function addCartToHTML() {
 
 returntoCart.addEventListener('click', function() {
     // Perform a fetch to get updated product data
+    
     fetch('/getProducts')
     .then(response => response.json())
     .then(updatedData => {
@@ -103,7 +111,7 @@ returntoCart.addEventListener('click', function() {
 
         // Call updateCartOnServer after all operations are complete
         updateCartOnServer(validCart);
-        delayTimer(2000);
+        delayTimer(1000);
     });
 });
 
