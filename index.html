@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eventifyed</title>
+    <style>
+      /* Add a style for the rocket emoji */
+      .rocket {
+          font-size: 5vw;
+          display: inline !important;
+          -webkit-text-fill-color: initial;
+          -moz-text-fill-color: initial;
+      }
+    </style>
     <link rel="stylesheet" href="styles.css" />
     <link rel="icon" href="images/companylogo2-removebg.ico" type="image/x-icon" />
     <link
@@ -48,7 +57,7 @@
     <div class="main">
       <div class="main__container">
         <div class="main__content">
-          <h1>Eventify Your Vision</h1>
+          <h1>Eventify Your Vision <span class="rocket">&#x1F680;</span></h1>
           <p>Discover, Connect, Belong.</p>
           <button class="main__btn"><a href="/events.html">Browse Events</a></button>
         </div>
@@ -180,10 +189,10 @@
         </div>
     </div>
     <script src="app.js"></script>
-    <script>
+    <!-- <script>
       if (window.location.protocol == "http:") {
         window.location.href = window.location.href.replace("http:", "https:");
       }
-    </script>
+    </script> -->
   </body>
 </html>
