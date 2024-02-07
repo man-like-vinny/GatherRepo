@@ -177,7 +177,7 @@ function addDataToHTML() {
     // const selectedProduct = products.find(product => product.eventID == globalProductID);
     console.log(selectedProduct.appliedID);
     const ProductPriceOptionOne = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
-    //const ProductPriceOptionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
+    const ProductPriceOptionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
     
     //console.log(ProductPriceOptionTwo.ticketQuantity);
     if(ProductPriceOptionOne.ticketQuantity == 0)
@@ -187,14 +187,14 @@ function addDataToHTML() {
     else{
         ProductPriceOptionOne.productAvailability = "Available";
     }
-    // if(ProductPriceOptionTwo.ticketQuantity == 0)
-    // {
-    //     ProductPriceOptionTwo.productAvailability = "Sold Out";
-    // }
-    // else
-    // {
-    //     ProductPriceOptionTwo.productAvailability = "Available";
-    // }
+    if(ProductPriceOptionTwo.ticketQuantity == 0)
+    {
+        ProductPriceOptionTwo.productAvailability = "Sold Out";
+    }
+    else
+    {
+        ProductPriceOptionTwo.productAvailability = "Available";
+    }
     console.log(selectedProduct);
 
         if(selectedProduct) {
@@ -232,7 +232,7 @@ function addDataToHTML() {
                 <div class="location_header">Location</div>
                 <div class="location">${selectedProduct.eventLocation}</div>
                 <div class="ticketHeading">Ticket Options</div>
-                <div class="ticketRules">Tickets are sold on a <strong>first come first served</strong> basis.<br>*Payment gateway charges will apply for sales/refunds.</div>
+                <div class="ticketRules">Family tickets are <strong>strictly</strong> sold as <strong>two adult, two child</strong>.<br>*Payment gateway charges will apply for sales/refunds.</div>
                 <table class ="ticketSection" width="100%" style="position: relative; top: 450px;" border="0" cellspacing="0" cellpadding="4">
                     <tbody>
                         <tr style="background-color: #efefef; color:black;">
@@ -253,6 +253,18 @@ function addDataToHTML() {
                                 <button class="addtoCart2" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
+                        <tr class = "row" style="color:black; position: relative; top: 10px;">
+                            <td style="position: relative; left: 20px;"><strong>${selectedProduct.option2}</strong></td>
+                            <td><strong>€${ProductPriceOptionTwo.price}</strong></td>
+                            <td>
+                                <strong>
+                                ${ProductPriceOptionTwo.productAvailability}
+                                </strong>
+                            </td>
+                            <td>
+                                <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option2}')">Add To Cart</button>
+                            </td>
+                        </tr>                    
                     </tbody>
                 </table>
                 <label for="ticketType">Select Ticket Type:</label>
