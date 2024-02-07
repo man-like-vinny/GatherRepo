@@ -1903,18 +1903,18 @@ font-weight: bold;
 cursor: pointer;
 }
 .cart .buttons a{
-color: #fff;
+color: #fff; 
 text-decoration: none;
 }
 
 .checkout_main_container {
   align-items: center;
   justify-self: center;
-  height: 145%;
-  background-color: #b4a9a9;
-  background-image: linear-gradient(to top, #dfc970 0%, #5673bcd5 100%);
+  height:max-content;
+  background-color: #b4a9a9 !important;
+  background-image: linear-gradient(to top, #dfc970 0%, #5673bcd5 100%) !important;
   /* background-color: rgba(140, 84, 161); */
-  z-index: 1;
+  z-index: 10 !important;
   width: 100%;
 }
 

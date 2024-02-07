@@ -48,15 +48,16 @@ function addCartToHTML() {
                     <div class="returnPrice">€${product.variablePrice * product.quantity}</div>`;
                 listCartHTML.appendChild(newCart);
                 totalQuantity = totalQuantity + product.quantity;
-                fee = Math.round(0.01845 * (product.variablePrice * product.quantity) + 0.3075) * 100
-                completePrice = Math.round(totalPrice + (product.variablePrice * product.quantity * 100) + fee)/100;
-                totalPrice = completePrice + totalPrice;
+                fee = (0.01845 * (product.variablePrice * product.quantity) + 0.3075) * 100
+                completePrice = Math.round(totalPrice + (product.variablePrice * product.quantity * 100) + fee);
+                console.log(completePrice)
+                totalPrice = completePrice;
                 console.log("check total price here: " + totalPrice);
             }
         });
     }
     totalQuantityHTML.innerText = totalQuantity;
-    totalPriceHTML.innerText = "€" + totalPrice;
+    totalPriceHTML.innerText = "€" + totalPrice/100;
 
     //updateCartOnServer(listCart);
 }
