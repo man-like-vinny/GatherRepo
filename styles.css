@@ -787,8 +787,8 @@ body {
     }
 
     .listEvents .description {
-      width: 149% !important;
-      margin-left: -16px;
+      width: 150% !important;
+      margin-left: -15px;
       height: 670px !important;
     }
 
@@ -799,8 +799,9 @@ body {
     }
 
     .listEvents .description .price  {
-      width: 100% !important;
-      margin-left: -10px;
+      width: 99% !important;
+      margin-left: -14px;
+      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
     }
 
     .listEvents .description .timing_header  {
@@ -1378,6 +1379,7 @@ header .totalQuantity{
 
   .listEvents .description .price {
     margin-top: 2px !important;
+    font-size: 18px;
   } 
 
 }
@@ -1396,8 +1398,8 @@ header .totalQuantity{
   color: rgb(0, 0, 0);
   top: 50px;
   left: 18px;
-  font-size: 18px;
-  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 18px !important;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
   z-index: 2;
   opacity: 1;
   margin-top: 2em ;
