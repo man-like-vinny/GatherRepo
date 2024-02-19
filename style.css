@@ -1,8 +1,9 @@
 body {
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
-  background: #242d60;
+  background-color: #b4a9a9 !important;
+  background-image: linear-gradient(to top, #dfc970 0%, #5673bcd5 100%) !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
   'Helvetica Neue', 'Ubuntu', sans-serif;
   height: 100vh;
@@ -10,15 +11,50 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-section {
-  background: #ffffff;
+
+.banner {
+  background: hsl(0, 0%, 100%); /* Example background color, adjust as needed */
   display: flex;
   flex-direction: column;
-  width: 400px;
-  height: 112px;
+  width: 450px;
+  height: 125px;
   border-radius: 6px;
   justify-content: space-between;
+  margin: auto;
+  margin-top: 30vh;
+  transform: translateY(-50%);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow with 16px blur */
 }
+
+@media (max-width: 1000px) {
+  .banner {
+    max-width: 100% !important; /* Set maximum width to 100% for small screens */
+    margin-top: 5vh; /* Adjust vertical centering for smaller screens */
+
+  }
+
+  h1{
+    font-size: 75px !important;
+    margin-left: 30px;
+  }
+}
+
+h1{
+  color: white;
+  font-size: 100px;
+  margin-top: -150px;
+}
+
+/* h1 {
+  color: white;
+  font-size: 100px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+
+
+
 .product {
   display: flex;
 }
@@ -27,7 +63,7 @@ section {
   flex-direction: column;
   justify-content: center;
 }
-p {
+.text {
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -42,6 +78,7 @@ p {
   justify-content: center;
   box-sizing: border-box;
 }
+
 img {
   border-radius: 6px;
   margin: 10px;
