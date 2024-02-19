@@ -94,6 +94,8 @@ async function handleSubmit(e) {
     },
   });
 
+  listCart.length = 0; //clear cart after payment -- stops any back clicks
+
   // This point will only be reached if there is an immediate error when
   // confirming the payment. Otherwise, your customer will be redirected to
   // your `return_url`. For some payment methods like iDEAL, your customer will
