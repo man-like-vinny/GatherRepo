@@ -94,8 +94,6 @@ async function handleSubmit(e) {
     },
   });
 
-  listCart.length = 0; //clear cart after payment -- stops any back clicks
-
   // This point will only be reached if there is an immediate error when
   // confirming the payment. Otherwise, your customer will be redirected to
   // your `return_url`. For some payment methods like iDEAL, your customer will
@@ -125,6 +123,7 @@ async function checkStatus() {
   switch (paymentIntent.status) {
     case "succeeded":
       showMessage("Payment succeeded!");
+      clearCart();
       break;
     case "processing":
       showMessage("Your payment is processing.");
@@ -136,6 +135,11 @@ async function checkStatus() {
       showMessage("Something went wrong.");
       break;
   }
+}
+
+function clearCart() {
+  listCart = []; // Empty the cart array
+  document.cookie = "listCart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/"; //clear cart after payment -- stops any back clicks
 }
 
 // ------- UI helpers -------
