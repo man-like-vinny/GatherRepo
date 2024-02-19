@@ -43,6 +43,8 @@ document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
 
+clearCart();
+
 let emailAddress = '';
 // Fetches a payment intent and captures the client secret
 async function initialize() {
@@ -123,7 +125,6 @@ async function checkStatus() {
   switch (paymentIntent.status) {
     case "succeeded":
       showMessage("Payment succeeded!");
-      clearCart();
       break;
     case "processing":
       showMessage("Your payment is processing.");
