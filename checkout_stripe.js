@@ -43,7 +43,7 @@ document
   .querySelector("#payment-form")
   .addEventListener("submit", handleSubmit);
 
-clearCart();
+//clearCart();
 
 let emailAddress = '';
 // Fetches a payment intent and captures the client secret
