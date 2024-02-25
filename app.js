@@ -126,34 +126,6 @@ ws.addEventListener('message', (event) => {
     }
   });
 
-// let products = null;
-
-// // Establish a WebSocket connection
-// const socket = new WebSocket('ws://localhost:5000');
-
-// // Listen for WebSocket connection open event
-// socket.addEventListener('open', (event) => {
-//     console.log('WebSocket connection opened');
-//     // Send a request for product data
-//     socket.send(JSON.stringify({ action: 'getProducts' }));
-// });
-
-// // Listen for messages from the WebSocket server
-// socket.addEventListener('message', (event) => {
-//     const message = JSON.parse(event.data);
-
-//     if (message.action === 'updateProducts') {
-//         // Update the products data with the new data received from the server
-//         products = message.data;
-//         addDataToHTML();
-//     }
-// });
-
-// // Function to send a request for updated product data
-// function requestProductUpdate() {
-//     socket.send(JSON.stringify({ action: 'getProducts' }));
-// }
-
 let selectedTicketType = null;
 
 // // Function to save the selected ticket type
@@ -224,46 +196,36 @@ function addDataToHTML() {
             <script src="script.js"></script>`;
 
             listProductHTML.appendChild(newProduct);
-
-            let addButton = newProduct.querySelector('button');
-
-            // addButton.addEventListener('click', function(){
-            //     if(cart.style.right == '-100%'){
-            //         cart.style.right = '0';
-            //         container.style.transform = 'translateX(-400px)';
-            //     } else {
-            //         cart.style.right = '0%';
-            //         container.style.transform = 'translateX(-400px)';
-            //         event_container.style.transform = 'translateX(-150px)';
-            //     }
-            // });
             
             const ticketSelection = document.getElementById("ticketType");
             ticketSelection.addEventListener("change", function() {
                 const selectedValue = ticketSelection.value;
-                console.log("Selected Value: " + selectedValue);
+                //console.log("Selected Value: " + selectedValue);
                 // const selectedProduct = product.name;
 
                 const selectedProductName = ticketSelection.parentElement.querySelector('h2').textContent;
-                console.log("selectedProductName: " + selectedProductName);
+                //console.log("selectedProductName: " + selectedProductName);
                 const selectedProduct = products.find(product => product.name === selectedProductName);
             
                 if (selectedProduct) {
                     // Now 'selectedProduct' contains the product information based on the selected ticket type.
                     // You can use this information to update the cart view or perform any other actions.
-                    console.log("Selected Product:", selectedProduct);
+                    //console.log("Selected Product:", selectedProduct);
                     
                     // You can also get the price for the selected ticket type
                     selectedTicketType = selectedProduct.type.find(type => type.ticketType === selectedValue);
-                    console.log("Selected TicketType: " + selectedTicketType);
+                    //console.log("Selected TicketType: " + selectedTicketType);
                     if (selectedTicketType) {
-                        console.log("Selected TicketType: " + selectedTicketType.ticketType);
-                        console.log("Price: €" + selectedTicketType.price);
+                        //console.log("Selected TicketType: " + selectedTicketType.ticketType);
+                        //console.log("Price: €" + selectedTicketType.price);
+                        console.log(" ");
                     } else {
-                        console.log("Price not found for the selected ticket type.");
+                        //console.log("Price not found for the selected ticket type.");
+                        console.log(" ");
                     }
                 } else {
-                    console.log("Product not found for the selected ID.");
+                    //console.log("Product not found for the selected ID.");
+                    console.log(" ");
                 }
             });
             
@@ -332,29 +294,32 @@ function addEventToHTML() {
             const ticketSelection = document.getElementById("ticketType");
             ticketSelection.addEventListener("change", function() {
                 const selectedValue = ticketSelection.value;
-                console.log("Selected Value: " + selectedValue);
+                //console.log("Selected Value: " + selectedValue);
                 // const selectedProduct = product.name;
 
                 const selectedProductName = ticketSelection.parentElement.querySelector('h2').textContent;
-                console.log("selectedProductName: " + selectedProductName);
+                //console.log("selectedProductName: " + selectedProductName);
                 const selectedProduct = products.find(product => product.name === selectedProductName);
             
                 if (selectedProduct) {
                     // Now 'selectedProduct' contains the product information based on the selected ticket type.
                     // You can use this information to update the cart view or perform any other actions.
-                    console.log("Selected Product:", selectedProduct);
+                    //console.log("Selected Product:", selectedProduct);
                     
                     // You can also get the price for the selected ticket type
                     selectedTicketType = selectedProduct.type.find(type => type.ticketType === selectedValue);
-                    console.log("Selected TicketType: " + selectedTicketType);
+                    //console.log("Selected TicketType: " + selectedTicketType);
                     if (selectedTicketType) {
-                        console.log("Selected TicketType: " + selectedTicketType.ticketType);
-                        console.log("Price: €" + selectedTicketType.price);
+                        //console.log("Selected TicketType: " + selectedTicketType.ticketType);
+                        //console.log("Price: €" + selectedTicketType.price);
+                        console.log(" ");
                     } else {
-                        console.log("Price not found for the selected ticket type.");
+                        //console.log("Price not found for the selected ticket type.");
+                        console.log(" ");
                     }
                 } else {
-                    console.log("Product not found for the selected ID.");
+                    //console.log("Product not found for the selected ID.");
+                    console.log(" ");
                 }
             });
             
@@ -385,8 +350,7 @@ clearCart();
 checkCart();
 
 function navigateProduct(filename) {
-    // globalProductID = 1;
-    console.log(filename);
+    //console.log(filename);
     //window.location.href = "SangeethaArangu.html";
     window.location.href = filename + ".html";
 }
@@ -394,17 +358,16 @@ fetch('/getProducts')
 .then(response => response.json())
 .then(data => {
     products = data;
-    console.log("done")
+    //console.log("done")
     addEventToHTML();
 })
 
 function checkProductId(productName){
-    console.log()
     const selectedProduct = products.find(product => product.name === productName);
-    console.log(selectedProduct);
+    //console.log(selectedProduct);
     const ticketSelection = document.getElementById("ticketType");
     const selectedValue = ticketSelection.value; // Get the selected value here
-    console.log("option1:" + selectedProduct.option1)
+    //console.log("option1:" + selectedProduct.option1)
 
     let productID = null;
     let productQuantity = null;
@@ -421,24 +384,12 @@ function checkProductId(productName){
         productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
         productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
     }
-    // else if (selectedValue === "Standard (Non-Member)") {
-    //     const StandardNonMemberID = selectedProduct.type.find(type => type.ticketType === "Standard (Non-Member)");
-    //     productID = StandardNonMemberID ? StandardNonMemberID.id : null;
-    //     productTicketType = StandardNonMemberID ? StandardNonMemberID.ticketType : null;
-    //     productQuantity = StandardNonMemberID ? StandardNonMemberID : null;
-    // }
-    // else if (selectedValue === "Standard (Member)") {
-    //     const StandardMemberID = selectedProduct.type.find(type => type.ticketType === "Standard (Member)");
-    //     productID = StandardMemberID ? StandardMemberID.id : null;
-    //     productTicketType = StandardMemberID ? StandardMemberID.ticketType : null;
-    //     productQuantity = StandardMemberID ? StandardMemberID : null;
-    // }
 
     if (productID !== null) {
-        console.log("Product Name: " + selectedProduct.name);
-        console.log("Product TicketType: " + productTicketType);
-        console.log("Product ID: " + productID);
-        console.log("Product Quantity: " + productQuantity);
+        //console.log("Product Name: " + selectedProduct.name);
+        //console.log("Product TicketType: " + productTicketType);
+        //console.log("Product ID: " + productID);
+        //console.log("Product Quantity: " + productQuantity);
         // Call the addCart function with the product ID and selected value
         if(productQuantity == 0){
             window.alert("The " + productTicketType + " ticket is sold out for this event.");
@@ -457,7 +408,7 @@ function addCart(productTypeID, productTicketType) {
         for (const product of productsCopy) {
             for (const productType of product.type) {
                 if (productType.id == productTypeID) {
-                    console.log("Match" + productType.id);
+                    //console.log("Match" + productType.id);
                     if (!listCart[productTypeID]) {
                         listCart[productTypeID] = product;
                         listCart[productTypeID].quantity = 1;
@@ -465,15 +416,16 @@ function addCart(productTypeID, productTicketType) {
                         listCart[productTypeID].staticQuantity = productType.ticketQuantity;
                         listCart[productTypeID].ticktype = productType.ticketType;
                         listCart[productTypeID].variablePrice = productType.price;
-                        console.log("check here: " + listCart[productTypeID].ticktype);
+                        //console.log("check here: " + listCart[productTypeID].ticktype);
 
                         if (listCart[productTypeID].ticketQuantity > 0) {
                             listCart[productTypeID].ticketQuantity--;
-                            console.log("updated quantity: " + listCart[productTypeID].ticketQuantity);
+                            //console.log("updated quantity: " + listCart[productTypeID].ticketQuantity);
                         } 
                         
                         else {
-                            console.log("Max tickets reached");
+                            //console.log("Max tickets reached");
+                            console.log(" ");
 
                         }
 
@@ -484,14 +436,16 @@ function addCart(productTypeID, productTicketType) {
                         if (listCart[productTypeID].ticketQuantity > 0) {
                             listCart[productTypeID].quantity++;
                             listCart[productTypeID].ticketQuantity--;
-                            console.log("updated quantity: " + listCart[productTypeID].ticketQuantity);
+                            //console.log("updated quantity: " + listCart[productTypeID].ticketQuantity);
                         } else {
-                            console.log("Max tickets reached");
+                            //console.log("Max tickets reached");
+                            console.log(" ");
                         }
                     }
                 }
                 else{
-                    console.log("Not a match" + productType.id);
+                    //console.log("Not a match" + productType.id);
+                    console.log(" ");
                 }
             }
         }
@@ -500,13 +454,14 @@ function addCart(productTypeID, productTicketType) {
         if (listCart[productTypeID].ticketQuantity > 0) {
             listCart[productTypeID].quantity++;
             listCart[productTypeID].ticketQuantity--;
-            console.log("updated quantity: " + listCart[productTypeID].ticketQuantity);
+            //console.log("updated quantity: " + listCart[productTypeID].ticketQuantity);
         } else {
-            console.log("Max tickets reached");
+            //console.log("Max tickets reached");
+            console.log(" ");
         }
     }
 
-    console.log(listCart);
+    //console.log(listCart);
     
     // console.log(listCart[$idProduct]);
     document.cookie = "listCart=" + JSON.stringify(listCart);
@@ -538,17 +493,8 @@ function addCartToHTML() {
             const earlyBirdMemberPrice = product.type.find(type => type.ticketType === selectedProduct.option2);
             price = earlyBirdMemberPrice ? earlyBirdMemberPrice.price : null;
         }
-        // } else if (selectedValue === "Standard (Non-Member)") {
-        //     const standardNonMemberPrice = product.type.find(type => type.ticketType === "Standard (Non-Member)");
-        //     price = standardNonMemberPrice ? standardNonMemberPrice.price : null;
-        // } else if (selectedValue === "Standard (Member)") {
-        //     const standardMemberPrice = product.type.find(type => type.ticketType === "Standard (Member)");
-        //     price = standardMemberPrice ? standardMemberPrice.price : null;
-        // }
         return price;
     }
-
-    console.log("Real shi: " + selectedTicketType);
 
     // If there are products in the cart
     if (listCart) {
@@ -575,8 +521,8 @@ function addCartToHTML() {
                     </div>`;
                 listCartHTML.appendChild(newCart);
                 totalQuantity = totalQuantity + product.quantity;
-                console.log("product quantity: " + product.quantity);
-                console.log("product ticket type: " + listCart[productTypeID].ticktype);
+                //console.log("product quantity: " + product.quantity);
+                //console.log("product ticket type: " + listCart[productTypeID].ticktype);
             }
         });
     }
@@ -591,10 +537,12 @@ function changeQuantity($idProduct, $type) {
                 listCart[$idProduct].ticketQuantity--;
 
                 if (listCart[$idProduct].ticketQuantity === 0) {
-                    console.log("Max tickets reached");
+                    //console.log("Max tickets reached");
+                    console.log(" ");
                 }
             } else {
-                console.log("Max tickets reached");
+                //console.log("Max tickets reached");
+                console.log(" ");
             }
             break;
         case '-':
@@ -604,10 +552,11 @@ function changeQuantity($idProduct, $type) {
             // if quantity <= 0 then remove product in cart
             if (listCart[$idProduct].quantity <= 0) {
                 delete listCart[$idProduct];
-                console.log(listCart);
+                //console.log(listCart);
                 listCart = [];
             } else if (listCart[$idProduct].ticketQuantity === 0) {
-                console.log("Max tickets reached");
+                //console.log("Max tickets reached");
+                console.log(" ");
             }
             break;
         default:
@@ -618,38 +567,3 @@ function changeQuantity($idProduct, $type) {
     // reload the HTML view cart
     addCartToHTML();
 }
-
-
-// function changeQuantity($idProduct, $type){
-//     switch ($type) {
-//         case '+':
-//             listCart[$idProduct].quantity++;
-//             listCart[$idProduct].ticketQuantity--;
-
-//             if(listCart[$idProduct].ticketQuantity == 0){
-//                 console.log("Max tickets reached")
-//             }
-
-//             break;
-//         case '-':
-//             listCart[$idProduct].quantity--;
-//             listCart[$idProduct].ticketQuantity++;
-
-//             // if quantity <= 0 then remove product in cart
-//             if(listCart[$idProduct].quantity <= 0){
-//                 delete listCart[$idProduct];
-//             }
-//             else if(listCart[$idProduct].ticketQuantity == 0){
-//                 console.log("Max tickets reached")
-//             }
-            
-//             break;
-    
-//         default:
-//             break;
-//     }
-//     // save new data in cookie
-//     document.cookie = "listCart=" + JSON.stringify(listCart) + "; expires=Thu, 31 Dec 2025 23:59:59 UTC; path=/;";
-//     // reload html view cart
-//     addCartToHTML();
-// }

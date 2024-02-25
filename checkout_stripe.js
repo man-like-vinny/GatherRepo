@@ -5,8 +5,8 @@ const stripe = Stripe("pk_live_51O2y4dASLMn2l3lqKpiDGgetEi9CbrP9miuR4Ns4pLxktfpv
 //const stripe = Stripe("pk_test_51O2y4dASLMn2l3lqZONitI1i4fQZcrWdhq7khNIvEG66SADdBXVagGLrCLDoYDTh8gYeiLdwicrM91iL0gJE5UL400rNvTqxBC");
 const validItems = listCart.filter(item => item !== null);
 
-console.log(listCart);
-console.log(validItems);
+//console.log(listCart);
+//console.log(validItems);
 
 // The items the customer wants to buy
 const itemsForStripe = validItems.map(product => {

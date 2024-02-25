@@ -1,80 +1,7 @@
-// const express = require('express');
-// const bodyParser = require('body-parser');
-// const mongoose = require('mongoose');
-
-// const app = express();
-// const port = 3000; // You can change the port number as needed
-// const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/checkoutusers'; // Update with your MongoDB URI
-
-// // Connect to MongoDB
-// mongoose.connect(mongoURI, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// });
-
-// // Define a schema for your data
-// const checkoutSchema = new mongoose.Schema({
-//     name: String,
-//     phone: String,
-//     address: String,
-//     country: String,
-//     city: String,
-// });
-
-// const Checkout = mongoose.model('Checkout', checkoutSchema);
-
-// app.use(bodyParser.urlencoded({ extended: true }));
-// app.use(express.static(__dirname));
-
-// // Serve your HTML file
-// app.get('/', (req, res) => {
-//     res.sendFile(__dirname + '/index.html');
-// });
-
-// // Define a route to handle form submissions
-// app.post('/submit', (req, res) => {
-//     const { name, phone, address, country, city } = req.body;
-
-//     const newCheckout = new Checkout({
-//         name,
-//         phone,
-//         address,
-//         country,
-//         city,
-//     });
-
-//     newCheckout.save()
-//         .then(() => {
-//             console.log('Received data:', req.body);
-//             res.status(200).send('Data saved to MongoDB');
-//         })
-//         .catch((err) => {
-//             console.error('Error saving to MongoDB:', err);
-//             res.status(500).send('Error saving data');
-//         });
-// });
-
-// app.get('/getCheckouts', (req, res) => {
-//     Checkout.find({}, 'name phone address')
-//         .then((data) => {
-//             res.json(data);
-//         })
-//         .catch((err) => {
-//             console.error('Error retrieving data:', err);
-//             res.status(500).send('Error retrieving data');
-//         });
-// });
-
-// app.listen(port, () => {
-//     console.log(`Server is running on port ${port}`);
-// });
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-//const socketIo = require('socket.io');
 
-//const port = process.env.PORT || 4000;
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(bodyParser.json());
@@ -86,13 +13,6 @@ app.get('/', (req, res) => {
 });
 
 app.use(express.static(__dirname));
-
-// const http = require('http'); // Add this line to create an HTTP server
-//const WebSocket = require('ws'); // Add this line for WebSocket support
-
-// const server = http.createServer(app); // Create an HTTP server
-//const server = express().listen(port);
-//const wss = new WebSocket.Server({ server }); // Create a WebSocket server
 
 var WebSocketServer = require("ws").Server
 // var server = http.createServer(app)
@@ -148,52 +68,6 @@ app.get('/getProducts', async (req, res) => {
   }
 });
 
-// wss.on('connection', (ws) => {
-//   console.log('WebSocket connection opened');
-
-//   // Handle WebSocket messages
-//   ws.on('message', async (message) => {
-//       const request = JSON.parse(message);
-
-//       if (request.action === 'getProducts') {
-//           try {
-//               const products = await Product.find({}).exec();
-//               console.log('Products fetched:', products);
-//               ws.send(JSON.stringify({ action: 'updateProducts', data: products }));
-//           } catch (err) {
-//               console.error('Error fetching products from MongoDB:', err);
-//               ws.send(JSON.stringify({ action: 'updateProducts', error: 'Failed to fetch products' }));
-//           }
-//       }
-//   });
-// });
-
-
-//---------------------------Change quantity-------------------------
-// app.post('/updateQuantity', async (req, res) => {
-//   try {
-//     const { items } = req.body;
-
-//     console.log('Received request to update quantity. Items:', items);
-
-//     // Loop through items and update the quantity for each product
-//     for (const item of items) {
-//       const { id, quantity } = item;
-//       console.log(id)
-//       console.log(quantity)
-//       // Find the product by its ID and update the quantity
-//       await Product.findOneAndUpdate(
-//         { _id: id },
-//         { 'type.ticketQuantity': quantity },
-//       );
-//     }
-
-//     res.json({ message: 'Quantity updated successfully' });
-//   } catch (error) {
-//     console.error('Error updating quantity:', error);
-//     res.status(500).json({ error: 'Failed to update quantity' });
-//   }
-// });
 
 // WebSocket server
 
@@ -286,79 +160,7 @@ function broadcastNumberOfClients() {
   });
 }
 
-
-// app.post('/api/updateCart', async (req, res) => {
-//   try {
-//     const cart = req.body.cart;
-//     console.log(req.body.cart);
-
-//     // Filter out items that are not null
-//     const validCart = cart.filter(item => item !== null);
-
-//     // Prepare an array of update operations
-//     const updateOperations = validCart.map(item => {
-//       const { name, ticktype, ticketQuantity } = item;
-//       console.log(name, ticktype, ticketQuantity);
-//       return {
-//         updateOne: {
-//           filter: { name: name, 'type.ticketType': ticktype },
-//           update: { $set: { 'type.$.ticketQuantity': ticketQuantity } },
-//         },
-//       };
-//     });
-
-//     // Execute the update operations
-//     await Product.bulkWrite(updateOperations);
-
-//     res.json({ success: true });
-//   } catch (error) {
-//     console.error('Error updating cart:', error);
-//     res.status(500).json({ error: 'Error updating cart in MongoDB' });
-//   }
-// });
-
-
 const stripe = require("stripe")('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');
-//const stripe = require("stripe")('sk_test_51O2y4dASLMn2l3lqB9tO9e4Ob1eEB8DyfaUC8i8Tz6iHADtchanmJcxCKpR1dWMSu4hafsa0jCPBzfuUiSH2tway00EqpaBNHn');
-
-// app.post('/submit', (req, res) => {
-//     const { name, phone, address, country, city, totalquantity, totalprice } = req.body;
-
-//     const newCheckout = new Checkout({
-//         name,
-//         phone,
-//         address,
-//         country,
-//         city,
-//         totalquantity,
-//         totalprice,
-//     });
-
-//     newCheckout.save()
-//         .then(() => {
-//             console.log('Received data:', req.body);
-//             res.status(200).send('Data saved to MongoDB');
-//         })
-//         .catch((err) => {
-//             console.error('Error saving to MongoDB:', err);
-//             res.status(500).send('Error saving data');
-//         });
-// });
-
-// app.get('/getCheckouts', (req, res) => {
-//     Checkout.find({}, 'name phone address')
-//         .then((data) => {
-//             res.json(data);
-//         })
-//         .catch((err) => {
-//             console.error('Error retrieving data:', err);
-//             res.status(500).send('Error retrieving data');
-//         });
-// });
-
-// const reduceQuantity = (items) => {
-
-// }
 
 const calculateOrderAmount = (items) => {
   // Replace this constant with a calculation of the order's amount
@@ -429,6 +231,3 @@ app.post("/create-payment-intent", async (req, res) => {
     clientSecret: paymentIntent.client_secret,
   });
 });
-
-
-// app.listen(port, () => console.log(`Node server listening on port ${port}`));
