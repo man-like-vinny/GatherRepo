@@ -207,7 +207,7 @@ function addDataToHTML() {
             // Wait for the image to load
             backgroundImage.onload = function () {
                 // Set the background image after it has loaded
-                backgroundEffect.style.backgroundImage = `url(${selectedProduct.image})`;
+                backgroundEffect.style.backgroundImage = `url(${selectedProduct.landscapeimage})`;
         
                 // Check if the image is portrait or landscape
                 const isPortrait = backgroundImage.height > backgroundImage.width;
