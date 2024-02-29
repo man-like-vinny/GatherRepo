@@ -278,7 +278,7 @@ function addDataToHTML() {
                         </tr>   
                         <!-- Check if ProductPriceOptionThree exists before rendering the row -->
                         ${ProductPriceOptionThree ? `
-                            <tr class="row3" style="color:black; position: relative; top: 15px;">
+                            <tr class="row3" style="color:black; position: relative; top: 35px;">
                                 <td style="position: relative; left: 20px;"><strong>${selectedProduct.option3}</strong></td>
                                 <td><strong>€${ProductPriceOptionThree.price}</strong></td>
                                 <td>
