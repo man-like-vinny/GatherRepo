@@ -24,6 +24,44 @@ console.log("http server listening on %d", port)
 var wss = new WebSocketServer({server: server})
 console.log("websocket server created")
 
+require("dotenv").config();
+
+const {KindeClient, GrantType} = require("@kinde-oss/kinde-nodejs-sdk");
+
+const options = {
+    domain: process.env.KINDE_DOMAIN,
+    clientId: process.env.KINDE_CLIENT_ID,
+    clientSecret: process.env.KINDE_CLIENT_SECRET,
+    redirectUri: process.env.KINDE_REDIRECT_URI,
+    logoutRedirectUri: process.env.KINDE_LOGOUT_REDIRECT_URI,
+    grantType: GrantType.PKCE
+};
+
+const kindeClient = new KindeClient(options);
+
+app.get("/login", kindeClient.login(), (req, res) => {
+    return res.redirect("https://www.eventifyed.com");
+});
+
+app.get("/register", kindeClient.register(), (req, res) => {
+    return res.redirect("/");
+});
+
+app.get("/callback", kindeClient.callback(), (req, res) => {
+  return res.redirect("/");
+});
+
+app.get("/logout", kindeClient.logout());
+
+//const isAuthenticated = await kindeClient.isAuthenticated(req); // Boolean: true or false
+
+// if (isAuthenticated) {
+//     // Need to implement, e.g: call an api, etc...
+// } else {
+//     // Need to implement, e.g: redirect user to sign in, etc..
+    
+// }
+
 const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/products'; // Update with your MongoDB URI
 
 // Connect to MongoDB
@@ -169,7 +207,12 @@ const calculateOrderAmount = (items) => {
   let totalAmountCents = 0; // Initialize total amount to zero
 
   totalAmountCents = items.reduce((total, item) => {
-    return Math.round(total + item.price * item.quantity + item.fee);
+    if(item.inclFee == "True"){
+      return Math.round(total + item.price * item.quantity + item.fee);
+    }
+    else{
+      return total + (item.price * item.quantity);
+    }
   }, 0);
 
   console.log("Total amount cents: " + totalAmountCents);

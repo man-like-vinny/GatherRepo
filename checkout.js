@@ -50,8 +50,13 @@ function addCartToHTML() {
                 totalQuantity = totalQuantity + product.quantity;
                 fee = (0.01845 * (product.variablePrice * product.quantity) + 0.3075) * 100
                 completePrice = Math.round(totalPrice + (product.variablePrice * product.quantity * 100) + fee);
-                //console.log(completePrice)
-                totalPrice = completePrice;
+                console.log(product.checkBooking);
+                if(product.checkBooking == "True"){
+                  totalPrice = completePrice;
+                }
+                else{
+                  totalPrice = totalPrice + (product.variablePrice * product.quantity * 100)
+                }
                 //console.log("check total price here: " + totalPrice);
             }
         });

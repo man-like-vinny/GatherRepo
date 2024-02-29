@@ -489,16 +489,9 @@ video {
       rgba(0, 0, 0, 0) 0%,
       rgba(17, 17, 17, 0.9) 100%
     ),
-    url('/events/mangalaschool.jpg');
-}
-
-.services__card:nth-child(3) {
-  background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(17, 17, 17, 0.9) 100%
-    ),
-    url('/events/mangalaschool.jpg');
+    url(product_images/OorThiruvizha_10.jpg);
+  background-size: cover;
+  background-position: center;
 }
 
 .services__card h2 {
@@ -575,7 +568,7 @@ video {
 @media screen and (max-width: 960px) {
   .services {
     height: 1300px !important;
-    margin-bottom: -480px !important;
+    margin-bottom: -350px !important;
   }
 
   .services h1 {
@@ -703,8 +696,6 @@ video {
     width: 24% !important;
   }
 
-
-
   .listEvents .item .item-bg {
     width: 100% !important;
     height: 100% !important;
@@ -712,8 +703,15 @@ video {
     background-position: center !important;
   }
 
-
-
+  .listEvents .item.portrait {
+    height: 560px !important;
+  }
+  
+  .listEvents .item.landscape {
+    height: 175px !important;
+    left: 92px;
+  }
+ 
   .services__container{
     height: 620px !important;
   }
@@ -771,6 +769,10 @@ video {
   }
   .listEvents{
     grid-template-columns: 1fr !important;
+  }
+  
+  .listEvents{
+    gap: 0px !important;
   }
 
   .listEvents .item {
@@ -852,7 +854,17 @@ video {
 
   .listEvents .description .ticketSection .row  {
     position: relative !important; 
+    top: 15px !important;
+  }
+
+  .listEvents .description .ticketSection .row2  {
+    position: relative !important; 
     top: 10px !important;
+  }
+
+  .listEvents .description .ticketSection .row3  {
+    position: relative !important; 
+    top: 15px !important;
   }
 
   .listEvents .description .addtoCart2{
@@ -1087,7 +1099,7 @@ video {
   overflow: hidden;
 }
 
-.enquires h1{
+.enquires_header{
   background-color: #ff8177;
   background-image: linear-gradient(
     to right,
@@ -1103,8 +1115,10 @@ video {
   -moz-background-clip: text;
   -webkit-text-fill-color: transparent;
   -moz-text-fill-color: transparent;
-  margin-top: 1rem;
   font-size: 2.5rem;
+  position: absolute;
+  font-weight: bold;
+  margin-bottom: 750px;
 }
 
 .enquires__container{
@@ -1123,6 +1137,7 @@ video {
   width: 90%;
   max-width: 600px;
   border-radius: 10px;
+  height: 70%;
 }
 
 /* form:hover{
@@ -1292,13 +1307,13 @@ transform: translateX(20px);
 }
 
 .listEvents{
-display: grid;
-grid-template-columns: repeat(2, 1fr);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .listEvents .item{
-height: 560px;
-width: 400px;
+height: 300px !important;
+width: 530px;
 left: 100px;
 border-radius: 4px;
 position: relative;
@@ -1307,11 +1322,22 @@ background-color: white;
 overflow: hidden; /* Add this to hide overflow of the background image */
 }
 
+.listEvents .item.portrait {
+  height: 560px !important;
+  width: 400px;
+}
+
+.listEvents .item.landscape {
+  height: 260px;
+  width: 545px;
+  margin-left: -145px !important;
+}
+
 .listEvents .item .item-bg{
 height: 100%;
 width: 100%;
 position: absolute;
-background-size: cover;
+background-size: contain;
 background-position: center;
 z-index: 1; /* Move the background behind the content */
 border-radius: 4px;
@@ -1621,6 +1647,14 @@ position: relative;
 color: #ffffff;
 background-color: white;
 overflow: hidden; /* Add this to hide overflow of the background image */
+}
+
+.listProduct .item.portrait {
+  height: 560px !important;
+}
+
+.listProduct .item.landscape {
+  height: 175px !important;
 }
 
 .listProduct .item .item-bg{

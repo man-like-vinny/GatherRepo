@@ -154,12 +154,36 @@ function addDataToHTML() {
             let newProduct = document.createElement('div');
             newProduct.classList.add('item');
             
-            // Create a container for the background effect
+            //Create a container for the background effect
             let backgroundEffect = document.createElement('div');
             backgroundEffect.classList.add('item-bg');
             backgroundEffect.style.backgroundImage = `url(${product.image})`;
 
             newProduct.appendChild(backgroundEffect);
+            
+            // let backgroundEffect = document.createElement('div');
+            // backgroundEffect.classList.add('item-bg');
+
+            // let backgroundImage = new Image();
+            // backgroundImage.src = product.image;
+
+            // // Wait for the image to load
+            // // Set the background image after it has loaded
+            // backgroundEffect.style.backgroundImage = `url(${product.image})`;
+
+            // // Check if the image is portrait or landscape
+            // const isPortrait = backgroundImage.height > backgroundImage.width;
+
+            // // Add the appropriate class to adjust height dynamically
+            // newProduct.classList.add(isPortrait ? 'portrait' : 'landscape');
+            // //backgroundEffect.style.backgroundImage = `url(${selectedProduct.image})`;
+
+            newProduct.appendChild(backgroundEffect);
+            
+            //const isPortrait = backgroundEffect.offsetHeight > backgroundEffect.offsetWidth;
+            // Add the appropriate class to adjust height dynamically
+            //newProduct.classList.add(isPortrait ? 'portrait' : 'landscape');
+
 
             // Create a video element for the product.image
             // let videoElement = document.createElement('video');

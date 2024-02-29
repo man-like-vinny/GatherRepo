@@ -17,6 +17,7 @@ const itemsForStripe = validItems.map(product => {
     staticQuant: product.staticQuantity,
     quantity: product.quantity,
     description: product.ticktype,
+    inclFee: product.checkBooking
   };
 });
 
@@ -28,9 +29,9 @@ const items = window.itemsForStripe;
 
 items.forEach(item => {
   const itemId = item.id;
-  const itemStatic = item.staticQuant;
+  const itemStatic = item.inclFee;
   //console.log("The item is the following: " + itemId);
-  console.log("The item is the following: " + itemStatic);
+  console.log("Booking fee: " + itemStatic);
   // Do something with the 'itemId' here, such as displaying it on the page or using it in your Stripe setup.
 });
 

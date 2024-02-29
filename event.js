@@ -150,22 +150,39 @@ function addDataToHTML() {
     //console.log(selectedProduct.appliedID);
     const ProductPriceOptionOne = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
     const ProductPriceOptionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
+    const ProductPriceOptionThree = selectedProduct.type.find(type => type.ticketType === selectedProduct.option3);
     
     //console.log(ProductPriceOptionTwo.ticketQuantity);
-    if(ProductPriceOptionOne.ticketQuantity == 0)
-    {
-        ProductPriceOptionOne.productAvailability = "Sold Out";
+    if(ProductPriceOptionOne){
+        if(ProductPriceOptionOne.ticketQuantity == 0)
+        {
+            ProductPriceOptionOne.productAvailability = "Sold Out";
+        }
+        else{
+            ProductPriceOptionOne.productAvailability = "Available";
+        }
     }
-    else{
-        ProductPriceOptionOne.productAvailability = "Available";
+
+    if(ProductPriceOptionTwo){
+        if(ProductPriceOptionTwo.ticketQuantity == 0)
+        {
+            ProductPriceOptionTwo.productAvailability = "Sold Out";
+        }
+        else
+        {
+            ProductPriceOptionTwo.productAvailability = "Available";
+        }
     }
-    if(ProductPriceOptionTwo.ticketQuantity == 0)
-    {
-        ProductPriceOptionTwo.productAvailability = "Sold Out";
-    }
-    else
-    {
-        ProductPriceOptionTwo.productAvailability = "Available";
+
+    if(ProductPriceOptionThree){
+        if(ProductPriceOptionThree.ticketQuantity == 0)
+        {
+            ProductPriceOptionThree.productAvailability = "Sold Out";
+        }
+        else
+        {
+            ProductPriceOptionThree.productAvailability = "Available";
+        }
     }
     //console.log(selectedProduct);
 
@@ -174,11 +191,33 @@ function addDataToHTML() {
             newProduct.classList.add('item');
             
             // Create a container for the background effect
+            // let backgroundEffect = document.createElement('div');
+            // backgroundEffect.classList.add('item-bg');
+            // backgroundEffect.style.backgroundImage = `url(${selectedProduct.image})`;
+
+            // newProduct.appendChild(backgroundEffect);
+
             let backgroundEffect = document.createElement('div');
             backgroundEffect.classList.add('item-bg');
-            backgroundEffect.style.backgroundImage = `url(${selectedProduct.image})`;
-
+        
+            // Create an image element
+            let backgroundImage = new Image();
+            backgroundImage.src = selectedProduct.image;
+        
+            // Wait for the image to load
+            backgroundImage.onload = function () {
+                // Set the background image after it has loaded
+                backgroundEffect.style.backgroundImage = `url(${selectedProduct.image})`;
+        
+                // Check if the image is portrait or landscape
+                const isPortrait = backgroundImage.height > backgroundImage.width;
+        
+                // Add the appropriate class to adjust height dynamically
+                newProduct.classList.add(isPortrait ? 'portrait' : 'landscape');
+            };
+        
             newProduct.appendChild(backgroundEffect);
+        
 
             // Create a video element for the product.image
             // let videoElement = document.createElement('video');
@@ -204,7 +243,7 @@ function addDataToHTML() {
                 <div class="location_header">Location</div>
                 <div class="location">${selectedProduct.eventLocation}</div>
                 <div class="ticketHeading">Ticket Options</div>
-                <div class="ticketRules">Family tickets are <strong>strictly</strong> sold as <strong>two adult, two child</strong>.<br>*Payment gateway charges will apply for sales/refunds.</div>
+                <div class="ticketRules">${selectedProduct.eventRules}</div>
                 <table class ="ticketSection" width="100%" style="position: relative; top: 450px;" border="0" cellspacing="0" cellpadding="4">
                     <tbody>
                         <tr style="background-color: #efefef; color:black;">
@@ -225,7 +264,7 @@ function addDataToHTML() {
                                 <button class="addtoCart2" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
-                        <tr class = "row" style="color:black; position: relative; top: 10px;">
+                        <tr class = "row2" style="color:black; position: relative; top: 10px;">
                             <td style="position: relative; left: 20px;"><strong>${selectedProduct.option2}</strong></td>
                             <td><strong>€${ProductPriceOptionTwo.price}</strong></td>
                             <td>
@@ -236,14 +275,28 @@ function addDataToHTML() {
                             <td>
                                 <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option2}')">Add To Cart</button>
                             </td>
-                        </tr>                    
+                        </tr>   
+                        <!-- Check if ProductPriceOptionThree exists before rendering the row -->
+                        ${ProductPriceOptionThree ? `
+                            <tr class="row3" style="color:black; position: relative; top: 15px;">
+                                <td style="position: relative; left: 20px;"><strong>${selectedProduct.option3}</strong></td>
+                                <td><strong>€${ProductPriceOptionThree.price}</strong></td>
+                                <td>
+                                    <strong>
+                                        ${ProductPriceOptionThree.productAvailability}
+                                    </strong>
+                                </td>
+                                <td>
+                                    <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option3}')">Add To Cart</button>
+                                </td>
+                            </tr>` : ''}               
                     </tbody>
                 </table>
                 <label for="ticketType">Select Ticket Type:</label>
                 <select style="opacity:0;" id="ticketType">
                     <option value="${selectedProduct.option1}">${selectedProduct.option1}</option>
                 </select>
-                <script src="script.js"></script>`;
+                <script></script>`;
 
             listProductHTML.appendChild(newProduct);
             listProductHTML.appendChild(descriptionElement);
@@ -348,8 +401,17 @@ function checkProductId(productName, productOption){
         productID = earlyBirdNonMemberID ? earlyBirdNonMemberID.id : null;
         productTicketType = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketType : null;
         productQuantity = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketQuantity : null;
-    } else if (productOption === selectedProduct.option2) {
+    } 
+    
+    else if (productOption === selectedProduct.option2) {
         const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
+        productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
+        productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
+        productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
+    } 
+    
+    else if (productOption === selectedProduct.option3) {
+        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option3);
         productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
         productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
         productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
