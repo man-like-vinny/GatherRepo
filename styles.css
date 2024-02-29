@@ -791,7 +791,7 @@ video {
   .listEvents .description {
     width: 150% !important;
     margin-left: -15px;
-    height: 670px !important;
+    height: 680px !important;
   }
 
   .listEvents .description h2  {
@@ -864,7 +864,7 @@ video {
 
   .listEvents .description .ticketSection .row3  {
     position: relative !important; 
-    top: 15px !important;
+    top: 20px !important;
   }
 
   .listEvents .description .addtoCart2{
