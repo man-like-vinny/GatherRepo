@@ -261,7 +261,7 @@ function addDataToHTML() {
                                 </strong>
                                 </td>
                             <td style="position: relative;">
-                                <button class="addtoCart2" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
+                                <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option1}')">Add To Cart</button>
                             </td>
                         </tr>
                         <tr class = "row2" style="color:black; position: relative; top: 10px;">
@@ -273,12 +273,12 @@ function addDataToHTML() {
                                 </strong>
                             </td>
                             <td>
-                                <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option2}')">Add To Cart</button>
+                                <button class="addtoCart2" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option2}')">Add To Cart</button>
                             </td>
                         </tr>   
                         <!-- Check if ProductPriceOptionThree exists before rendering the row -->
                         ${ProductPriceOptionThree ? `
-                            <tr class="row3" style="color:black; position: relative; top: 35px;">
+                            <tr class="row3" style="color:black; position: relative; top: 15px;">
                                 <td style="position: relative; left: 20px;"><strong>${selectedProduct.option3}</strong></td>
                                 <td><strong>€${ProductPriceOptionThree.price}</strong></td>
                                 <td>
@@ -287,7 +287,7 @@ function addDataToHTML() {
                                     </strong>
                                 </td>
                                 <td>
-                                    <button class="addtoCart" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option3}')">Add To Cart</button>
+                                    <button class="addtoCart3" onclick="checkProductId('${selectedProduct.name}', '${selectedProduct.option3}')">Add To Cart</button>
                                 </td>
                             </tr>` : ''}               
                     </tbody>
@@ -450,7 +450,7 @@ function addCart(productTypeID, productTicketType) {
                         listCart[productTypeID].staticQuantity = productType.ticketQuantity;
                         listCart[productTypeID].ticktype = productType.ticketType;
                         listCart[productTypeID].variablePrice = productType.price;
-                        //console.log("check here: " + listCart[productTypeID].ticktype);
+                        console.log("check here: " + listCart[productTypeID].ticktype);
 
                         if (listCart[productTypeID].ticketQuantity > 0) {
                             listCart[productTypeID].ticketQuantity--;
