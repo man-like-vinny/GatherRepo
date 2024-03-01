@@ -7,9 +7,7 @@ function checkCart() {
         .split('; ')
         .find(row => row.startsWith('listCart='));
     if (cookieValue) {
-        console.log("listcart prev: ", listCart);
         listCart = JSON.parse(cookieValue.split('=')[1]);
-        console.log("listcart curr: ", listCart);
     }
 }
 
