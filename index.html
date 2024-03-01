@@ -57,9 +57,10 @@
     <div class="main">
       <div class="main__container">
         <div class="main__content">
-          <!-- <h1>Eventify Your Vision <span class="rocket">&#x1F680;</span></h1> -->
-          <h1 class="main__content" id="typed-text"></h1>
-          <p>Discover, Connect, Belong.</p>
+          <h1>Eventify Your Vision <span class="rocket">&#x1F680;</span></h1>
+          <!-- <h1 class="main__content" id="typed-text"></h1> -->
+          <!-- <p >Discover, Connect, Belong.</p> -->
+          <p id="typed-text"></p>
           <button class="main__btn"><a href="/events.html">Browse Events</a></button>
         </div>
         <div class="main__img--container">
@@ -202,7 +203,7 @@
     </div>
     <script src="app.js"></script>
     <script>
-      const text = "Eventify Your Vision";
+      const text = "Discover, Connect, Belong.";
       const rocketEmoji = document.createElement('span');
       rocketEmoji.className = 'rocket';
       rocketEmoji.innerHTML = '&#x1F680;';
@@ -215,7 +216,7 @@
           index++;
 
           if (index === text.length) {
-                typedText.appendChild(rocketEmoji);
+                //typedText.appendChild(rocketEmoji);
           }
 
           if (index < text.length) {
