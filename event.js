@@ -244,7 +244,7 @@ function addDataToHTML() {
                 <div class="location">${selectedProduct.eventLocation}</div>
                 <div class="ticketHeading">Ticket Options</div>
                 <div class="ticketRules">${selectedProduct.eventRules}</div>
-                <table class ="ticketSection" width="100%" style="position: relative; top: 450px;" border="0" cellspacing="0" cellpadding="4">
+                <table class ="ticketSection" width="100%" style="position: relative; top: 465px;" border="0" cellspacing="0" cellpadding="4">
                     <tbody>
                         <tr style="background-color: #efefef; color:black;">
                             <td width="30%" style="position: relative; left: 19px;"><strong>Ticket Selection</strong></td>
@@ -397,24 +397,25 @@ function checkProductId(productName, productOption){
 
 
     if (productOption === selectedProduct.option1) {
-        const earlyBirdNonMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
-        productID = earlyBirdNonMemberID ? earlyBirdNonMemberID.id : null;
-        productTicketType = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketType : null;
-        productQuantity = earlyBirdNonMemberID ? earlyBirdNonMemberID.ticketQuantity : null;
+        const optionOne = selectedProduct.type.find(type => type.ticketType === selectedProduct.option1);
+        productID = optionOne ? optionOne.id : null;
+        productTicketType = optionOne ? optionOne.ticketType : null;
+        productQuantity = optionOne ? optionOne.ticketQuantity : null;
     } 
     
     else if (productOption === selectedProduct.option2) {
-        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
-        productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
-        productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
-        productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
+        const optionTwo = selectedProduct.type.find(type => type.ticketType === selectedProduct.option2);
+        productID = optionTwo ? optionTwo.id : null;
+        productTicketType = optionTwo ? optionTwo.ticketType : null;
+        productQuantity = optionTwo ? optionTwo.ticketQuantity : null;
     } 
     
     else if (productOption === selectedProduct.option3) {
-        const earlyBirdMemberID = selectedProduct.type.find(type => type.ticketType === selectedProduct.option3);
-        productID = earlyBirdMemberID ? earlyBirdMemberID.id : null;
-        productTicketType = earlyBirdMemberID ? earlyBirdMemberID.ticketType : null;
-        productQuantity = earlyBirdMemberID ? earlyBirdMemberID.ticketQuantity : null;
+        const optionThree = selectedProduct.type.find(type => type.ticketType === selectedProduct.option3);
+        productID = optionThree ? optionThree.id : null;
+        productTicketType = optionThree ? optionThree.ticketType : null;
+        productQuantity = optionThree ? optionThree.ticketQuantity : null;
+        console.log("Here is child details: ", productID)
     }
 
     if (productID !== null) {
@@ -503,7 +504,6 @@ function addCart(productTypeID, productTicketType) {
     addCartToHTML();
 }
 
-
 addCartToHTML();
 function addCartToHTML() {
     // Clear the default data
@@ -548,6 +548,7 @@ function addCartToHTML() {
         });
     }
     totalHTML.innerText = totalQuantity;
+    document.cookie = "listCart=" + JSON.stringify(listCart);
 }
 
 function changeQuantity($idProduct, $type) {
@@ -584,7 +585,7 @@ function changeQuantity($idProduct, $type) {
             break;
     }
     // save new data in the cookie
-    document.cookie = "listCart=" + JSON.stringify(listCart);
+    document.cookie = "listCart=" + encodeURIComponent(JSON.stringify(listCart));
     // reload the HTML view cart
     addCartToHTML();
 }

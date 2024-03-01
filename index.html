@@ -57,7 +57,8 @@
     <div class="main">
       <div class="main__container">
         <div class="main__content">
-          <h1>Eventify Your Vision <span class="rocket">&#x1F680;</span></h1>
+          <!-- <h1>Eventify Your Vision <span class="rocket">&#x1F680;</span></h1> -->
+          <h1 class="main__content" id="typed-text"></h1>
           <p>Discover, Connect, Belong.</p>
           <button class="main__btn"><a href="/events.html">Browse Events</a></button>
         </div>
@@ -200,6 +201,33 @@
         </div>
     </div>
     <script src="app.js"></script>
+    <script>
+      const text = "Eventify Your Vision";
+      const rocketEmoji = document.createElement('span');
+      rocketEmoji.className = 'rocket';
+      rocketEmoji.innerHTML = '&#x1F680;';
+      let index = 0;
+
+      function type() {
+          const typedText = document.getElementById('typed-text');
+          typedText.innerHTML += text[index];
+
+          index++;
+
+          if (index === text.length) {
+                typedText.appendChild(rocketEmoji);
+          }
+
+          if (index < text.length) {
+              setTimeout(type, 100); // Adjust typing speed here (in milliseconds)
+          }
+      }
+
+      // Start typing when the page loads
+      window.onload = function() {
+          type();
+      };
+    </script>
     <script>
       if (window.location.protocol == "http:") {
         window.location.href = window.location.href.replace("http:", "https:");
