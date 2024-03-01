@@ -445,7 +445,11 @@ function addCart(productTypeID, productTicketType) {
                 if (productType.id == productTypeID) {
                     //console.log("Match" + productType.id);
                     if (!listCart[productTypeID]) {
-                        listCart[productTypeID] = product;
+                        const productWithoutTicketDesc = { ...product };
+                        delete productWithoutTicketDesc.ticketDescription; //will avoid issues with adding to cart for document.cookie
+                        listCart[productTypeID] = productWithoutTicketDesc;
+                        console.log("product: ",productWithoutTicketDesc);
+                        //listCart[productTypeID] = product;
                         listCart[productTypeID].quantity = 1;
                         listCart[productTypeID].ticketQuantity = productType.ticketQuantity;
                         listCart[productTypeID].staticQuantity = productType.ticketQuantity;
