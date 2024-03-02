@@ -202,7 +202,7 @@ function addDataToHTML() {
         
             // Create an image element
             let backgroundImage = new Image();
-            backgroundImage.src = selectedProduct.image;
+            backgroundImage.src = selectedProduct.landscapeimage;
         
             // Wait for the image to load
             backgroundImage.onload = function () {
@@ -211,6 +211,8 @@ function addDataToHTML() {
         
                 // Check if the image is portrait or landscape
                 const isPortrait = backgroundImage.height > backgroundImage.width;
+                // console.log("height:", backgroundImage.height);
+                // console.log("width:", backgroundImage.width);
         
                 // Add the appropriate class to adjust height dynamically
                 newProduct.classList.add(isPortrait ? 'portrait' : 'landscape');
