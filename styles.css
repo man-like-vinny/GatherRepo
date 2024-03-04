@@ -431,7 +431,7 @@ background-color: hsl(0, 0%, 7%);
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 180vh;
+  height: 100vh;
 }
 
 .video-container {
@@ -593,8 +593,8 @@ video {
 
 @media screen and (max-width: 960px) {
   .services {
-    height: 1550px !important;
-    padding-bottom: 800px;
+    height: 1400px;
+    padding-bottom: 900px;
   }
 
   #main__img {

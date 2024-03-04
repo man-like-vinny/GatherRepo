@@ -216,6 +216,14 @@ function addDataToHTML() {
         
                 // Add the appropriate class to adjust height dynamically
                 newProduct.classList.add(isPortrait ? 'portrait' : 'landscape');
+
+                if(!isPortrait && window.innerWidth <= 960){
+                    const servicesElement = document.querySelector('.services');
+                    if(servicesElement){
+                        servicesElement.style.height = '950px';
+                        servicesElement.style.paddingBottom = '450px';
+                    }
+                }
             };
         
             newProduct.appendChild(backgroundEffect);
