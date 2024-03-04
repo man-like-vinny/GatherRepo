@@ -39,28 +39,42 @@ const options = {
 
 const kindeClient = new KindeClient(options);
 
+// Middleware to check if the user is authenticated
+const isAuthenticatedMiddleware = async (req, res, next) => {
+  const isAuthenticated = await kindeClient.isAuthenticated(req);
+
+  if (isAuthenticated) {
+    // User is authenticated, proceed to the next middleware or route handler
+    next();
+  } else {
+    // User is not authenticated, redirect to the login page
+    res.redirect("/login");
+  }
+};
+
+// Login route with authentication middleware
 app.get("/login", kindeClient.login(), (req, res) => {
-    return res.redirect("https://www.eventifyed.com");
+  return res.redirect("https://www.eventifyed.com/dashboard.html");
 });
 
+// Register route with authentication middleware
 app.get("/register", kindeClient.register(), (req, res) => {
-    return res.redirect("/");
+  return res.redirect("/");
 });
 
+// Callback route with authentication middleware
 app.get("/callback", kindeClient.callback(), (req, res) => {
   return res.redirect("/");
 });
 
+// Logout route
 app.get("/logout", kindeClient.logout());
 
-//const isAuthenticated = await kindeClient.isAuthenticated(req); // Boolean: true or false
-
-// if (isAuthenticated) {
-//     // Need to implement, e.g: call an api, etc...
-// } else {
-//     // Need to implement, e.g: redirect user to sign in, etc..
-    
-// }
+// Dashboard route with authentication middleware
+app.get("/dashboard.html", isAuthenticatedMiddleware, (req, res) => {
+  // User is authenticated, render the dashboard.html or perform other actions
+  res.send("Welcome to the dashboard!");
+});
 
 const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/products'; // Update with your MongoDB URI
 

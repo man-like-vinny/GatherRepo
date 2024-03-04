@@ -3,6 +3,8 @@
     "start": "nodemon server.js"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^4.70.3",
+    "@clerk/nextjs": "^4.29.9",
     "@kinde-oss/kinde-auth-pkce-js": "^3.0.30",
     "@kinde-oss/kinde-nodejs-sdk": "^1.2.3",
     "auto-sni": "^2.3.2",
