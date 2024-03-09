@@ -54,12 +54,12 @@ const isAuthenticatedMiddleware = async (req, res, next) => {
 
 // Login route with authentication middleware
 app.get("/login", kindeClient.login(), (req, res) => {
-  return res.redirect("https://www.eventifyed.com/dashboard.html");
+  return res.redirect("https://eventifyed.kinde.com/knock-knock");
 });
 
 // Register route with authentication middleware
 app.get("/register", kindeClient.register(), (req, res) => {
-  return res.redirect("/");
+  return res.redirect("https://eventifyed.kinde.com/knock-knock");
 });
 
 // Callback route with authentication middleware
@@ -101,7 +101,18 @@ const productSchema = new mongoose.Schema({
     staticImage: String
 });
 
+const promoSchema = new mongoose.Schema({
+  type: [
+      {
+          promoType: String,
+          percentOff: Number
+      }
+  ]
+});
+
 const Product = mongoose.model('Product', productSchema, 'events');
+
+const Promo = mongoose.model('Promo', promoSchema, 'promotions');
 
 // // Route to get all products
 app.get('/getProducts', async (req, res) => {
@@ -117,6 +128,22 @@ app.get('/getProducts', async (req, res) => {
   } catch (error) {
     console.error('Error fetching products from MongoDB:', error);
     res.status(500).json({ error: 'Failed to fetch products' });
+  }
+});
+
+app.get('/getPromo', async (req, res) => {
+  try {
+    console.log('Accessed /getPromo route'); // Add this log statement
+
+    const promotionList = await Promo.find({}); // Find all products in the collection
+
+    console.log('Promotions fetched:', promotionList); // Add this log statement
+
+    // Send the products as JSON
+    res.json(promotionList);
+  } catch (error) {
+    console.error('Error fetching promotions from MongoDB:', error);
+    res.status(500).json({ error: 'Failed to fetch promotions' });
   }
 });
 
@@ -219,13 +246,23 @@ const calculateOrderAmount = (items) => {
   // Calculate the order total on the server to prevent
   // people from directly manipulating the amount on the client
   let totalAmountCents = 0; // Initialize total amount to zero
-
+  
   totalAmountCents = items.reduce((total, item) => {
-    if(item.inclFee == "True"){
-      return Math.round(total + item.price * item.quantity + item.fee);
-    }
-    else{
-      return total + (item.price * item.quantity);
+    const itemTotal = item.price * item.quantity;
+    const itemTotalWithFee = itemTotal + item.fee;
+  
+    if (item.inclFee === "True") {
+      if (item.promoAmount) {
+        return Math.round(total + itemTotalWithFee - (item.promoAmount / 100 * itemTotalWithFee));
+      } else {
+        return Math.round(total + itemTotalWithFee);
+      }
+    } else {
+      if (item.promoAmount) {
+        return total + (itemTotal - (item.promoAmount / 100 * itemTotal));
+      } else {
+        return total + itemTotal;
+      }
     }
   }, 0);
 
@@ -236,35 +273,42 @@ const calculateOrderAmount = (items) => {
   return totalAmountCents;
 };
 
-const chargeCustomer = async (customerId) => {
-  // Lookup the payment methods available for the customer
-  const paymentMethods = await stripe.paymentMethods.list({
-    customer: customerId,
-    type: "card",
-  });
-  try {
-    // Charge the customer and payment method immediately
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1,
-      currency: "usd",
-      customer: customerId,
-      payment_method: paymentMethods.data[0].id,
-      off_session: true,
-      confirm: true,
-    });
-  } catch (err) {
-    // Error code will be authentication_required if authentication is needed
-    console.log("Error code is: ", err.code);
-    const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
-    console.log("PI retrieved: ", paymentIntentRetrieved.id);
-  }
-};
+// const chargeCustomer = async (customerId) => {
+//   // Lookup the payment methods available for the customer
+//   const paymentMethods = await stripe.paymentMethods.list({
+//     customer: customerId,
+//     type: "card",
+//   });
+//   try {
+//     // Charge the customer and payment method immediately
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: 1,
+//       currency: "usd",
+//       customer: customerId,
+//       payment_method: paymentMethods.data[0].id,
+//       off_session: true,
+//       confirm: true,
+//     });
+//   } catch (err) {
+//     // Error code will be authentication_required if authentication is needed
+//     console.log("Error code is: ", err.code);
+//     const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
+//     console.log("PI retrieved: ", paymentIntentRetrieved.id);
+//   }
+// };
+
 
 app.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
   // Alternatively, set up a webhook to listen for the payment_intent.succeeded event
   // and attach the PaymentMethod to a new Customer
   const customer = await stripe.customers.create();
+
+  // const coupon = await stripe.coupons.create({
+  //   percent_off: 100,
+  //   duration: 'once',
+  //   name: 'FREE TICKET'
+  // });
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
@@ -277,7 +321,7 @@ app.post("/create-payment-intent", async (req, res) => {
     payment_method_types: ["card"], // Specify the payment method types
     automatic_payment_methods: {
       enabled: false,
-    },
+    }
   });
 
   console.log(paymentIntent);
