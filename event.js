@@ -21,6 +21,12 @@ let promoClass = document.querySelector('.cart .promotions');
 let promoHeader = document.querySelector('.cart .promotions .promotionsHeader');
 let promoField = document.querySelector('.cart .promotions .promotionCheckout');
 let promoStatus = document.querySelector('.cart .promotions .promotionStatus');
+let promoTextBar = document.getElementById('promotionForm');
+let promoApplyButton = document.querySelector('form button');
+
+let promoTag = document.querySelector('.cart .promotions .promotionTag');
+let promoTagName = document.querySelector('.cart .promotions .promotionTag .promotionTagName');
+let promoTagCancel = document.querySelector('.cart .promotions .promotionTag .promotionTagCancel');
 
 const originalTopValue = getComputedStyle(promoClass).top;
 
@@ -28,6 +34,19 @@ promoHeader.addEventListener('click', function(){
     promoField.style.display = 'flex';
     promoHeader.style.cursor = 'auto';
     promoHeader.style.color = 'grey';
+})
+
+promoTagCancel.addEventListener('click', function() {
+    promoTag.classList.remove('show');
+    //promoTag.style.display = 'none';
+
+    promoStatus.style.display = 'none';
+    deleteAllPromo();
+
+    promoApplyButton.style.color = '';
+    promoApplyButton.style.pointerEvents = '';
+    
+    document.getElementById('name').disabled = false;
 })
 
 function setPromoHeaderDefault() {
@@ -45,9 +64,15 @@ function setPromoHeaderDefault() {
 
     marginValue -= 100; // Increment the margin by 20px each time
     promoHeader.style.marginTop = `${marginValue}px`;
+
+    
+    promoApplyButton.style.color = '';
+    promoApplyButton.style.pointerEvents = '';
+
+    document.getElementById('name').disabled = false;
 }
 
-document.getElementById('promotionForm').addEventListener('submit', function (event) {
+promoTextBar.addEventListener('submit', function (event) {
     // Prevent the default form submission
     event.preventDefault();
 
@@ -646,6 +671,8 @@ function changeQuantity($idProduct, $type) {
                 // if quantity <= 0 then remove product in cart
                 if (listCart[$idProduct].quantity <= 0) {
                     delete listCart[$idProduct];
+                    //promoTag.style.display = 'none';
+                    promoTag.classList.remove('show');
                     deleteAllPromo();
                     setPromoHeaderDefault();
                     //listCart = [];
@@ -675,17 +702,34 @@ function checkPromo(promoCode){
     const selectedPromotionName = promotions.find(availablePromos => availablePromos.promoName == "users");
     const selectedPromotionType = selectedPromotionName.type.find(type => type.promoType === promoCode);
     if(selectedPromotionType){
+        promoStatus.style.display = 'block';
         promoStatus.style.color = 'green';
         promoStatus.textContent = `Promotion code '${promoCode}' applied successfully!`;
+
+        setTimeout(function() {
+            promoStatus.style.display = 'none'; // Assuming you want to hide the status after 5 seconds
+        }, 5000); // 5000 milliseconds (5 seconds)
+        
+        promoTagName.textContent = `${promoCode}`;
+        promoTag.style.display = 'grid';
+        promoTag.classList.add('show');
+
         for (const productID in listCart) {
             if (listCart.hasOwnProperty(productID)) {
               // Add promotion information to the product
               listCart[productID].promotionApplied = selectedPromotionType.percentOff;
             }
         }
+        promoApplyButton.style.color = 'grey';
+        promoApplyButton.style.pointerEvents = 'none';
+
+        document.getElementById('name').value = '';
+        document.getElementById('name').disabled = true;
+
         // console.log(listCart.promotionApplied);
     }
     else {
+        promoStatus.style.display = 'block';
         promoStatus.style.color = 'red';
         promoStatus.textContent = '⚠️ Enter a valid promo code.';
     }

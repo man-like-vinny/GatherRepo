@@ -249,7 +249,7 @@ const calculateOrderAmount = (items) => {
   
     if (item.inclFee === "True") {
       if (item.promoAmount) {
-        return Math.round(total + itemTotalWithFee - (item.promoAmount / 100 * itemTotalWithFee));
+        return Math.round(total + itemTotalWithFee - (item.promoAmount / 100 * itemTotal));
       } else {
         return Math.round(total + itemTotalWithFee);
       }

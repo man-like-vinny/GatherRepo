@@ -420,8 +420,10 @@ background-color: hsl(0, 0%, 7%);
   }
 
   .main__btn {
-    padding: 12px 36px;
-    margin: 2.5rem 0;
+    padding: 12px 8px;
+    margin: 2.5rem auto;
+    display: inline-block;
+    margin-right: 15px;
   }
 }
 
@@ -2000,35 +2002,49 @@ z-index: 2; /* Set a higher z-index for .item */
   transition: opacity 0.3s ease;
 }
 
-.cart .promotions .promotionTag{
+.cart .promotions .promotionTag {
   margin-left: 20px;
   margin-top: -15px;
-  opacity: 1;
+  opacity: 0;
   background: #1b1b1b;
-  width: 30%;
+  width: min-content; /* Adjusted width property */
   border-radius: 10px;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  transform: translateX(100%); /* Initial position outside the viewport */
+  transition: opacity 0.2s, transform 0.5s; /* Add transition property */
 }
 
-.cart .promotions .promotionTag .promotionTagCancel{
-  color: rgb(222, 51, 51);
-  position: absolute;
+.cart .promotions .promotionTag.show {
+  opacity: 1;
+  transform: translateX(0); /* Move to the original position */
+}
+
+.cart .promotions .promotionTag .promotionTagCancel {
+  color: grey;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 1.8em;
+  transition: color 0.3s;
+  font-size: 1em;
   font-weight: bolder;
   font-family: Helvetica, Arial, sans-serif;
 }
 
-.cart .promotions .promotionTag .promotionTagName{
-
+.cart .promotions .promotionTag .promotionTagLogo {
+  /* Add styles for your logo here */
 }
+
+.cart .promotions .promotionTag .promotionTagName {
+  /* Add styles for your tag name here */
+}
+
 
 .cart .promotions .promotionStatus{
   margin-left: 20px;
   opacity: 0;
+  display: none;
 }
 
 .cart .listCart img{
@@ -2166,7 +2182,7 @@ font-family:'Times New Roman', Times, serif;
 .checkoutLayout .returnCart .listHolder .return .row-totalPromoContainer .totalPromo{
   font-weight: bold;
   font-size: 17px;
-  margin-left: -65px;
+  margin-left: -10px;
 }
 
 .checkoutLayout .returnCart .listHolder .return .row .totalPrice{

@@ -29,9 +29,11 @@ function addCartToHTML() {
     let totalQuantityHTML = document.querySelector('.totalQuantity');
     let totalPriceHTML = document.querySelector('.totalPrice');
     let totalPromoHTML = document.querySelector('.totalPromo');
+    let totalPromoHeaderHTML = document.querySelector('.totalPromoHeader');
     let totalQuantity = 0;
     let totalPrice = 0;
     let completePrice = 0;
+    let discountAmount = 0;
 
     // if there are products in the Cart
     if (listCart) {
@@ -51,11 +53,12 @@ function addCartToHTML() {
                 totalQuantity = totalQuantity + product.quantity;
                 fee = (0.01845 * (product.variablePrice * product.quantity) + 0.3075) * 100;
                 promoAmount = product.promotionApplied;
+                beforeFeePrice = completePrice = Math.round(totalPrice + (product.variablePrice * product.quantity * 100))
                 completePrice = Math.round(totalPrice + (product.variablePrice * product.quantity * 100) + fee);
                 console.log(product.checkBooking);
                 if(product.checkBooking == "True"){
                   if(promoAmount){
-                    discountAmount = (promoAmount/100 * completePrice);
+                    discountAmount = (promoAmount/100 * beforeFeePrice);
                     totalPrice = Math.round(completePrice - discountAmount); // 0.25 represents 25%
                   }
                   else{
@@ -64,8 +67,9 @@ function addCartToHTML() {
                 }
                 else{
                   if(promoAmount){
-                    discountAmount = (promoAmount/100 * (product.variablePrice * product.quantity * 100));
-                    totalPrice = totalPrice + (product.variablePrice * product.quantity * 100) - discountAmount;
+                    oneTimeDiscount = (promoAmount / 100) * (product.variablePrice * product.quantity * 100);
+                    discountAmount = discountAmount + (promoAmount / 100) * (product.variablePrice * product.quantity * 100);
+                    totalPrice = totalPrice + (product.variablePrice * product.quantity * 100) - oneTimeDiscount;
                   }
                   else{
                     totalPrice = totalPrice + (product.variablePrice * product.quantity * 100);
@@ -77,7 +81,8 @@ function addCartToHTML() {
     }
     totalQuantityHTML.innerText = totalQuantity;
     if (promoAmount) {
-      totalPromoHTML.innerText = `${promoAmount}% OFF (-${discountAmount/100})`;
+      totalPromoHeaderHTML.innerText = `Promotion Applied (${promoAmount}% OFF)`
+      totalPromoHTML.innerText = `-${discountAmount/100}`;
     }
     else{
       let totalPromoContainer = document.querySelector('.row-totalPromoContainer');
