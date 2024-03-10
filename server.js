@@ -100,7 +100,6 @@ const productSchema = new mongoose.Schema({
     image: String,
     staticImage: String
 });
-
 const promoSchema = new mongoose.Schema({
   type: [
       {
@@ -111,7 +110,6 @@ const promoSchema = new mongoose.Schema({
 });
 
 const Product = mongoose.model('Product', productSchema, 'events');
-
 const Promo = mongoose.model('Promo', promoSchema, 'promotions');
 
 // // Route to get all products
@@ -130,7 +128,6 @@ app.get('/getProducts', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
-
 app.get('/getPromo', async (req, res) => {
   try {
     console.log('Accessed /getPromo route'); // Add this log statement
@@ -146,7 +143,6 @@ app.get('/getPromo', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch promotions' });
   }
 });
-
 
 // WebSocket server
 
@@ -246,7 +242,7 @@ const calculateOrderAmount = (items) => {
   // Calculate the order total on the server to prevent
   // people from directly manipulating the amount on the client
   let totalAmountCents = 0; // Initialize total amount to zero
-  
+
   totalAmountCents = items.reduce((total, item) => {
     const itemTotal = item.price * item.quantity;
     const itemTotalWithFee = itemTotal + item.fee;
@@ -297,18 +293,11 @@ const calculateOrderAmount = (items) => {
 //   }
 // };
 
-
 app.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
   // Alternatively, set up a webhook to listen for the payment_intent.succeeded event
   // and attach the PaymentMethod to a new Customer
   const customer = await stripe.customers.create();
-
-  // const coupon = await stripe.coupons.create({
-  //   percent_off: 100,
-  //   duration: 'once',
-  //   name: 'FREE TICKET'
-  // });
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
