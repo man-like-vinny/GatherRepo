@@ -1,5 +1,6 @@
 let listCart = [];
-let returntoCart = document.querySelector('.returnCart');
+//let returntoCart = document.querySelector('.returnCart');
+let returntoCart = document.querySelector('#returntocartlogo');
 const spinnerOverlay = document.getElementById('spinner-overlay');
 var host = location.origin.replace(/^http/, 'ws')
 
