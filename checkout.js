@@ -1,5 +1,6 @@
 let listCart = [];
 let returntoCart = document.querySelector('.returnCart');
+const spinnerOverlay = document.getElementById('spinner-overlay');
 var host = location.origin.replace(/^http/, 'ws')
 
 function checkCart() {
@@ -97,6 +98,8 @@ function addCartToHTML() {
 
 returntoCart.addEventListener('click', function() {
     // Perform a fetch to get updated product data
+
+    spinnerOverlay.style.display = 'flex';
     
     fetch('/getProducts')
     .then(response => response.json())
@@ -134,7 +137,8 @@ returntoCart.addEventListener('click', function() {
 
         // Call updateCartOnServer after all operations are complete
         updateCartOnServer(validCart);
-        delayTimer(1000);
+        delayTimer(2000);
+        //spinnerOverlay.style.display = 'none';
     });
 });
 

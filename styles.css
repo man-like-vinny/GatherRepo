@@ -434,7 +434,7 @@ background-color: hsl(0, 0%, 7%);
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: min-content;
 }
 
 .video-container {
@@ -596,8 +596,8 @@ video {
 
 @media screen and (max-width: 960px) {
   .services {
-    height: 1400px;
-    padding-bottom: 900px;
+    height: min-content;
+    padding-bottom: 750px;
   }
 
   #main__img {
@@ -757,7 +757,7 @@ video {
 
 @media only screen and (min-width: 375px) and (max-width: 1114px) {
   .services {
-
+    height: min-content;
   }
 
   .services h1 {
@@ -1717,13 +1717,13 @@ position: absolute;
 
 .listProduct{
 display: grid;
-grid-template-columns: repeat(2, 1fr);
+grid-template-columns: repeat(3, 1fr);
 gap: 20px;
 }
 
 .listProduct .item {
 height: 560px;
-width: 400px;
+width: 370px;
 border-radius: 4px;
 position: relative;
 color: #ffffff;
@@ -2286,6 +2286,45 @@ background-color: #51ff00;
 transition: all 0.35s;
 border-radius: 20px;
 color: white;
+}
+
+#spinner-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* You can customize the overlay color and opacity */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Adjust the z-index as needed */
+}
+
+.spinnerComponent {
+  border: 4px solid rgba(0, 0, 0, 0.1); 
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  top: 50%;
+  left: 50%;
+  animation: spin 1s linear infinite;
+}
+
+#spinnerEventifyed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 50px;
+  max-height: 50px;
+
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 #returntocartlogo{

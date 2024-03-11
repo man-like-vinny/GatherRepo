@@ -201,7 +201,6 @@ function addDataToHTML() {
             if(product.status == "true"){
                 eventStatus = "Buy Tickets"
                 globalProductID = product.eventID;
-                console.log(globalProductID);
                 navigateStatus = `navigateProduct('${product.filename}')`;
             }
             else{
