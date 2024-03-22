@@ -37,11 +37,11 @@ promoHeader.addEventListener('click', function(){
 })
 
 promoTagCancel.addEventListener('click', function() {
+    deleteAllPromo();
     promoTag.classList.remove('show');
     //promoTag.style.display = 'none';
 
     promoStatus.style.display = 'none';
-    deleteAllPromo();
 
     promoApplyButton.style.color = '';
     promoApplyButton.style.pointerEvents = '';
