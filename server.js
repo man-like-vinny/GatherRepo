@@ -276,9 +276,9 @@ function broadcastNumberOfClients() {
   });
 }
 
-//const stripe = require("stripe")('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');
-const stripeKey = process.env.SK_Key
-const stripe = require("stripe")(stripeKey);
+const stripe = require("stripe")('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');
+//const stripeKey = process.env.SK_Key
+//const stripe = require("stripe")(stripeKey);
 //const stripe = require("stripe")('sk_test_51O2y4dASLMn2l3lqB9tO9e4Ob1eEB8DyfaUC8i8Tz6iHADtchanmJcxCKpR1dWMSu4hafsa0jCPBzfuUiSH2tway00EqpaBNHn')
 const calculateOrderAmount = (items) => {
   // Replace this constant with a calculation of the order's amount
