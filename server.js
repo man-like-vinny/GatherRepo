@@ -2,6 +2,21 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+//const fetch = require('node-fetch');
+const fs = require('fs');
+
+// const puppeteer = require("puppeteer");
+// const convert = require('svg-to-img');
+
+const nodemailer = require('nodemailer');
+
+// const Recipient = require("mailersend").Recipient;
+// const EmailParams = require("mailersend").EmailParams;
+// const Sender = require("mailersend").Sender;
+//const { MailerSend } = require("mailersend");
+
+//const { MailerSend, Sender, Token, Recipient, EmailParams } = require("mailersend");
+
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(bodyParser.json());
@@ -26,7 +41,16 @@ console.log("websocket server created")
 
 require("dotenv").config();
 
+//pupeeter
+// const browser = puppeteer.launch({
+//   'args' : [
+//     '--no-sandbox',
+//     '--disable-setuid-sandbox'
+//   ]
+// });
+
 const {KindeClient, GrantType} = require("@kinde-oss/kinde-nodejs-sdk");
+const { type } = require('os');
 
 const options = {
     domain: process.env.KINDE_DOMAIN,
@@ -76,7 +100,7 @@ app.get("/dashboard.html", isAuthenticatedMiddleware, (req, res) => {
   res.send("Welcome to the dashboard!");
 });
 
-const mongoURI = 'mongodb+srv://vinayakunnithan:Vinayak1@gather.fgw0v5i.mongodb.net/products'; // Update with your MongoDB URI
+const mongoURI = process.env.MDB_KEY; // Update with your MongoDB URI
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, {
@@ -100,6 +124,7 @@ const productSchema = new mongoose.Schema({
     image: String,
     staticImage: String
 });
+
 const promoSchema = new mongoose.Schema({
   type: [
       {
@@ -109,8 +134,24 @@ const promoSchema = new mongoose.Schema({
   ]
 });
 
+const customerSchema = new mongoose.Schema({
+  eventName: String,
+  customerName: String,
+  customerEmail: String,
+  customerID: String,
+  ticketDescription: String,
+  quantity: Number,
+  totalPaid: Number,
+  feePaid: Number,
+  eventID: Number,
+  bookingFeeRequired: String,
+  promotionApplied: String
+})
+
 const Product = mongoose.model('Product', productSchema, 'events');
 const Promo = mongoose.model('Promo', promoSchema, 'promotions');
+const Customer = mongoose.model('Customer', customerSchema, 'customers');
+
 
 // // Route to get all products
 app.get('/getProducts', async (req, res) => {
@@ -235,8 +276,9 @@ function broadcastNumberOfClients() {
   });
 }
 
-const stripe = require("stripe")('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');
-
+//const stripe = require("stripe")('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');
+//const stripe = require("stripe")(process.env.SK_Key);
+const stripe = require("stripe")('sk_test_51O2y4dASLMn2l3lqB9tO9e4Ob1eEB8DyfaUC8i8Tz6iHADtchanmJcxCKpR1dWMSu4hafsa0jCPBzfuUiSH2tway00EqpaBNHn')
 const calculateOrderAmount = (items) => {
   // Replace this constant with a calculation of the order's amount
   // Calculate the order total on the server to prevent
@@ -269,29 +311,106 @@ const calculateOrderAmount = (items) => {
   return totalAmountCents;
 };
 
-// const chargeCustomer = async (customerId) => {
-//   // Lookup the payment methods available for the customer
-//   const paymentMethods = await stripe.paymentMethods.list({
-//     customer: customerId,
-//     type: "card",
+async function process_qr(customerData) {
+  const url = "https://api.qr-code-generator.com/v1/create?access-token=EIlebKMHtkzJgmef0l3iYp_F20RfsQ8xFsuxt6N1Ru24B9ucs--fPa1sCEJpkv-B";
+
+  const payload = JSON.stringify({
+    "frame_name": "bottom-frame",
+    "qr_code_text": JSON.stringify(customerData),
+    "image_format": "PNG",
+    "frame_color": "#131313",
+    "frame_icon_name": "mobile",
+    "image_width": 400,
+    "frame_text": "Eventifyed",
+    "marker_left_template": "version13",
+    "marker_right_template": "version13",
+    "marker_bottom_template": "version13",
+  });
+  
+  const headers = {
+    'Content-Type': 'application/json',
+    'Cookie': 'AWSALB=mjK0XwMtS9Sta9QVo0hZaph6Nyqb9tqVQfZvFDr93eL/Zx9zqUnssj56QNCB1v6cCSzB9vfsQ3lb+LSmaTICrBh5ugDeeTj9yctmifsNWfEFtphXyg5LE4Tc8sE6; AWSALBCORS=mjK0XwMtS9Sta9QVo0hZaph6Nyqb9tqVQfZvFDr93eL/Zx9zqUnssj56QNCB1v6cCSzB9vfsQ3lb+LSmaTICrBh5ugDeeTj9yctmifsNWfEFtphXyg5LE4Tc8sE6'
+  };
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: payload,
+    });
+
+    if (response.ok) {
+      const pngContent = await response.arrayBuffer();
+
+      // Convert array buffer to Buffer
+      const byteArray = new Uint8Array(pngContent);
+      const pngBuffer = Buffer.from(byteArray);
+
+      fs.writeFileSync(`CustomerQRCodes/${customerData.customerID}_${customerData.eventName}_Eventifyed_Pass.png`, pngBuffer);
+      console.log(`PNG saved as CustomerQRCodes/${customerData.customerID}_${customerData.eventName}_Eventifyed_Pass.png`);
+
+      return `CustomerQRCodes/${customerData.customerID}_${customerData.eventName}_Eventifyed_Pass.png`;
+    } else {
+      const errorMessage = await response.text();
+      console.error(`Error: ${response.status} - ${errorMessage}`);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// async function process_qr(customerData) {
+//   const url = "https://api.qr-code-generator.com/v1/create?access-token=EIlebKMHtkzJgmef0l3iYp_F20RfsQ8xFsuxt6N1Ru24B9ucs--fPa1sCEJpkv-B";
+
+//   const payload = JSON.stringify({
+//     "frame_name": "bottom-frame",
+//     "qr_code_text": JSON.stringify(customerData),
+//     "image_format": "SVG",
+//     "frame_color": "#131313",
+//     "frame_icon_name": "mobile",
+//     "frame_text": "Eventifyed",
+//     "marker_left_template": "version13",
+//     "marker_right_template": "version13",
+//     "marker_bottom_template": "version13",
 //   });
+  
+//   const headers = {
+//     'Content-Type': 'application/json',
+//     'Cookie': 'AWSALB=mjK0XwMtS9Sta9QVo0hZaph6Nyqb9tqVQfZvFDr93eL/Zx9zqUnssj56QNCB1v6cCSzB9vfsQ3lb+LSmaTICrBh5ugDeeTj9yctmifsNWfEFtphXyg5LE4Tc8sE6; AWSALBCORS=mjK0XwMtS9Sta9QVo0hZaph6Nyqb9tqVQfZvFDr93eL/Zx9zqUnssj56QNCB1v6cCSzB9vfsQ3lb+LSmaTICrBh5ugDeeTj9yctmifsNWfEFtphXyg5LE4Tc8sE6'
+//   };
+
 //   try {
-//     // Charge the customer and payment method immediately
-//     const paymentIntent = await stripe.paymentIntents.create({
-//       amount: 1,
-//       currency: "usd",
-//       customer: customerId,
-//       payment_method: paymentMethods.data[0].id,
-//       off_session: true,
-//       confirm: true,
+//     const response = await fetch(url, {
+//       method: 'POST',
+//       headers: headers,
+//       body: payload,
 //     });
-//   } catch (err) {
-//     // Error code will be authentication_required if authentication is needed
-//     console.log("Error code is: ", err.code);
-//     const paymentIntentRetrieved = await stripe.paymentIntents.retrieve(err.raw.payment_intent.id);
-//     console.log("PI retrieved: ", paymentIntentRetrieved.id);
+
+//     if (response.ok) {
+//       const svgContent = await response.text();
+
+//       // Save the SVG content to a file
+//       fs.writeFileSync('output.svg', svgContent, 'utf-8');
+//       console.log('QR code saved as output.svg');
+
+//       const pngBuffer = await convert.from(svgContent).toPng({
+//         width: 400,
+//         height: 500
+//       });
+
+//       fs.writeFileSync(`CustomerQRCodes/${customerData.customerID}_${customerData.eventName}_Eventifyed_Pass.png`, pngBuffer);
+//       console.log(`SVG converted to PNG: CustomerQRCodes/${customerData.customerID}_${customerData.eventName}_Eventifyed_Pass.png`);
+
+//       return `CustomerQRCodes/${customerData.customerID}_${customerData.eventName}_Eventifyed_Pass.png`
+
+//     } else {
+//       const errorMessage = await response.text();
+//       console.error(`Error: ${response.status} - ${errorMessage}`);
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
 //   }
-// };
+// }
 
 app.post("/create-payment-intent", async (req, res) => {
   const { items } = req.body;
@@ -319,5 +438,158 @@ app.post("/create-payment-intent", async (req, res) => {
 
   res.send({
     clientSecret: paymentIntent.client_secret,
+    givenCustomerID: customer.id,
   });
 });
+
+//Insert customer details into MongoDB
+app.post("/insert-customer-details", async (req, res) => {
+  try {
+    console.log('Accessed /insertCustomer route'); // Add this log statement
+
+      const { items, customerName, customerEmail, customerID } = req.body;
+
+      const eventName = items[0].id;
+      const firstName = customerName.split(" ")[0];
+      const totalPaid = calculateOrderAmount(items)/100;
+      const feePaid = (items[0].fee/100);
+      const ticketDescription = items.map(item => `${item.description} x ${item.quantity}`).join('\n');
+      const ticketDescriptionWithLineBreaks = ticketDescription.split('\n').join('<br>');
+      const bookingFeeRequired = items[0].inclFee;
+      const promotionApplied = items[0].promoAmount;
+
+      // Create a new customer document
+      const customer = new Customer({
+        eventName,
+        customerName,
+        customerEmail,
+        customerID,
+        ticketDescription,
+        totalPaid,
+        feePaid,
+        bookingFeeRequired,
+        promotionApplied
+      });
+
+    // Save the customer document to MongoDB
+    await customer.save();
+    console.log('Customer inserted into MongoDB:', customer); // Add this log statement
+
+
+    //Embed schema into QR
+    await process_qr(customer);
+
+    //Send email to customer
+    //await sendEmail(customerEmail, firstName, customerID, eventName, ticketDescriptionWithLineBreaks);
+    res.status(200).json({ message: 'Customer inserted and email sent successfully' });
+    //res.status(500).json({ message: 'Customer inserted and email sent successfully' });
+
+    //Create email with mailersend 
+    // const recipients = [new Recipient("vinayakunnithan@yahoo.com", "Recipient")];
+    // const sentFrom = new Sender("team@eventifyed.com", "Vinayak Unnithan");
+
+    // const emailHtml = `
+    //   <p>Greetings from the team, you got this message through MailerSend.</p>
+    // `;
+
+    // const emailParams = new EmailParams()
+    //   .setFrom("trial-ynrw7gyq6qk42k8e.mlsender.net")
+    //   .setTo(recipients)
+    //   .setReplyTo(sentFrom)
+    //   .setSubject("You've got tickets from Eventifyed")
+    //   .setHtml(emailHtml)
+    //   .setText(`Hi ${customerName}],
+
+    //             We are pleased to inform you that you have successfully received tickets for ${eventName}. Enclosed within this email, you will find your personalized QR code, which will serve as your entry pass. Please ensure to present this QR code to the designated ticket organizer upon arrival at the event venue.
+                
+    //             Should you encounter any challenges in accessing or retrieving your QR code, please do not hesitate to contact us by simply replying to this email. Our team is readily available to assist you in resolving any queries or concerns you may have.
+                
+    //             We look forward to your attendance and wish you an enjoyable experience at ${eventName}.
+                
+    //             Warm regards,
+                
+    //             Vinayak Unnithan
+    //             Founder
+    //             Eventifyed Team`)
+
+    // const mailersend = new MailerSend({
+    //   api_key: process.env.API_KEY,
+    // });
+
+    //Send email with QR to customer
+    //mailersend.email.send(emailParams);
+
+    // Read SVG content from file
+    //const svgContent = fs.readFileSync('output.svg', 'utf-8');
+
+    // Send SVG content as response
+    //res.set('Content-Type', 'image/svg+xml');
+    // res.send(svgContent);
+    //res.send(svgContent);
+
+    //console.log("Email has been sent");  
+    // Send email with QR to customer
+
+    // mailersend.token.create(token)
+    // .then((response) => console.log(response.body))
+    // .catch((error) => console.log(error.body));
+        
+    // mailersend.email.send(emailParams).then(() => {
+    //   console.log("Email sent successfully");
+    // }).catch((error) => {
+    //   console.error("Error sending email:", error);
+    // });
+
+    } catch (error) {
+    console.error('Error inserting customer into MongoDB:', error);
+    res.status(500).json({ error: 'Failed to insert customer' });
+    }
+});
+
+async function sendEmail(emailAddress, firstName, customerID, eventName, ticketDescriptionWithLineBreaks) {
+  try {
+    const pngContent = fs.readFileSync(`CustomerQRCodes/${customerID}_${eventName}_Eventifyed_Pass.png`);
+    console.log(typeof(pngContent));
+
+    // Create a SMTP transporter
+    let transporter = nodemailer.createTransport({
+      host: "smtp.mailersend.net",
+      port: 587,
+      secure: false,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+
+    // Send mail with defined transport object
+    let info = transporter.sendMail({
+      from: 'Eventifyed <team@eventifyed.com>',
+      sender: 'Eventifyed <team@eventifyed.com>',
+      to: emailAddress,
+      bcc: 'Eventifyed <team@eventifyed.com>',
+      replyTo: 'team@eventifyed.com',
+      subject: "You've got tickets from Eventifyed",
+      html: `<p>Hi ${firstName},</p>
+            <p>We are pleased to inform you that you have successfully received the following tickets for ${eventName}:
+            <p><strong>${ticketDescriptionWithLineBreaks}</strong></p>
+            <p>Enclosed within this email, you will find your personalized QR code, which will serve as your entry pass. Please ensure to present this QR code to the designated ticket organizer upon arrival at the event venue.</p>
+            <p>Should you encounter any challenges in accessing or retrieving your QR code, please do not hesitate to contact us by simply replying to this email. Our team is readily available to assist you in resolving any queries or concerns you may have.</p>
+            <p>We look forward to your attendance and wish you an enjoyable experience at ${eventName}.</p>
+            <p>Warm regards,</p>
+            <p>Vinayak Unnithan<br>Founder<br>Eventifyed Team</p>
+            `,
+      attachments: [
+        {
+          filename: `${customerID}_${eventName}_Eventifyed_Pass.png`,
+          content: pngContent
+        }
+      ]
+    });
+
+    console.log("Email sent successfully:", info.response);
+  } catch (error) {
+    console.error("Error sending email:", error);
+    throw error;
+  }
+}

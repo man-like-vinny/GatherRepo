@@ -1,8 +1,8 @@
 // This is a public sample test API key.
 // Don’t submit any personally identifiable information in requests made with this key.
 // Sign in to see your own test API key embedded in code samples.
-const stripe = Stripe("pk_live_51O2y4dASLMn2l3lqKpiDGgetEi9CbrP9miuR4Ns4pLxktfpvBPKNqX7LHgsCxNHXwt5Z8oqcoyFWP1I0NpHE74sP004yeMSfkW");
-//const stripe = Stripe("pk_test_51O2y4dASLMn2l3lqZONitI1i4fQZcrWdhq7khNIvEG66SADdBXVagGLrCLDoYDTh8gYeiLdwicrM91iL0gJE5UL400rNvTqxBC");
+//const stripe = Stripe("pk_live_51O2y4dASLMn2l3lqKpiDGgetEi9CbrP9miuR4Ns4pLxktfpvBPKNqX7LHgsCxNHXwt5Z8oqcoyFWP1I0NpHE74sP004yeMSfkW");
+const stripe = Stripe("pk_test_51O2y4dASLMn2l3lqZONitI1i4fQZcrWdhq7khNIvEG66SADdBXVagGLrCLDoYDTh8gYeiLdwicrM91iL0gJE5UL400rNvTqxBC");
 const validItems = listCart.filter(item => item !== null);
 
 //console.log(listCart);
@@ -48,6 +48,8 @@ document
 //clearCart();
 
 let emailAddress = '';
+let customerName = '';
+
 // Fetches a payment intent and captures the client secret
 async function initialize() {
   const response = await fetch("/create-payment-intent", {
@@ -55,11 +57,12 @@ async function initialize() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ items }),
   });
-  const { clientSecret } = await response.json();
+  const { clientSecret, givenCustomerID } = await response.json();
 
   const appearance = {
     theme: 'stripe',
   };
+
   elements = stripe.elements({ appearance, clientSecret });
 
   const linkAuthenticationElement = elements.create("linkAuthentication");
@@ -79,17 +82,75 @@ async function initialize() {
 
   const addressElement = elements.create('address', options);
   addressElement.mount('#address-element');
+
+  addressElement.on('change', (event) => {
+    customerName = event.value.name;
+    customerID = givenCustomerID;
+  })
   
   const paymentElement = elements.create("payment", paymentElementOptions);
   paymentElement.mount("#payment-element");
 }
 
+// async function handleSubmit(e) {
+//   e.preventDefault();
+//   setLoading(true);
+
+//   //customerName = addressElement.name;
+//   customerEmail = emailAddress;
+
+//   spinnerOverlay.style.display = 'flex';
+
+//   const insertCustomer = await fetch("/insert-customer-details", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ items, customerName, customerEmail, customerID }),
+//   });
+  
+//   if(!insertCustomer.ok){
+//     throw new Error ("Failed to send email") 
+//   }
+
+//   else{
+//   const svgContent = await insertCustomer.text();
+
+//   const { error, paymentIntent } = await stripe.confirmPayment({
+//     elements,
+//     confirmParams: {
+//       // Make sure to change this to your payment completion page
+//       return_url: "http://www.eventifyed.com/success.html",
+//       //return_url: "/success.html",
+//       receipt_email: emailAddress,
+//     },
+//   });
+// }
+
+
+//   //delayTimer(2000);
+
+//   // This point will only be reached if there is an immediate error when
+//   // confirming the payment. Otherwise, your customer will be redirected to
+//   // your `return_url`. For some payment methods like iDEAL, your customer will
+//   // be redirected to an intermediate site first to authorize the payment, then
+//   // redirected to the `return_url`.
+//   if (error.type === "card_error" || error.type === "validation_error") {
+//     showMessage(error.message);
+//   } else {
+//     showMessage("An unexpected error occurred.");
+//   }
+
+//   setLoading(false);
+// }
+
 async function handleSubmit(e) {
   e.preventDefault();
   setLoading(true);
 
-  const { error } = await stripe.confirmPayment({
+  //customerName = addressElement.name;
+
+  const {error} = await stripe.confirmPayment({
     elements,
+    redirect: "if_required",
     confirmParams: {
       // Make sure to change this to your payment completion page
       return_url: "http://www.eventifyed.com/success.html",
@@ -98,19 +159,78 @@ async function handleSubmit(e) {
     },
   });
 
-  // This point will only be reached if there is an immediate error when
-  // confirming the payment. Otherwise, your customer will be redirected to
-  // your `return_url`. For some payment methods like iDEAL, your customer will
-  // be redirected to an intermediate site first to authorize the payment, then
-  // redirected to the `return_url`.
-  if (error.type === "card_error" || error.type === "validation_error") {
+  if (error) {
     showMessage(error.message);
-  } else {
-    showMessage("An unexpected error occurred.");
-  }
+    spinnerOverlay.style.display = 'none';
+    setLoading(false);
+  } 
+  
+  else {
+    spinnerOverlay.style.display = 'flex';
+    customerEmail = emailAddress;
 
-  setLoading(false);
+    const insertCustomer = await fetch("/insert-customer-details", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items, customerName, customerEmail, customerID }),
+    });
+
+    if (!insertCustomer.ok) {
+      throw new Error("Failed to send email");
+    }
+
+    else{
+      const svgContent = await insertCustomer.text();
+      window.location.href = "http://www.eventifyed.com/success.html";
+    }
+  }
 }
+
+
+// async function handleSubmit(e) {
+//   e.preventDefault();
+//   setLoading(true);
+
+//   //customerName = addressElement.name;
+//   customerEmail = emailAddress;
+
+//   spinnerOverlay.style.display = 'flex';
+
+//   const insertCustomer = await fetch("/insert-customer-details", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json" },
+//     body: JSON.stringify({ items, customerName, customerEmail, customerID }),
+//   });
+  
+//   if(!insertCustomer.ok){
+//     throw new Error ("Failed to send email") 
+//   }
+
+//   else{
+//     const { error, paymentIntent } = await stripe.confirmPayment({
+//       elements,
+//       redirect: "if_required",
+//       confirmParams: {
+//         // Make sure to change this to your payment completion page
+//         return_url: "http://www.eventifyed.com/success.html",
+//         //return_url: "/success.html",
+//         receipt_email: emailAddress,
+//       },
+//     })
+
+//     const svgContent = await insertCustomer.text();
+
+//     if (error.type === "card_error" || error.type === "validation_error") {
+//       showMessage(error.message);
+//     } else {
+//       showMessage("An unexpected error occurred.");
+//     }
+
+//     spinnerOverlay.style.display = 'none';
+//     setLoading(false);
+// }
+//   //delayTimer(2000);
+// }
 
 // Fetches the payment intent status after payment submission
 async function checkStatus() {
