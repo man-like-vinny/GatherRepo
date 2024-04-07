@@ -481,7 +481,7 @@ app.post("/insert-customer-details", async (req, res) => {
     await process_qr(customer);
 
     //Send email to customer
-    //await sendEmail(customerEmail, firstName, customerID, eventName, ticketDescriptionWithLineBreaks);
+    await sendEmail(customerEmail, firstName, customerID, eventName, ticketDescriptionWithLineBreaks);
     res.status(200).json({ message: 'Customer inserted and email sent successfully' });
     //res.status(500).json({ message: 'Customer inserted and email sent successfully' });
 
@@ -578,7 +578,7 @@ async function sendEmail(emailAddress, firstName, customerID, eventName, ticketD
             <p>Should you encounter any challenges in accessing or retrieving your QR code, please do not hesitate to contact us by simply replying to this email. Our team is readily available to assist you in resolving any queries or concerns you may have.</p>
             <p>We look forward to your attendance and wish you an enjoyable experience at ${eventName}.</p>
             <p>Warm regards,</p>
-            <p>Vinayak Unnithan<br>Founder<br>Eventifyed Team</p>
+            <p>Vinayak Unnithan<br>Founder @ Eventifyed</p>
             `,
       attachments: [
         {
