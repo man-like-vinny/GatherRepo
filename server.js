@@ -313,7 +313,7 @@ const calculateOrderAmount = (items) => {
 };
 
 async function process_qr(customerData) {
-  const url = "https://api.qr-code-generator.com/v1/create?access-token=EIlebKMHtkzJgmef0l3iYp_F20RfsQ8xFsuxt6N1Ru24B9ucs--fPa1sCEJpkv-B";
+  const url = "https://api.qr-code-generator.com/v1/create?access-token=ln8vLYvUZrJR97khtmrQ4drdahi3CEhYYufT0Kzh1zWrU1REj2MniG69-xLonkLU";
 
   const payload = JSON.stringify({
     "frame_name": "bottom-frame",
