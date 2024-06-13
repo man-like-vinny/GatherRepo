@@ -279,16 +279,21 @@ img {
   margin-right: 10px;
 }
 
+.main .mainContent .body .portalContainer h3{
+  margin-left: 20px;
+}
 
 .main .mainContent .body .portalContainer .contactform{
   background: white;
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 600px;
+  max-height: 460px;
+  max-width: max-content;
   height: 100%;
   margin-left: 20px;
   z-index: 100;
+  background-color: red;
 }
 
 form h3{
