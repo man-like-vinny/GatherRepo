@@ -17,7 +17,8 @@ const nodemailer = require('nodemailer');
 
 //const { MailerSend, Sender, Token, Recipient, EmailParams } = require("mailersend");
 
-const port = process.env.PORT || 5000;
+//Below should be 5000 for prod
+const port = process.env.PORT || 5570;
 const app = express();
 app.use(bodyParser.json());
 app.use(express.json());
@@ -138,7 +139,8 @@ const productSchema = new mongoose.Schema({
     ],
     ticketDescription: String,
     image: String,
-    staticImage: String
+    staticImage: String,
+    eventID:String
 });
 
 const promoSchema = new mongoose.Schema({
@@ -156,6 +158,7 @@ const customerSchema = new mongoose.Schema({
   customerEmail: String,
   customerID: String,
   ticketDescription: String,
+  confirmedSeats: String,
   quantity: Number,
   totalPaid: Number,
   feePaid: Number,
@@ -478,6 +481,13 @@ app.post("/create-payment-intent", async (req, res) => {
   // Alternatively, set up a webhook to listen for the payment_intent.succeeded event
   // and attach the PaymentMethod to a new Customer
   const customer = await stripe.customers.create();
+  const ticketDescription = items.map(item => {
+    let description = `${item.description} x ${item.quantity}`;
+    if (Array.isArray(item.selectedSeats) && item.selectedSeats.length > 0) {
+      description += `\n  Seats: ${item.selectedSeats.join(', ')}`;
+    }
+    return description;
+  }).join('\n\n');
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
@@ -485,7 +495,7 @@ app.post("/create-payment-intent", async (req, res) => {
     setup_future_usage: "off_session",
     amount: calculateOrderAmount(items),
     currency: "eur",
-    description: items.map(item => `${item.id} : ${item.description} x ${item.quantity}`).join('\n'),
+    description: ticketDescription,
     // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
     payment_method_types: ["card"], // Specify the payment method types
     automatic_payment_methods: {
@@ -517,11 +527,11 @@ app.post("/insert-customer-details", async (req, res) => {
       //const ticketDescription = items.map(item => `${item.description} x ${item.quantity}`).join('\n');
       const ticketDescription = items.map(item => {
         let description = `${item.description} x ${item.quantity}`;
-        if (item.selectedSeats) {
+        if (Array.isArray(item.selectedSeats) && item.selectedSeats.length > 0) {
           description += `\n  Seats: ${item.selectedSeats.join(', ')}`;
         }
         return description;
-      }).join('\n');
+      }).join('\n\n');
       
       const ticketDescriptionWithLineBreaks = ticketDescription.split('\n').join('<br>');
       const bookingFeeRequired = items[0].inclFee;

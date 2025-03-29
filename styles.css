@@ -870,29 +870,23 @@ video {
     margin-left: -10px;
   }
 
-  .listEvents .description .ticketSection  {
-    width: 105% !important;
-    margin-top: 100px;
-    margin-left: -10px;
+  .listEvents .description .ticketSection {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adjust spacing between rows */
+}
+
+  .listEvents .description .ticketSection .row,
+  .listEvents .description .ticketSection .row2,
+  .listEvents .description .ticketSection .row3,
+  .listEvents .description .ticketSection .row4 {
+      position: relative !important;
+      margin-top: -10px !important; /* Ensures spacing instead of using top */
+      display: block;
   }
 
   .listEvents .description .ticketSection td  {
     width: 15% !important;
-  }
-
-  .listEvents .description .ticketSection .row  {
-    position: relative !important; 
-    top: 15px !important;
-  }
-
-  .listEvents .description .ticketSection .row2  {
-    position: relative !important; 
-    top: 10px !important;
-  }
-
-  .listEvents .description .ticketSection .row3  {
-    position: relative !important; 
-    top: 15px !important;
   }
 
   .listEvents .description .addtoCart{

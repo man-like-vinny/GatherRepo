@@ -123,6 +123,7 @@ fetch('/getPromo')
 
 let listCart = [];
 
+
 checkoutButton.addEventListener('click', function(){
     if (listCart.every(element => element === null) || listCart.length === 0) {
         // Don't do anything or show a message to the user indicating that the cart is empty.
@@ -130,6 +131,10 @@ checkoutButton.addEventListener('click', function(){
         //return;
     }
     else{
+        //const eventId = currentEventId;
+        //const seatsToBuy = listCart[eventId]?.selectedSeats || [];
+        //seatMap.confirmSelection()
+        //alert('Checkout successful! Your seats are now unavailable.');
         window.location.href = '/checkout.html';
     }
 })
@@ -168,10 +173,12 @@ class SeatMap {
   initWebSocket() {
     this.ws = new WebSocket(host);
     this.ws.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      if (data.action === 'seatUpdated') {
-        this.updateSeatStatus(data.seat);
-      }
+        const data = JSON.parse(event.data);
+        if (data.action === 'seatUpdated') {
+            this.updateSeatStatus(data.seat);
+        } else if (data.action === 'checkoutCompleted') {
+            this.markSeatsAsUnavailable(data.seats);
+        }
     };
   }
 
@@ -179,6 +186,23 @@ class SeatMap {
     const response = await fetch(`/getSeats/${this.eventId}`);
     this.seatData = await response.json();
   }
+
+//   markSeatsAsUnavailable(seats) {
+//     seats.forEach(seatInfo => {
+//         const seatElement = this.container.querySelector(`[data-seat="${seatInfo.seatNumber}"]`);
+//         if (seatElement) {
+//             seatElement.className = 'seat unavailable';
+//         }
+//     });
+//   }
+
+    markSeatsAsUnavailable(seats) {
+        seats.forEach(seatInfo => {
+            this.updateSeatStatus(seatInfo);
+        });
+    }
+
+
 
   updateSeatStatus(seatInfo) {
     const seatElement = this.container.querySelector(`[data-seat="${seatInfo.seatNumber}"]`);
@@ -250,16 +274,23 @@ class SeatMap {
     grid.className = 'seat-grid';
 
     const rows = ['A', 'B', 'C'];
-    rows.forEach(row => {
-      const rowElement = document.createElement('div');
-      rowElement.className = 'seat-row';
-      
-      const label = document.createElement('div');
-      label.className = 'row-label';
-      label.textContent = row;
-      rowElement.appendChild(label);
 
-      for (let col = 1; col <= 18; col++) {
+    rows.forEach(row => {
+    const rowElement = document.createElement('div');
+    rowElement.className = 'seat-row';
+    
+    const label = document.createElement('div');
+    label.className = 'row-label';
+    label.textContent = row;
+    rowElement.appendChild(label);
+
+    // Determine the number of columns based on row
+    const totalSeats = row === 'A' ? 18 : 18;
+
+    for (let col = 1; col <= totalSeats; col++) {
+        // Skip seats A17 and A18
+        if (row === 'A' && col > 16) continue;
+        
         const seat = document.createElement('div');
         const seatNumber = `${row}${col}`;
         seat.className = 'seat available';
@@ -268,20 +299,30 @@ class SeatMap {
         // Check if seat exists in seatData and update its status
         const seatData = this.seatData?.find(s => s.seatNumber === seatNumber);
         if (seatData) {
-          seat.className = `seat ${seatData.status}`;
+        seat.className = `seat ${seatData.status}`;
         }
 
         // Check if seat is in cart
         if (listCart && listCart.some(item => item?.selectedSeats?.includes(seatNumber))) {
-          seat.className = 'seat in-cart';
+        seat.className = 'seat in-cart';
         }
 
         seat.addEventListener('click', () => this.handleSeatClick(seat, seatNumber));
         rowElement.appendChild(seat);
-      }
+    }
+    
+    if (row === 'A') {
+        // Add placeholders for missing seats on the right
+        for (let i = 1; i <= 2; i++) {
+        const placeholder = document.createElement('div');
+        placeholder.className = 'seat placeholder';
+        rowElement.appendChild(placeholder);
+        }
+    }
 
-      grid.appendChild(rowElement);
+    grid.appendChild(rowElement);
     });
+    
 
     seatMap.appendChild(grid);
 
@@ -359,7 +400,7 @@ class SeatMap {
 
         // Notify other clients about the seat update
         this.ws.send(JSON.stringify({
-            action: 'seatUpdate',
+            action: 'seatUpdated',
             seat: {
                 eventId: this.eventId,
                 seatNumber,
@@ -383,7 +424,40 @@ class SeatMap {
     }
 
     this.close();
-    }   
+    }
+    
+    async completeCheckout() {
+
+        const seats = Array.from(this.selectedSeats);
+
+        for (const seatNumber of seats) {
+            await fetch('/updateSeat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    eventId: this.eventId,
+                    seatNumber,
+                    status: 'unavailable'
+                })
+            });
+        }
+    
+        // Notify all clients that these seats are now unavailable
+        this.ws.send(JSON.stringify({
+            action: 'checkoutCompleted',
+            seats: seats.map(seatNumber => ({
+                eventId: this.eventId,
+                seatNumber,
+                status: 'unavailable'
+            }))
+        }));
+        
+        //delete listCart[this.eventId];
+        alert("Checkout successful! Your seats are now unavailable.");
+    }
+    
 
   close() {
     this.container.innerHTML = '';
@@ -978,23 +1052,31 @@ function changeQuantity($idProduct, $type) {
             // Remove product from cart if quantity reaches 0
             if (listCart[$idProduct].quantity <= 0) {
                 // Release all selected seats if any
-                if (listCart[$idProduct].selectedSeats) {
-                    listCart[$idProduct].selectedSeats.forEach(seat => {
-                        fetch('/updateSeat', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                eventId: $idProduct,
-                                seatNumber: seat,
-                                status: 'available'
-                            })
-                        });
-                    });
-                }
+                // if (listCart[$idProduct].selectedSeats) {
+                //     listCart[$idProduct].selectedSeats.forEach(seat => {
+                //         fetch('/updateSeat', {
+                //             method: 'POST',
+                //             headers: {
+                //                 'Content-Type': 'application/json'
+                //             },
+                //             body: JSON.stringify({
+                //                 eventId: $idProduct,
+                //                 seatNumber: seat,
+                //                 status: 'available'
+                //             })
+                //         });
+                //     });
+                // }
                 delete listCart[$idProduct];
-                listCart = [];
+                //listCart = [];
+
+                promoTag.classList.remove('show');
+                deleteAllPromo();
+                setPromoHeaderDefault();
+                if (listCart.every(element => element === null)) {
+                    promoHeader.style.display = 'none';
+                    promoStatus.style.opacity = 0;
+                }
             }
             break;
 
