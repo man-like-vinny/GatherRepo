@@ -215,6 +215,21 @@ app.get('/getSeats/:eventId', async (req, res) => {
   }
 });
 
+// app.post('/updateSeat', async (req, res) => {
+//   try {
+//       const { eventId, seatNumber, status } = req.body;
+//       const updatedSeat = await Seat.findOneAndUpdate(
+//           { eventId, seatNumber },
+//           { status },
+//           { new: true }
+//       );
+//       res.json(updatedSeat);
+//   } catch (error) {
+//       console.error('Error updating seat:', error);
+//       res.status(500).json({ error: 'Failed to update seat' });
+//   }
+// });
+
 app.post('/updateSeat', async (req, res) => {
   try {
       const { eventId, seatNumber, status } = req.body;
@@ -223,6 +238,21 @@ app.post('/updateSeat', async (req, res) => {
           { status },
           { new: true }
       );
+
+      // Broadcast seat update to all clients
+      wss.clients.forEach((client) => {
+          if (client.readyState === WebSocketServer.OPEN) {
+              client.send(JSON.stringify({
+                  action: 'seatUpdated',
+                  seat: {
+                      eventId,
+                      seatNumber,
+                      status
+                  }
+              }));
+          }
+      });
+
       res.json(updatedSeat);
   } catch (error) {
       console.error('Error updating seat:', error);
@@ -231,6 +261,8 @@ app.post('/updateSeat', async (req, res) => {
 });
 
 // Add new endpoint to verify seats are still available
+// In server.js, update the /verifySeats endpoint:
+
 app.post('/verifySeats', async (req, res) => {
   try {
       const { eventId, seats } = req.body;
@@ -240,8 +272,36 @@ app.post('/verifySeats', async (req, res) => {
       });
 
       const allAvailable = seatStatuses.every(seat => 
-          seat.status === 'available' || seat.status === 'selected'
+          seat.status === 'available' || 
+          seat.status === 'selected'
       );
+
+      if (!allAvailable) {
+          // Update seats to unavailable if they're taken
+          for (const seat of seatStatuses) {
+              if (seat.status === 'in_cart') {
+                  await Seat.findOneAndUpdate(
+                      { eventId, seatNumber: seat.seatNumber },
+                      { status: 'unavailable' },
+                      { new: true }
+                  );
+
+                  // Notify all clients about the status change
+                  wss.clients.forEach((client) => {
+                      if (client.readyState === WebSocketServer.OPEN) {
+                          client.send(JSON.stringify({
+                              action: 'seatUpdated',
+                              seat: {
+                                  eventId,
+                                  seatNumber: seat.seatNumber,
+                                  status: 'unavailable'
+                              }
+                          }));
+                      }
+                  });
+              }
+          }
+      }
 
       res.json({ available: allAvailable });
   } catch (error) {
@@ -249,6 +309,25 @@ app.post('/verifySeats', async (req, res) => {
       res.status(500).json({ error: 'Failed to verify seats' });
   }
 });
+
+// app.post('/verifySeats', async (req, res) => {
+//   try {
+//       const { eventId, seats } = req.body;
+//       const seatStatuses = await Seat.find({
+//           eventId,
+//           seatNumber: { $in: seats }
+//       });
+
+//       const allAvailable = seatStatuses.every(seat => 
+//           seat.status === 'available' || seat.status === 'selected'
+//       );
+
+//       res.json({ available: allAvailable });
+//   } catch (error) {
+//       console.error('Error verifying seats:', error);
+//       res.status(500).json({ error: 'Failed to verify seats' });
+//   }
+// });
 
 // WebSocket server
 
@@ -281,6 +360,27 @@ wss.on('connection', (ws) => {
       if (data.action === 'updateCart') {
         const cart = data.cart;
         const validCart = cart.filter(item => item !== null);
+
+        // Update seat status to unavailable for seats in cart
+        validCart.forEach(async (item) => {
+          if (item.selectedSeats && item.selectedSeats.length > 0) {
+            console.log(`Updating seats for ${item.id}: ${item.selectedSeats.join(', ')} to unavailable`);
+            
+            try {
+              const result = await Seat.updateMany(
+                { 
+                  eventId: item.id,
+                  seatNumber: { $in: item.selectedSeats }
+                },
+                { $set: { status: 'unavailable' } }
+              );
+              console.log(`Updated ${result.modifiedCount} seats to unavailable`);
+            } catch (error) {
+              console.error('Error updating seat status:', error);
+            }
+          }
+        });
+        
         const updateOperations = validCart.map(item => {
           const { name, ticktype, ticketQuantity } = item;
           console.log(name, ticktype, ticketQuantity);
@@ -300,13 +400,13 @@ wss.on('connection', (ws) => {
           }
         });
       }
-      else if (data.action === 'seatUpdate') {
+      else if (data.action === 'seatUpdate' || data.action === 'checkoutCompleted') {
         // Broadcast seat update to all connected clients
-        clients.forEach((client) => {
+        wss.clients.forEach((client) => {
           if (client.readyState === WebSocketServer.OPEN) {
             client.send(JSON.stringify({
-              action: 'seatUpdated',
-              seat: data.seat
+              action: data.action,
+              seats: data.seats || [data.seat]
             }));
           }
         });

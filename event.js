@@ -124,20 +124,112 @@ fetch('/getPromo')
 let listCart = [];
 
 
-checkoutButton.addEventListener('click', function(){
+// checkoutButton.addEventListener('click', function(){
+//     if (listCart.every(element => element === null) || listCart.length === 0) {
+//         // Don't do anything or show a message to the user indicating that the cart is empty.
+//         window.alert("Cart Empty!")
+//         //return;
+//     }
+//     else{
+//         //const eventId = currentEventId;
+//         //const seatsToBuy = listCart[eventId]?.selectedSeats || [];
+//         //alert('Checkout successful! Your seats are now unavailable.');
+//         window.location.href = '/checkout.html';
+//     }
+// })
+
+// In event.js, modify the checkoutButton event listener:
+
+// Update the checkoutButton event listener:
+// checkoutButton.addEventListener('click', async function(){
+//     if (listCart.every(element => element === null) || listCart.length === 0) {
+//         window.alert("Cart Empty!")
+//         return;
+//     }
+
+//     // Check if any items in cart have seat selections
+//     const itemsWithSeats = listCart.filter(item => item && item.selectedSeats && item.selectedSeats.length > 0);
+    
+//     if (itemsWithSeats.length > 0) {
+//         for (const item of itemsWithSeats) {
+//             const response = await fetch('/verifySeats', {
+//                 method: 'POST',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 body: JSON.stringify({
+//                     eventId: item.id,
+//                     seats: item.selectedSeats
+//                 })
+//             });
+
+//             const result = await response.json();
+            
+//             if (!result.available) {
+//                 window.alert("Some selected seats are no longer available. Please refresh your cart.");
+//                 return;
+//             }
+//         }
+//     }
+
+//     window.location.href = '/checkout.html';
+// });
+
+checkoutButton.addEventListener('click', async function(){
     if (listCart.every(element => element === null) || listCart.length === 0) {
-        // Don't do anything or show a message to the user indicating that the cart is empty.
         window.alert("Cart Empty!")
-        //return;
+        return;
     }
-    else{
-        //const eventId = currentEventId;
-        //const seatsToBuy = listCart[eventId]?.selectedSeats || [];
-        //seatMap.confirmSelection()
-        //alert('Checkout successful! Your seats are now unavailable.');
-        window.location.href = '/checkout.html';
+
+    const itemsWithSeats = listCart.filter(item => item && item.selectedSeats && item.selectedSeats.length > 0);
+    
+    if (itemsWithSeats.length > 0) {
+        for (const item of itemsWithSeats) {
+            // Create a new WebSocket connection
+            const ws = new WebSocket(host);
+            
+            // Wait for the connection to be established
+            await new Promise((resolve) => {
+                ws.onopen = () => resolve();
+            });
+
+            // Update each seat status
+            for (const seatNumber of item.selectedSeats) {
+                // Update seat in database
+                await fetch('/updateSeat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        eventId: item.id,
+                        seatNumber,
+                        status: 'unavailable'
+                    })
+                });
+
+                // Broadcast the update
+                ws.send(JSON.stringify({
+                    action: 'checkoutCompleted',
+                    seats: [{
+                        eventId: item.id,
+                        seatNumber,
+                        status: 'unavailable'
+                    }]
+                }));
+
+                console.log("done with seats apprently")
+            }
+
+            // Close the WebSocket connection
+            ws.close();
+        }
     }
-})
+
+    //window.location.href = '/checkout.html';
+});
+
+
 
 checkoutButton.addEventListener('mouseover', function() {
     if (listCart.every(element => element === null) || listCart.length === 0) {
@@ -204,12 +296,25 @@ class SeatMap {
 
 
 
+//   updateSeatStatus(seatInfo) {
+//     const seatElement = this.container.querySelector(`[data-seat="${seatInfo.seatNumber}"]`);
+//     if (seatElement) {
+//       seatElement.className = `seat ${seatInfo.status}`;
+//     }
+//   }
+
   updateSeatStatus(seatInfo) {
     const seatElement = this.container.querySelector(`[data-seat="${seatInfo.seatNumber}"]`);
     if (seatElement) {
-      seatElement.className = `seat ${seatInfo.status}`;
+        seatElement.className = `seat ${seatInfo.status}`;
+        
+        // If the seat becomes unavailable, remove it from selected seats
+        if (seatInfo.status === 'unavailable' && this.selectedSeats.has(seatInfo.seatNumber)) {
+            this.selectedSeats.delete(seatInfo.seatNumber);
+            this.updateSelectedSeatsText();
+        }
     }
-  }
+}
 
   updateSelectedSeatsText() {
     const selectedSeatsText = document.getElementById('selected-seats-text');
@@ -382,9 +487,32 @@ class SeatMap {
         return;
     }
 
+   // Verify seats are still available
+   const response = await fetch('/verifySeats', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        eventId: this.eventId,
+        seats: Array.from(this.selectedSeats)
+        })
+    });
+
+    const result = await response.json();
+
+    if (!result.available) {
+        alert("Some selected seats are no longer available. Please choose different seats.");
+        // Refresh the seat map
+        await this.fetchSeats();
+        this.selectedSeats.clear();
+        this.container.innerHTML = '';
+        this.render();
+        return;
+    }
+
     // Update seats in database
     const seats = Array.from(this.selectedSeats);
-
     for (const seatNumber of seats) {
         await fetch('/updateSeat', {
             method: 'POST',
@@ -399,14 +527,14 @@ class SeatMap {
         });
 
         // Notify other clients about the seat update
-        this.ws.send(JSON.stringify({
-            action: 'seatUpdated',
-            seat: {
-                eventId: this.eventId,
-                seatNumber,
-                status: 'in_cart'
-            }
-        }));
+        // this.ws.send(JSON.stringify({
+        //     action: 'seatUpdated',
+        //     seat: {
+        //         eventId: this.eventId,
+        //         seatNumber,
+        //         status: 'in_cart'
+        //     }
+        // }));
     }
 
     // If the product is already in cart, append the new seats
@@ -417,7 +545,7 @@ class SeatMap {
         listCart[this.eventId].selectedSeats.push(...seats);
         //listCart[this.eventId].quantity++;
         //listCart[this.eventId].ticketQuantity--;
-        addCart(this.eventId, this.ticketType, seats);
+        //addCart(this.eventId, this.ticketType, seats);
     } else {
         // Add to cart with selected seats
         addCart(this.eventId, this.ticketType, seats);
@@ -494,30 +622,57 @@ ws.addEventListener('error', (error) => {
   console.error('WebSocket error:', error);
 });
 
-ws.addEventListener('message', (event) => {
+// ws.addEventListener('message', (event) => {
+//     const data = JSON.parse(event.data);
+//     if (data.action === 'numberOfClients') {
+//       // Handle the number of connected clients
+//       const numberOfClients = data.count;
+//       console.log(`Number of connected clients: ${numberOfClients}`);
+//     } else if (data.action === 'cartUpdated') {
+//       // Handle other actions, e.g., cart updates
+//       console.log('Cart updated by another user');
+      
+//       // Check if the server requests a fetch to update the content
+//       if (data.requestFetch) {
+//         // Perform a fetch to update the products data
+//         fetch('/getProducts')
+//           .then(response => response.json())
+//           .then(updatedData => {
+//             // Update the products data with the fetched data
+//             products = updatedData;
+//             // Call the addDataToHTML function to update the page content
+//             //addDataToHTML();
+//           });
+//       }
+//     }
+//   });
+  
+
+  ws.addEventListener('message', (event) => {
     const data = JSON.parse(event.data);
     if (data.action === 'numberOfClients') {
       // Handle the number of connected clients
       const numberOfClients = data.count;
       console.log(`Number of connected clients: ${numberOfClients}`);
-    } else if (data.action === 'cartUpdated') {
-      // Handle other actions, e.g., cart updates
-      console.log('Cart updated by another user');
-      
-      // Check if the server requests a fetch to update the content
-      if (data.requestFetch) {
-        // Perform a fetch to update the products data
-        fetch('/getProducts')
-          .then(response => response.json())
-          .then(updatedData => {
-            // Update the products data with the fetched data
-            products = updatedData;
-            // Call the addDataToHTML function to update the page content
-            //addDataToHTML();
-          });
-      }
+    } else if (data.action === 'seatUpdated' || data.action === 'checkoutCompleted') {
+        if (seatMap) {
+            if (data.action === 'seatUpdated') {
+                seatMap.updateSeatStatus(data.seat);
+            } else {
+                seatMap.markSeatsAsUnavailable(data.seats);
+            }
+        } else {
+            // If seatMap doesn't exist, update the seat display directly
+            data.seats?.forEach(seatInfo => {
+                const seatElement = document.querySelector(`[data-seat="${seatInfo.seatNumber}"]`);
+                if (seatElement) {
+                    seatElement.className = `seat ${seatInfo.status}`;
+                }
+            });
+        }
     }
-  });
+});
+
 
 let selectedTicketType = null;
 
@@ -664,9 +819,9 @@ function addDataToHTML() {
                 <table class ="ticketSection" width="100%" style="position: relative; top: 435px;" border="0" cellspacing="0" cellpadding="4">
                     <tbody>
                         <tr style="background-color: #efefef; color:black;">
-                            <td width="30%" style="position: relative; left: 19px;"><strong>Ticket Selection</strong></td>
-                            <td width="15%"><strong>Price</strong></td>
-                            <td width="25%"><strong>Ticket Status</strong></td>
+                            <td class="ticketSelection" width="30%" style="position: relative; left: 19px;"><strong>Ticket Selection</strong></td>
+                            <td class="ticketPrice" width="15%"><strong>Price</strong></td>
+                            <td class="ticketStatus" width="25%"><strong>Ticket Status</strong></td>
                             <td width="25%"></td>
                         </tr>
                         <tr style="color:black; position: relative; top: 5px;">
