@@ -172,6 +172,44 @@ returntoCart.addEventListener('click', function() {
         delayTimer(2000);
         //spinnerOverlay.style.display = 'none';
     });
+
+    fetch('/getSeats')
+    .then(response => response.json())
+    .then(updatedData => {
+        const validCart = listCart.filter(item => item !== null);
+
+        validCart.forEach(item => {
+            // Find the product with the matching name
+            const matchingProduct = updatedData.find(product => product.name === item.name);
+
+            if (matchingProduct) {
+                // Find the corresponding ticketType
+                const matchingTicket = matchingProduct.type.find(ticket => ticket.ticketType === item.ticktype);
+
+                if (matchingTicket) {
+
+                    // Check for matching seats and update their status
+                    item.SelectedSeats.forEach(selectedSeat => {
+                        const matchingSeat = updatedData.find(seat => 
+                          seat.seatNumber === selectedSeat.seatNumber &&
+                          seat.row === selectedSeat.row &&
+                          seat.status === "available"
+                        );
+
+                        if (matchingSeat) {
+                            matchingSeat.status = "unavailable";
+                        }
+                    });
+                }
+            }
+        });
+
+        console.log(updatedData); // Check the modified seat status
+        //updateSeatOnServer(validCart);
+        //delayTimer(2000);
+    })
+    .catch(error => console.error('Error fetching seats:', error));
+
 });
 
 function clearCart() {

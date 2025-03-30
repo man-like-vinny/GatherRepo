@@ -121,6 +121,23 @@ fetch('/getPromo')
         promotions = data;
 })
 
+let seats = null;
+const eventId = "YSM2025"; // Replace with actual event ID
+
+fetch(`/getSeats/${eventId}`)  // ✅ Uses path parameter correctly
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        seats = data;
+        console.log(seats); // Check the fetched seat data
+    })
+    .catch(error => console.error('Error fetching seats:', error));
+
+
 let listCart = [];
 
 
@@ -226,7 +243,7 @@ checkoutButton.addEventListener('click', async function(){
         }
     }
 
-    //window.location.href = '/checkout.html';
+    window.location.href = '/checkout.html';
 });
 
 
@@ -402,7 +419,8 @@ class SeatMap {
         seat.dataset.seat = seatNumber;
         
         // Check if seat exists in seatData and update its status
-        const seatData = this.seatData?.find(s => s.seatNumber === seatNumber);
+        //const seatData = this.seatData?.find(s => s.seatNumber === seatNumber);
+        const seatData = seats?.find(seat => seat.seatNumber === seatNumber);
         if (seatData) {
         seat.className = `seat ${seatData.status}`;
         }
@@ -545,7 +563,7 @@ class SeatMap {
         listCart[this.eventId].selectedSeats.push(...seats);
         //listCart[this.eventId].quantity++;
         //listCart[this.eventId].ticketQuantity--;
-        //addCart(this.eventId, this.ticketType, seats);
+        addCart(this.eventId, this.ticketType, seats);
     } else {
         // Add to cart with selected seats
         addCart(this.eventId, this.ticketType, seats);
@@ -766,7 +784,7 @@ function addDataToHTML() {
             let backgroundImage = new Image();
             backgroundImage.src = selectedProduct.landscapeimage;
         
-            // Wait for the image to load
+            // Wait for the image to load 
             backgroundImage.onload = function () {
                 // Set the background image after it has loaded
                 backgroundEffect.style.backgroundImage = `url(${selectedProduct.landscapeimage})`;

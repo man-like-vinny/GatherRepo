@@ -123,8 +123,6 @@ const seatSchema = new mongoose.Schema({
   type: String
 });
 
-const Seat = mongoose.model('Seat', seatSchema, 'seats');
-
 // Define a schema for your data
 const productSchema = new mongoose.Schema({
     name: String,
@@ -169,6 +167,7 @@ const customerSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema, 'events');
 const Promo = mongoose.model('Promo', promoSchema, 'promotions');
+const Seat = mongoose.model('Seat', seatSchema, 'seats');
 const Customer = mongoose.model('Customer', customerSchema, 'customers');
 
 
@@ -188,6 +187,7 @@ app.get('/getProducts', async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch products' });
   }
 });
+
 app.get('/getPromo', async (req, res) => {
   try {
     console.log('Accessed /getPromo route'); // Add this log statement
@@ -207,13 +207,31 @@ app.get('/getPromo', async (req, res) => {
 // Add these new endpoints after your existing endpoints
 app.get('/getSeats/:eventId', async (req, res) => {
   try {
+      console.log('Accessed /getSeats route'); // Add this log statement
       const seats = await Seat.find({ eventId: req.params.eventId });
+      console.log('Seats fetched:', seats); // Add this log statement
       res.json(seats);
   } catch (error) {
       console.error('Error fetching seats:', error);
       res.status(500).json({ error: 'Failed to fetch seats' });
   }
 });
+
+// app.get('/getSeats', async (req, res) => {
+//   try {
+//     console.log('Accessed /getSeats route'); // Add this log statement
+
+//     const seats = await Seat.find({}); // Find all products in the collection
+
+//     console.log('Seats fetched:', seats); // Add this log statement
+
+//     // Send the products as JSON
+//     res.json(seats);
+//   } catch (error) {
+//     console.error('Error fetching seats from MongoDB:', error);
+//     res.status(500).json({ error: 'Failed to fetch seats' });
+//   }
+// });
 
 // app.post('/updateSeat', async (req, res) => {
 //   try {
@@ -363,13 +381,13 @@ wss.on('connection', (ws) => {
 
         // Update seat status to unavailable for seats in cart
         validCart.forEach(async (item) => {
-          if (item.selectedSeats && item.selectedSeats.length > 0) {
-            console.log(`Updating seats for ${item.id}: ${item.selectedSeats.join(', ')} to unavailable`);
+          if (Array.isArray(item.selectedSeats) && item.selectedSeats.length > 0) {
+            console.log(`Updating seats for ${item.eventId}: ${item.selectedSeats.join(', ')} to unavailable`);
             
             try {
               const result = await Seat.updateMany(
                 { 
-                  eventId: item.id,
+                  eventId: item.eventId,
                   seatNumber: { $in: item.selectedSeats }
                 },
                 { $set: { status: 'unavailable' } }
