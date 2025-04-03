@@ -489,7 +489,7 @@ video {
       rgba(0, 0, 0, 0) 0%,
       rgba(17, 17, 17, 0.6) 100%
     ),
-    url(product_images/maynoothuniversity_bollywood.jpg);
+    url(product_images/YeShamMastani.jpg);
   background-size: cover;
   background-position: center;
   position: relative;
@@ -501,38 +501,19 @@ video {
   opacity: 0.2;
 }
 
-.services__card:nth-child(2) {
+/*
+.services__card:nth-child(0) {
   background-image: linear-gradient(
       to bottom,
       rgba(0, 0, 0, 0) 0%,
       rgba(17, 17, 17, 0.9) 100%
     ),
-    url(product_images/OorThiruvizha_10_1.jpg);
+    url(product_images/maynoothuniversity_bollywood.jpg);
   background-size: contain;
   background-position: center;
 }
+*/
 
-.services__card:nth-child(3) {
-  background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(17, 17, 17, 0.9) 100%
-    ),
-    url(product_images/maynoothuniversity_holi.jpg);
-  background-size: contain;
-  background-position: center;
-}
-
-.services__card:nth-child(4) {
-  background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0%,
-      rgba(17, 17, 17, 0.9) 100%
-    ),
-    url(product_images/mangalaschool.jpg);
-  background-size: contain;
-  background-position: center;
-}
 
 .services__card h2 {
   position: absolute;
@@ -1591,7 +1572,8 @@ color: white;
   position: absolute;
   background-color: rgb(29, 101, 193);
   color: #fff;
-  bottom: -2px;
+  bottom: 5px;
+  gap: 5px;
   width: 150px;
   right: 10px;
   border-radius: 20px;
@@ -1625,6 +1607,25 @@ color: white;
   border-radius: 4px;
   color: white;
   }
+
+  .food-select {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: white;
+    font-size: 14px;
+  }
+
+  .food-select:focus {
+      outline: none;
+      border-color: #4a90e2;
+  }
+
+  .addtoCart3:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 /* .listEvents .description label{
 z-index: 100;

@@ -28,6 +28,46 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+//Serve your HTML file
+// Add route for /events without .html
+app.get('/events', (req, res) => {
+  res.sendFile(__dirname + '/events.html');
+});
+
+// Add routes for other pages without .html
+app.get('/contact', (req, res) => {
+  res.sendFile(__dirname + '/contact.html');
+});
+
+app.get('/checkout', (req, res) => {
+  res.sendFile(__dirname + '/checkout.html');
+});
+
+app.get('/success', (req, res) => {
+  res.sendFile(__dirname + '/success.html');
+});
+
+// Add routes for event pages
+app.get('/MaynoothUniversityBollywoodNight2024', (req, res) => {
+  res.sendFile(__dirname + '/MaynoothUniversityBollywoodNight2024.html');
+});
+
+app.get('/OorThiruvizha_10', (req, res) => {
+  res.sendFile(__dirname + '/OorThiruvizha_10.html');
+});
+
+app.get('/MaynoothUniversityHoli2024', (req, res) => {
+  res.sendFile(__dirname + '/MaynoothUniversityHoli2024.html');
+});
+
+app.get('/SangeethaArangu', (req, res) => {
+  res.sendFile(__dirname + '/SangeethaArangu.html');
+});
+
+app.get('/YeShamMasthani', (req, res) => {
+  res.sendFile(__dirname + '/YeShamMasthani.html');
+});
+
 app.use(express.static(__dirname));
 
 var WebSocketServer = require("ws").Server
@@ -376,63 +416,61 @@ wss.on('connection', (ws) => {
     try {
       const data = JSON.parse(message);
       if (data.action === 'updateCart') {
-        const cart = data.cart;
-        const validCart = cart.filter(item => item !== null);
-
-        // Update seat status to unavailable for seats in cart
-        validCart.forEach(async (item) => {
-          if (Array.isArray(item.selectedSeats) && item.selectedSeats.length > 0) {
-            console.log(`Updating seats for ${item.eventId}: ${item.selectedSeats.join(', ')} to unavailable`);
-            
-            try {
-              const result = await Seat.updateMany(
-                { 
-                  eventId: item.eventId,
-                  seatNumber: { $in: item.selectedSeats }
-                },
-                { $set: { status: 'unavailable' } }
-              );
-              console.log(`Updated ${result.modifiedCount} seats to unavailable`);
-            } catch (error) {
-              console.error('Error updating seat status:', error);
-            }
-          }
-        });
-        
-        const updateOperations = validCart.map(item => {
-          const { name, ticktype, ticketQuantity } = item;
-          console.log(name, ticktype, ticketQuantity);
-          return {
-            updateOne: {
-              filter: { name: name, 'type.ticketType': ticktype },
-              update: { $set: { 'type.$.ticketQuantity': ticketQuantity } },
-            },
-          };
-        });
-
-        Product.bulkWrite(updateOperations);
-
-        clients.forEach((client) => {
-          if (client.readyState === WebSocketServer.OPEN) {
-            client.send(JSON.stringify({ action: 'cartUpdated'}));
-          }
-        });
-      }
-      else if (data.action === 'seatUpdate' || data.action === 'checkoutCompleted') {
-        // Broadcast seat update to all connected clients
-        wss.clients.forEach((client) => {
-          if (client.readyState === WebSocketServer.OPEN) {
-            client.send(JSON.stringify({
-              action: data.action,
-              seats: data.seats || [data.seat]
-            }));
-          }
-        });
+          const cart = data.cart;
+          const seats = data.seats;
+          const validCart = cart.filter(item => item !== null);
+  
+          // Determine seat status update based on data.seats or item.selectedSeats
+          validCart.forEach(async (item) => {
+              let seatsToUpdateAvailable = [];
+              let seatsToUpdateUnavailable = [];
+  
+              if (Array.isArray(seats) && seats.length > 0) {
+                  // Use seats from data.seats
+                  //seatsToUpdateAvailable = seats.map(seat => seat.seatNumber);
+                  seatsToUpdateAvailable = seats
+                  console.log("Here are the seats before", seatsToUpdateAvailable)
+                  console.log(`Updating seats from data.seats for event ${item.eventId}: ${seatsToUpdateAvailable.join(', ')} to available`);
+              } else if (Array.isArray(item.selectedSeats) && item.selectedSeats.length > 0) {
+                  // Use item.selectedSeats if data.seats is not provided
+                  seatsToUpdateUnavailable = item.selectedSeats;
+                  console.log(`Updating seats from item.selectedSeats for event ${item.eventId}: ${seatsToUpdateUnavailable.join(', ')} to unavailable`);
+              }
+  
+              if (seatsToUpdateUnavailable.length > 0) {
+                  try {
+                      const result = await Seat.updateMany(
+                          { 
+                              eventId: item.eventId,
+                              seatNumber: { $in: seatsToUpdateUnavailable }
+                          },
+                          { $set: { status: 'unavailable' } }
+                      );
+                      console.log(`Updated ${result.modifiedCount} seats to unavailable`);
+                  } catch (error) {
+                      console.error('Error updating seat status:', error);
+                  }
+              }
+              else if (seatsToUpdateAvailable.length > 0){
+                  try {
+                    const result = await Seat.updateMany(
+                        { 
+                            eventId: item.eventId,
+                            seatNumber: { $in: seatsToUpdateAvailable }
+                        },
+                        { $set: { status: 'available' } }
+                    );
+                    console.log(`Updated ${result.modifiedCount} seats to available`);
+                } catch (error) {
+                    console.error('Error updating seat status:', error);
+                }
+              }
+          });
       }
     } catch (error) {
       console.error('WebSocket message handling error:', error);
-    }
-  });
+  }
+});
 
   ws.on('close', () => {
     console.log('A client has disconnected.');
